@@ -45,4 +45,7 @@ app.use(function (err: any, req: Request, res: Response, _next: NextFunction) {
   res.render('error')
 })
 
-app.listen(5001)
+// TODO: Move this default to .env.development
+const port = process.env.PORT ?? 5001
+
+app.listen(port)
