@@ -119,6 +119,15 @@ jobs:
           event: pass
           template: basic_success_1
 
+  notify-production-deployment:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - tariff/notify-production-release:
+          app-name: FPO Developer Hub Backend
+          slack-channel: trade_tariff
+          release-tag: $CIRCLE_TAG
+
 workflows:
   version: 2
 
@@ -161,16 +170,73 @@ workflows:
             - build-and-push-dev
           <<: *filter-not-main
 
-  # deploy-to-staging:
-  #   jobs:
-  #     - deploy:
-  #         stage: staging
-  #         context: trade-tariff-lambda-deployments-staging
-  #         <<: *filter-main
+  deploy-to-staging-and-production:
+    jobs:
+      - write-docker-tag:
+          name: write-docker-tag-staging
+          environment: staging
 
-  # deploy-to-production:
-  #   jobs:
-  #     - deploy:
-  #         stage: production
-  #         context: trade-tariff-lambda-deployments-production
-  #         <<: *filter-main
+      - write-docker-tag:
+          name: write-docker-tag-prod
+          environment: production
+
+      - plan-terraform:
+          name: plan-terraform-staging
+          context: trade-tariff-terraform-aws-staging
+          environment: staging
+          requires:
+            - write-docker-tag-staging
+          <<: *filter-not-main
+
+      - tariff/build-and-push:
+          name: build-and-push-live
+          context: trade-tariff-terraform-aws-staging
+          environment: staging
+          image_name: tariff-admin
+          ssm_parameter: "/staging/ADMIN_ECR_URL"
+          <<: *filter-main
+
+      - apply-terraform:
+          name: apply-terraform-staging
+          context: trade-tariff-terraform-aws-staging
+          environment: staging
+          requires:
+            - write-docker-tag-staging
+            - plan-terraform-staging
+            - build-and-push-live
+          <<: *filter-main
+
+      - plan-terraform:
+          name: plan-terraform-prod
+          context: trade-tariff-terraform-aws-production
+          environment: production
+          requires:
+            - write-docker-tag-prod
+          <<: *filter-not-main
+
+      - tariff/create-production-release:
+          name: create-production-release
+          context: trade-tariff-releases
+          image-name: tariff-admin-production
+          requires:
+            - apply-terraform-staging
+          <<: *filter-main
+
+      - write-docker-tag:
+          name: write-docker-tag-prod-release
+          environment: production
+          <<: *filter-release
+
+      - apply-terraform:
+          name: apply-terraform-prod
+          context: trade-tariff-terraform-aws-production
+          environment: production
+          requires:
+            - write-docker-tag-prod-release
+          <<: *filter-release
+
+      - notify-production-deployment:
+          context: trade-tariff-releases
+          requires:
+            - apply-terraform-prod
+          <<: *filter-release
