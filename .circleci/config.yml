@@ -192,8 +192,8 @@ workflows:
           name: build-and-push-live
           context: trade-tariff-terraform-aws-staging
           environment: staging
-          image_name: tariff-admin
-          ssm_parameter: "/staging/ADMIN_ECR_URL"
+          image_name: tariff-fpo-developer-hub-backend
+          ssm_parameter: "/staging/FPO_DEVELOPER_HUB_BACKEND_ECR_URL"
           <<: *filter-main
 
       - apply-terraform:
@@ -217,7 +217,7 @@ workflows:
       - tariff/create-production-release:
           name: create-production-release
           context: trade-tariff-releases
-          image-name: tariff-admin-production
+          image-name: tariff-fpo-developer-hub-backend-production
           requires:
             - apply-terraform-staging
           <<: *filter-main
