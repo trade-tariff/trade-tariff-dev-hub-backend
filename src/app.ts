@@ -6,7 +6,7 @@ const path = require('path')
 const cookieParser = require('cookie-parser')
 
 const indexRouter: Router = require('./routes/index')
-const usersRouter: Router = require('./routes/users')
+const apiRouter: Router = require('./routes/api')
 const expressNunjucks = require('express-nunjucks').default
 
 const app: Express = express()
@@ -27,7 +27,7 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, '../public')))
 
 app.use('/', indexRouter)
-app.use('/users', usersRouter)
+app.use('/api', apiRouter)
 
 // catch 404 and forward to error handler
 app.use(function (_req: Request, _res: Response, next: NextFunction) {
