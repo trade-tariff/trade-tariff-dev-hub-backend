@@ -1,6 +1,6 @@
 .PHONY: default build run clean
 
-IMAGE_NAME := trade-tariff-fpo-developer-hub
+IMAGE_NAME := trade-tariff-dev-hub-backend
 
 default: build run
 
