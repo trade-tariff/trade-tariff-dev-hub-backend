@@ -123,6 +123,7 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
+      - checkout
       - tariff/notify-production-release:
           app-name: FPO Developer Hub Backend
           slack-channel: trade_tariff
