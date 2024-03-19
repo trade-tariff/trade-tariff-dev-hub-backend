@@ -123,6 +123,15 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
+      - run:
+          command: pwd
+      - run:
+          command: ls -lart
+      - checkout
+      - run:
+          command: pwd
+      - run:
+          command: ls -lart
       - tariff/notify-production-release:
           app-name: FPO Developer Hub Backend
           slack-channel: trade_tariff
