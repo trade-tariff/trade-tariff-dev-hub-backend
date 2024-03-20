@@ -28,3 +28,7 @@ data "aws_kms_key" "secretsmanager_key" {
 data "aws_ssm_parameter" "ecr_url" {
   name = "/${var.environment}/FPO_DEVELOPER_HUB_BACKEND_ECR_URL"
 }
+
+data "aws_dynamodb_table" "customer_api_keys" {
+  name = "CustomerApiKeys"
+}
