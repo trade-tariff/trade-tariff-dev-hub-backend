@@ -2,6 +2,8 @@ import { type Express, type Request, type Response, type NextFunction, type Rout
 
 const createError = require('http-errors')
 const express = require('express')
+const morgan = require('morgan')
+
 const path = require('path')
 const cookieParser = require('cookie-parser')
 
@@ -44,6 +46,10 @@ app.use(function (err: any, req: Request, res: Response, _next: NextFunction) {
   res.status(err.status || 500)
   res.render('error')
 })
+
+// Morgan middleware: https://www.npmjs.com/package/morgan
+// usage: DEBUG=express:* yarn run start
+app.use(morgan('dev'))
 
 // TODO: Move this default to .env.development
 const port = process.env.PORT ?? 5001
