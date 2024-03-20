@@ -13,6 +13,7 @@
         "node_modules/*"
       ]
     },
+    "rootDir": "./src",
     "outDir": "./dist",
     "experimentalDecorators": true
   },

@@ -6,9 +6,11 @@ import createError from 'http-errors'
 import express from 'express'
 import path from 'path'
 import cookieParser from 'cookie-parser'
-
+import bodyParser from 'body-parser';
 import indexRouter from './routes/index'
+import indexRouter from './api/routes/index';
 import apiRouter from './routes/api'
+import { apiKeyRoutes } from './api/routes/apiKeyRoutes';
 import initEnvironment from './config/env'
 import { CustomerApiKeyRepository } from './repositories/customerApiKeyRepository'
 initEnvironment()
@@ -50,3 +52,15 @@ app.use(function (err: any, req: Request, res: Response, _next: NextFunction) {
 })
 
 app.listen(process.env.PORT)
+
+app.use(bodyParser.json());
+app.use('/', indexRouter);
+app.use('/api', apiKeyRoutes);
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
+app.listen(port, () => {
+  console.log(`App listening at http://localhost:${port}`);
+});
+
