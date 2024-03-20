@@ -35,6 +35,22 @@ data "aws_iam_policy_document" "task" {
     ]
     resources = ["*"]
   }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "dynamodb:BatchGetItem",
+      "dynamodb:BatchWriteItem",
+      "dynamodb:GetItem",
+      "dynamodb:PutItem",
+      "dynamodb:Query",
+      "dynamodb:Scan",
+      "dynamodb:UpdateItem",
+    ]
+    resources = [
+      data.aws_dynamodb_table.customer_api_keys.arn
+    ]
+  }
 }
 
 resource "aws_iam_policy" "task" {
