@@ -236,8 +236,9 @@ workflows:
             - write-docker-tag-prod-release
           <<: *filter-release
 
-      - notify-production-deployment:
-          context: trade-tariff-releases
-          requires:
-            - apply-terraform-prod
-          <<: *filter-release
+      # TODO: Work out why notifications produce failing parser errors (is this a JQ issue)
+      # - notify-production-deployment:
+      #     context: trade-tariff-releases
+      #     requires:
+      #       - apply-terraform-prod
+      #     <<: *filter-release
