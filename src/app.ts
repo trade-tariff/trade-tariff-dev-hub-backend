@@ -9,9 +9,12 @@ const indexRouter: Router = require('./routes/index')
 const apiRouter: Router = require('./routes/api')
 const expressNunjucks = require('express-nunjucks').default
 
+const initEnvironment = require('./config/env')
+
+initEnvironment()
+
 const app: Express = express()
 const isDev = app.get('env') === 'development'
-
 const dirname = path.join(__dirname, '../views')
 
 app.set('views', dirname)
@@ -45,7 +48,4 @@ app.use(function (err: any, req: Request, res: Response, _next: NextFunction) {
   res.render('error')
 })
 
-// TODO: Move this default to .env.development
-const port = process.env.PORT ?? 5001
-
-app.listen(port)
+app.listen(process.env.PORT)
