@@ -1,25 +1,23 @@
-import { type Express, type Request, type Response, type NextFunction, type Router } from 'express'
+import { type Express, type Request, type Response, type NextFunction } from 'express'
 
-const createError = require('http-errors')
-const express = require('express')
-const path = require('path')
-const cookieParser = require('cookie-parser')
+import createError from 'http-errors'
+import express from 'express'
+import path from 'path'
+import cookieParser from 'cookie-parser'
 
-const indexRouter: Router = require('./routes/index')
-const apiRouter: Router = require('./routes/api')
-const expressNunjucks = require('express-nunjucks').default
+import indexRouter from './routes/index'
+import apiRouter from './routes/api'
+import initEnvironment from './config/env'
+
+initEnvironment()
 
 const app: Express = express()
 const isDev = app.get('env') === 'development'
 
-const dirname = path.join(__dirname, '../views')
-
-app.set('views', dirname)
-
-expressNunjucks(app, {
-  watch: isDev,
-  noCache: isDev
-})
+if (isDev) {
+  const morgan = require('morgan')
+  app.use(morgan('dev'))
+}
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
@@ -45,7 +43,4 @@ app.use(function (err: any, req: Request, res: Response, _next: NextFunction) {
   res.render('error')
 })
 
-// TODO: Move this default to .env.development
-const port = process.env.PORT ?? 5001
-
-app.listen(port)
+app.listen(process.env.PORT)

@@ -12,7 +12,9 @@ run:
 		--network=host \
 		--rm \
 		--name $(IMAGE_NAME) \
-		-e PORT=5001 \
+		-e DEBUG=express:* \
+		-e NODE_ENV=test \
+		--env-file .env.development \
 		-it \
 		$(IMAGE_NAME) \
 

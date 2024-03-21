@@ -11,7 +11,8 @@ RUN yarn run build && \
   adduser -S tariff -G tariff && \
   chown -R tariff:tariff /app
 
-ENV PORT=8080
+ENV PORT=8080 \
+  NODE_ENV=production
 
 USER tariff
 
