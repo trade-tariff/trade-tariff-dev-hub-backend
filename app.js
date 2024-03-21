@@ -26,15 +26,9 @@ app.use('/users', usersRouter);
 app.use(function (_req, _res, next) {
     next(createError(404));
 });
-// Error handler
 app.use(function (err, req, res, _next) {
-    // Set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
-    // Render the error page
     res.status(err.status || 500);
     res.render('error');
 });
-// TODO: Move this default to .env.development
-const port = (_a = process.env.PORT) !== null && _a !== void 0 ? _a : 5001;
-app.listen(port);

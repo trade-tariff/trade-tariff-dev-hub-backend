@@ -4,22 +4,26 @@ Express app giving FPO operators the ability to manage their own API credentials
 
 # Starting the app
 ```
-npm run build && npm start
+make
+```
+
+# Running the tests
+```
+make test
 ```
 
 
-# Project structure idea?
+# Project structure planning
 
 trade-tariff-dev-hub-backend/
 ├── public/
 ├── src/
-│ ├── api/
-│ │   ├── controllers/
-│ │   │   ├── apiKeyController.ts
-│ │   ├── routes/
-│ │   │   ├── apiKeyRoutes.ts
-│ ├── config/
-│ │   ├── awsConfig.ts
+│ ├── controllers/
+│ │   ├── healthchecksController.ts
+│ │   ├── apiKeyController.ts
+│ ├── routes/
+│ │   ├── api.ts
+│ │   ├── index.ts
 │ ├── services/
 │ │   ├── apiKeyService.ts
 │ ├── repositories/
@@ -32,18 +36,22 @@ trade-tariff-dev-hub-backend/
 │ ├── types/
 │ │   ├── index.d.ts
 │ ├── app.ts
+| ├── init.ts
 │ └── index.ts
-├── tests/
-│   ├── integration/
-│   └── unit/
-├── .env
+├── spec/
+│   ├── controllers/
+│   └── repositories/
+│   └── routes/
+│   └── services/
+├── .env.development
+├── .env.test
 ├── package.json
 ├── tsconfig.json
 └── README.md
 
-  - api/controllers/apiKeyController.ts: Handles incoming HTTP requests, parses request data, and calls the appropriate service methods. It sends back the HTTP responses to the client.
+  - controllers/apiKeyController.ts: Handles incoming HTTP requests, parses request data, and calls the appropriate service methods. It sends back the HTTP responses to the client.
 
-  - api/routes/apiKeyRoutes.ts: Defines routes for your API and associates them with the controller methods.
+  - routes/apiKeyRoutes.ts: Defines routes for your API and associates them with the controller methods.
 
   - services/apiKeyService.ts: Contains the business logic for managing API keys. It interacts with AWS API Gateway to create or delete keys and calls the repository for database operations.
 

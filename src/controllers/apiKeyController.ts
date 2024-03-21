@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { apiKeyService } from '../../services/apiKeyService';
+import { apiKeyService } from '../services/apiKeyService';
 
 export const apiKeyController = {
   createApiKey: async (req: Request, res: Response) => {
@@ -7,10 +7,6 @@ export const apiKeyController = {
       const { customerId } = req.body;
       const { name } = req.body;
       const { description } = req.body;
-
-      if (!customerId) {
-        return res.status(400).send({ message: 'Customer ID is required' });
-      }
 
       if (!name) {
         return res.status(400).send({ message: 'Name is required' });
@@ -20,7 +16,7 @@ export const apiKeyController = {
         return res.status(400).send({ message: 'Description is required' });
       }
 
-      const apiKeyDetails = await apiKeyService.createApiKeyAndSave(customerId, name, description);
+      const apiKeyDetails = await apiKeyService.createApiKeyAndSave(name, description);
 
       return res.status(201).send(apiKeyDetails);
     } catch (error) {

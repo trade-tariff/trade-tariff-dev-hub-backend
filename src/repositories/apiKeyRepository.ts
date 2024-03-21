@@ -1,7 +1,7 @@
 import dynamoDb from '../utils/dynamoDbClient';
 
 class ApiKeyRepository {
-  private tableName: string = 'ApiKeys';
+  private tableName: string = 'CustomerApiKeys';
 
   constructor() {}
 
@@ -18,9 +18,11 @@ class ApiKeyRepository {
 
     try {
       await dynamoDb.put(params).promise();
-      console.log('API key stored successfully');
+
+      // Can remove this later
+      // console.log('API key stored successfully');
     } catch (error) {
-      console.error('Error storing API key:', error);
+      // console.error('Error storing API key:', error);
       throw error;
     }
   }

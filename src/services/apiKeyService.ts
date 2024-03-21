@@ -9,7 +9,7 @@ class ApiKeyService {
         });
     }
 
-    public async createApiKeyAndSave(customerID: string, name: string, description?: string): Promise<AWS.APIGateway.ApiKey> {
+    public async createApiKeyAndSave(name: string, description?: string): Promise<AWS.APIGateway.ApiKey> {
         const params: AWS.APIGateway.CreateApiKeyRequest = {
             name,
             description,

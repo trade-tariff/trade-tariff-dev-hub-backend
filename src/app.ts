@@ -8,9 +8,8 @@ import path from 'path'
 import cookieParser from 'cookie-parser'
 import bodyParser from 'body-parser';
 import indexRouter from './routes/index'
-import indexRouter from './api/routes/index';
 import apiRouter from './routes/api'
-import { apiKeyRoutes } from './api/routes/apiKeyRoutes';
+import { apiKeyRoutes } from './routes/apiKeyRoutes';
 import initEnvironment from './config/env'
 import { CustomerApiKeyRepository } from './repositories/customerApiKeyRepository'
 initEnvironment()
@@ -59,6 +58,8 @@ app.use('/api', apiKeyRoutes);
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
+const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
