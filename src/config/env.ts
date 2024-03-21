@@ -2,7 +2,7 @@ const dotenv = require('dotenv')
 const path = require('path')
 const fs = require('fs')
 
-function initEnvironment(): void {
+export default function initEnvironment (): void {
   let envFilePath = path.join(process.cwd(), '.env')
 
   switch (process.env.NODE_ENV) {
@@ -20,5 +20,3 @@ function initEnvironment(): void {
     console.warn(`Environment file not found: ${envFilePath}`)
   }
 }
-
-module.exports = initEnvironment
