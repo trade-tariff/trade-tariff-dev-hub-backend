@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "tsc",
-    "start": "node ./dist/app.js",
+    "start": "node ./dist/src/app.js",
     "test": "ts-node node_modules/jasmine/bin/jasmine"
   },
   "dependencies": {
