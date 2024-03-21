@@ -53,5 +53,4 @@ app.use(function (err: any, req: Request, res: Response, _next: NextFunction) {
   res.render('error')
 })
 
-
 app.listen(process.env.PORT)
