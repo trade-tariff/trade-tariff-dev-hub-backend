@@ -1,5 +1,3 @@
-import 'jasmine'
-
 import { type DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { type ScanCommandOutput } from '@aws-sdk/lib-dynamodb'
 import { ListCustomerApiKeysService } from '../../src/services/listCustomerApiKeysService'

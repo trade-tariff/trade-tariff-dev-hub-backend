@@ -1,5 +1,3 @@
-import 'jasmine'
-
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { CustomerApiKeyRepository } from '../../src/repositories/customerApiKeyRepository'
 import { type ListCustomerApiKeysService } from '../../src/services/listCustomerApiKeysService'

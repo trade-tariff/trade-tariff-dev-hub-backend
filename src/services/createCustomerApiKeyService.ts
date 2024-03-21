@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { CustomerApiKey } from '../models/customerApiKey'
 import { CustomerApiKeyEncryption } from '../utils/customerApiKeyEncryption'
 import { PutCommand, type DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb'
@@ -61,3 +62,46 @@ class CreateCustomerApiKeyService {
 }
 
 export { CreateCustomerApiKeyService }
+||||||| parent of 30e6145 (move to version 3 js)
+=======
+import { APIGatewayClient, CreateApiKeyCommand, ApiKey } from '@aws-sdk/client-api-gateway';
+import { apiKeyRepository } from '../repositories/apiKeyRepository';
+
+class CreateCustomerApiKeyService {
+    private apiGatewayClient: APIGatewayClient;
+
+    constructor() {
+        this.apiGatewayClient = new APIGatewayClient({
+            region: process.env.AWS_REGION || 'eu-west-2'
+        });
+    }
+    public async call(customerId: string,
+                      name: string,
+                      value: string,
+                      description: string): Promise<ApiKey> {
+        const params = {
+              name,
+              value,
+              description,
+              enabled: true
+        };
+
+        try {
+            const createApiKeyCommand = new CreateApiKeyCommand(params);
+            const apiKey = await this.apiGatewayClient.send(createApiKeyCommand);
+
+            console.log('API Key created:', apiKey);
+            await apiKeyRepository.storeApiKey(customerId, description, apiKey);
+
+            console.log('API key stored successfully in the database.');
+
+            return apiKey;
+        } catch (error) {
+            // console.error('Error creating API key:', error);
+            throw error;
+        }
+    }
+}
+
+export const createCustomerApiKeyService = new CreateCustomerApiKeyService();
+>>>>>>> 30e6145 (move to version 3 js)

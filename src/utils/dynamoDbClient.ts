@@ -1,7 +1,15 @@
-import * as AWS from 'aws-sdk';
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 
-const dynamoDb = new AWS.DynamoDB.DocumentClient({
-  region: 'eu-west-2',
+const client = new DynamoDBClient({
+  region: "eu-west-2",
+  credentials: {
+    accessKeyId: "test",
+    secretAccessKey: "test",
+    sessionToken: "test",
+  },
 });
 
-export default dynamoDb;
+const dynamoDbDocClient = DynamoDBDocumentClient.from(client);
+
+export default dynamoDbDocClient;
