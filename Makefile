@@ -27,3 +27,6 @@ shell:
 		--name $(IMAGE_NAME)-shell \
 		--no-healthcheck \
 		-it $(IMAGE_NAME) /bin/sh
+
+test:
+	yarn run test
