@@ -40,6 +40,18 @@ executors:
       TF_IN_AUTOMATION: 1
 
 jobs:
+  tests:
+    docker:
+      - image: cimg/node:21.6.2
+        environment:
+          NODE_ENVIRONMENT: test
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+      - run:
+          command: make test
+
   write-docker-tag:
     parameters:
       environment:
@@ -162,6 +174,9 @@ workflows:
           ssm_parameter: "/development/FPO_DEVELOPER_HUB_BACKEND_ECR_URL"
           <<: *filter-not-main
 
+      - tests:
+          <<: *filter-not-main
+
       - apply-terraform:
           name: apply-terraform-dev
           context: trade-tariff-terraform-aws-development
@@ -169,6 +184,7 @@ workflows:
           requires:
             - plan-terraform-dev
             - build-and-push-dev
+            - tests
           <<: *filter-not-main
 
   deploy-to-staging-and-production:
