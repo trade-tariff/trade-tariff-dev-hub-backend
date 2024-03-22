@@ -6,12 +6,13 @@ export class CustomerApiKeyRepository {
   private readonly client: DynamoDBClient
   private readonly listService: ListCustomerApiKeysService
 
-  constructor(client: DynamoDBClient) {
+  constructor(client: DynamoDBClient, listService: ListCustomerApiKeysService = new ListCustomerApiKeysService(client)) {
     this.client = client
-    this.listService = new ListCustomerApiKeysService(this.client)
+    this.listService = listService
   }
 
   async listCustomerApiKeys(customerId: string): Promise<CustomerApiKey[]> {
+    console.log('listCustomerApiKeys')
     return await this.listService.call(customerId)
   }
 }
