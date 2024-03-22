@@ -42,7 +42,7 @@ executors:
 jobs:
   linters:
     docker:
-      - image: cimg/node:20.11.0
+      - image: cimg/node:21.6.2
     resource_class: small
     steps:
       - checkout
