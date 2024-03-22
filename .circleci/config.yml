@@ -40,6 +40,18 @@ executors:
       TF_IN_AUTOMATION: 1
 
 jobs:
+  linters:
+    docker:
+      - image: cimg/node:20.11.0
+    resource_class: small
+    steps:
+      - checkout
+      - run: "yarn install"
+      - run:
+          name: "Lint changed files"
+          command: |
+            yarn run eslint $(git diff --name-only --diff-filter=ACM $(git merge-base main HEAD)..HEAD | egrep '\.js' | grep -v json)
+
   tests:
     docker:
       - image: cimg/node:21.6.2
@@ -174,6 +186,9 @@ workflows:
           ssm_parameter: "/development/FPO_DEVELOPER_HUB_BACKEND_ECR_URL"
           <<: *filter-not-main
 
+      - linters:
+          <<: *filter-not-main
+
       - tests:
           <<: *filter-not-main
 
@@ -185,6 +200,7 @@ workflows:
             - plan-terraform-dev
             - build-and-push-dev
             - tests
+            - linters
           <<: *filter-not-main
 
   deploy-to-staging-and-production:

@@ -4,11 +4,14 @@
   "private": true,
   "scripts": {
     "build": "tsc",
-    "start": "node ./dist/app.js",
+    "start": "node ./dist/src/app.js",
     "test": "ts-node node_modules/jasmine/bin/jasmine"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.538.0",
+    "@aws-sdk/lib-dynamodb": "^3.538.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "dotenv": "^16.4.5",
@@ -27,6 +30,7 @@
     "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
     "eslint-plugin-promise": "^6.0.0",
     "jasmine": "^5.1.0",
+    "jasmine-spec-reporter": "^7.0.0",
     "morgan": "^1.10.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.2"

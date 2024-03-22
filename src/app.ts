@@ -1,5 +1,7 @@
 import { type Express, type Request, type Response, type NextFunction } from 'express'
 
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
+
 import createError from 'http-errors'
 import express from 'express'
 import path from 'path'
@@ -8,8 +10,12 @@ import cookieParser from 'cookie-parser'
 import indexRouter from './routes/index'
 import apiRouter from './routes/api'
 import initEnvironment from './config/env'
-
+import { CustomerApiKeyRepository } from './repositories/customerApiKeyRepository'
 initEnvironment()
+
+const _client = new DynamoDBClient({ region: process.env.AWS_REGION })
+// TODO: Pass this around to the relevant controllers
+const _repository = new CustomerApiKeyRepository(_client)
 
 const app: Express = express()
 const isDev = app.get('env') === 'development'
