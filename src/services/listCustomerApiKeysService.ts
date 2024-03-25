@@ -5,11 +5,11 @@ import { ScanCommand } from '@aws-sdk/lib-dynamodb'
 class ListCustomerApiKeysService {
   private readonly client: DynamoDBClient
 
-  constructor(client: DynamoDBClient) {
+  constructor (client: DynamoDBClient) {
     this.client = client
   }
 
-  async call(customerId: string): Promise<CustomerApiKey[]> {
+  async call (customerId: string): Promise<CustomerApiKey[]> {
     const command = new ScanCommand({
       TableName: 'CustomerApiKeys',
       FilterExpression: 'CustomerId = :CustomerId',
