@@ -115,4 +115,44 @@ describe('CustomerApiKey Model', () => {
       expect(errors.length).toBe(1)
     })
   })
+
+  describe('fromItem', () => {
+    it('returns a CustomerApiKey instance', () => {
+      const item = {
+        CustomerApiKeyId: 'the-id',
+        Secret: 'secret',
+        Enabled: true,
+        Description: '',
+        CustomerId: 'yodel',
+        CreatedAt: new Date().toISOString(),
+        UpdatedAt: new Date().toISOString(),
+        Saved: false
+      }
+
+      const actual = CustomerApiKey.fromItem(item)
+      expect(actual).toBeInstanceOf(CustomerApiKey)
+      expect(actual.CustomerApiKeyId).toBe('the-id')
+    })
+  })
+
+  describe('toItem', () => {
+    it('returns a plain object', () => {
+      const apiKey = new CustomerApiKey()
+      apiKey.CustomerApiKeyId = 'the-id'
+      apiKey.Secret = 'secret'
+      apiKey.Enabled = true
+
+      const actual = apiKey.toItem()
+      expect(actual).toEqual({
+        CustomerApiKeyId: 'the-id',
+        Secret: 'secret',
+        Enabled: true,
+        Description: '',
+        CustomerId: '',
+        CreatedAt: apiKey.CreatedAt,
+        UpdatedAt: apiKey.UpdatedAt,
+        Saved: false
+      })
+    })
+  })
 })
