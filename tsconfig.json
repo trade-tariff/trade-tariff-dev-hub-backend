@@ -15,5 +15,10 @@
     },
     "outDir": "./dist",
     "experimentalDecorators": true
-  }
+  },
+  "include": [
+    "src/**/*.ts",
+    "test/**/*.ts",
+    ".eslintrc.js"
+  ]
 }
