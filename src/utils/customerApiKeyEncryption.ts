@@ -7,12 +7,12 @@ dotenv.config({ path: '.env.test' })
 export class CustomerApiKeyEncryption {
   static cryptoKey: crypto.webcrypto.CryptoKey | null = null
 
-  static async loadKey(): Promise<crypto.webcrypto.CryptoKey> {
-    let base64Key: string
-
+  static async loadKey (): Promise<crypto.webcrypto.CryptoKey> {
     if (CustomerApiKeyEncryption.cryptoKey !== null) {
       return CustomerApiKeyEncryption.cryptoKey
     }
+
+    let base64Key: string
 
     if (process.env.ENCRYPTION_KEY === undefined) {
       base64Key = ''
@@ -35,7 +35,7 @@ export class CustomerApiKeyEncryption {
     return CustomerApiKeyEncryption.cryptoKey
   }
 
-  async encrypt(secret: string): Promise<string> {
+  async encrypt (secret: string): Promise<string> {
     const iv = crypto.getRandomValues(new Uint8Array(12))
     const encoded = new TextEncoder().encode(secret)
 
@@ -54,7 +54,7 @@ export class CustomerApiKeyEncryption {
     return `${encodedIv}:${encodedEncrypted}`
   }
 
-  async decrypt(encrypted: string): Promise<string> {
+  async decrypt (encrypted: string): Promise<string> {
     const [encodedIv, encodedEncrypted] = encrypted.split(':')
 
     const iv = Buffer.from(encodedIv, 'base64')
