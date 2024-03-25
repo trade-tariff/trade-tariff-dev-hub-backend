@@ -13,9 +13,9 @@ import initEnvironment from './config/env'
 import { CustomerApiKeyRepository } from './repositories/customerApiKeyRepository'
 initEnvironment()
 
-const _client = new DynamoDBClient({ region: process.env.AWS_REGION })
+const client = new DynamoDBClient({ region: process.env.AWS_REGION })
 // TODO: Pass this around to the relevant controllers
-const _repository = new CustomerApiKeyRepository(_client)
+const _repository = new CustomerApiKeyRepository(client)
 
 const app: Express = express()
 const isDev = app.get('env') === 'development'
