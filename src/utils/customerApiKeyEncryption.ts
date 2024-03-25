@@ -5,8 +5,14 @@ import dotenv from 'dotenv'
 dotenv.config({ path: '.env.test' })
 
 export class CustomerApiKeyEncryption {
-  async loadKey(): Promise<crypto.webcrypto.CryptoKey> {
+  static cryptoKey: crypto.webcrypto.CryptoKey | null = null
+
+  static async loadKey(): Promise<crypto.webcrypto.CryptoKey> {
     let base64Key: string
+
+    if (CustomerApiKeyEncryption.cryptoKey !== null) {
+      return CustomerApiKeyEncryption.cryptoKey
+    }
 
     if (process.env.ENCRYPTION_KEY === undefined) {
       base64Key = ''
@@ -15,7 +21,7 @@ export class CustomerApiKeyEncryption {
     }
 
     const decodedKey = Buffer.from(base64Key, 'base64')
-    const result = await crypto.subtle.importKey(
+    CustomerApiKeyEncryption.cryptoKey = await crypto.subtle.importKey(
       'raw',
       decodedKey,
       {
@@ -26,7 +32,7 @@ export class CustomerApiKeyEncryption {
       ['encrypt', 'decrypt']
     )
 
-    return result
+    return CustomerApiKeyEncryption.cryptoKey
   }
 
   async encrypt(secret: string): Promise<string> {
@@ -38,7 +44,7 @@ export class CustomerApiKeyEncryption {
         name: 'AES-GCM',
         iv
       },
-      await this.loadKey(),
+      await CustomerApiKeyEncryption.loadKey(),
       encoded
     )
 
@@ -59,7 +65,7 @@ export class CustomerApiKeyEncryption {
         name: 'AES-GCM',
         iv
       },
-      await this.loadKey(),
+      await CustomerApiKeyEncryption.loadKey(),
       encryptedSecret
     )
 
