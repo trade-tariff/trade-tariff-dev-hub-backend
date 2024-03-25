@@ -17,7 +17,7 @@ class CreateCustomerApiKeyService {
     const customerApiKey = new CustomerApiKey()
     let saved = false
 
-    customerApiKey.CustomerId = customerId
+    customerApiKey.FpoId = customerId
     customerApiKey.CustomerApiKeyId = this.generateClientId()
     customerApiKey.Secret = await this.generateRandomSecret()
     customerApiKey.Enabled = true

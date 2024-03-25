@@ -18,7 +18,7 @@ describe('CustomerApiKey Model', () => {
       apiKey.Secret = 'some-secret'
       apiKey.Enabled = true
       apiKey.Description = 'some-description'
-      apiKey.CustomerId = 'some-customer-id'
+      apiKey.FpoId = 'some-fpo-id'
       apiKey.CreatedAt = new Date().toISOString()
       apiKey.UpdatedAt = new Date().toISOString()
 
@@ -76,10 +76,10 @@ describe('CustomerApiKey Model', () => {
     })
   })
 
-  describe('when the CustomerId is invalid', () => {
+  describe('when the FpoId is invalid', () => {
     it('is invalid', async () => {
       const apiKey: CustomerApiKey = new CustomerApiKey()
-      apiKey.CustomerId = null as unknown as string
+      apiKey.FpoId = null as unknown as string
 
       const errors = await validate(apiKey)
       expect(errors.length).toBe(1)
@@ -123,7 +123,7 @@ describe('CustomerApiKey Model', () => {
         Secret: 'secret',
         Enabled: true,
         Description: '',
-        CustomerId: 'yodel',
+        FpoId: 'yodel',
         CreatedAt: new Date().toISOString(),
         UpdatedAt: new Date().toISOString(),
         Saved: false
@@ -148,7 +148,7 @@ describe('CustomerApiKey Model', () => {
         Secret: 'secret',
         Enabled: true,
         Description: '',
-        CustomerId: '',
+        FpoId: '',
         CreatedAt: apiKey.CreatedAt,
         UpdatedAt: apiKey.UpdatedAt,
         Saved: false

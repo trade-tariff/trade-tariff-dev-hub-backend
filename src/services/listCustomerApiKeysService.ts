@@ -12,9 +12,9 @@ class ListCustomerApiKeysService {
   async call (customerId: string): Promise<CustomerApiKey[]> {
     const command = new ScanCommand({
       TableName: 'CustomerApiKeys',
-      FilterExpression: 'CustomerId = :CustomerId',
+      FilterExpression: 'FpoId = :FpoId',
       ExpressionAttributeValues: {
-        ':CustomerId': customerId
+        ':FpoId': customerId
       }
     })
 

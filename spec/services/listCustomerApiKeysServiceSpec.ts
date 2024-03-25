@@ -18,7 +18,7 @@ describe('ListCustomerApiKeysService', () => {
           Secret: 'secret',
           Enabled: true,
           Description: 'description',
-          CustomerId: 'customer-id',
+          FpoId: 'fpo-id',
           CreatedAt: new Date().toISOString(),
           UpdatedAt: new Date().toISOString()
         }
