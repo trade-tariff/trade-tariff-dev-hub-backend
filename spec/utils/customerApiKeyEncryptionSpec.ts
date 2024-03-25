@@ -2,7 +2,7 @@ import { CustomerApiKeyEncryption } from '../../src/utils/customerApiKeyEncrypti
 
 describe('CustomerApiKeyEncription', () => {
   describe('encrypt', () => {
-    it('should return encrypted key', async () => {
+    it('returns an encrypted key', async () => {
       const encryption = new CustomerApiKeyEncryption()
 
       const encrypted = await encryption.encrypt('secret')
@@ -12,7 +12,7 @@ describe('CustomerApiKeyEncription', () => {
   })
 
   describe('decrypt', () => {
-    it('should return decrypted key', async () => {
+    it('returns a decrypted key', async () => {
       const encrypted = 'TwdRsG9BC6yF8zER:vgPdLKDyFcxn8bfJYpUHS/+YTk8O2g=='
       const encryption = new CustomerApiKeyEncryption()
       const decrypted = await encryption.decrypt(encrypted)
