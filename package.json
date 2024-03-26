@@ -8,6 +8,7 @@
     "test": "ts-node node_modules/jasmine/bin/jasmine"
   },
   "dependencies": {
+    "@aws-sdk/client-api-gateway": "^3.540.0",
     "@aws-sdk/client-dynamodb": "^3.540.0",
     "@aws-sdk/lib-dynamodb": "^3.540.0",
     "class-transformer": "^0.5.1",

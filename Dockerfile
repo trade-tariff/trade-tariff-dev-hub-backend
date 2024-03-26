@@ -6,10 +6,11 @@ RUN yarn install --frozen-lockfile
 
 COPY . /app/
 
-RUN yarn run build && \
-  addgroup -S tariff && \
+RUN addgroup -S tariff && \
   adduser -S tariff -G tariff && \
   chown -R tariff:tariff /app
+
+RUN yarn run build
 
 ENV PORT=8080 \
   NODE_ENV=production

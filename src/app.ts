@@ -13,10 +13,6 @@ import initEnvironment from './config/env'
 import { CustomerApiKeyRepository } from './repositories/customerApiKeyRepository'
 initEnvironment()
 
-const client = new DynamoDBClient({ region: process.env.AWS_REGION })
-// TODO: Pass this around to the relevant controllers
-const _repository = new CustomerApiKeyRepository(client)
-
 const app: Express = express()
 const isDev = app.get('env') === 'development'
 
@@ -40,13 +36,15 @@ app.use(function (_req: Request, _res: Response, next: NextFunction) {
 
 // Error handler
 app.use(function (err: any, req: Request, res: Response, _next: NextFunction) {
-  // Set locals, only providing error in development
   res.locals.message = err.message
   res.locals.error = req.app.get('env') === 'development' ? err : {}
 
-  // Render the error page
   res.status(err.status || 500)
-  res.render('error')
+
+  res.json({
+    message: err.message,
+    error: req.app.get('env') === 'development' ? err : {}
+  })
 })
 
 app.listen(process.env.PORT)
