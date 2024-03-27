@@ -17,7 +17,7 @@ module.exports = {
     '@typescript-eslint'
   ],
   rules: {
-    '@typescript-eslint/no-var-requires': 'off'
+    '@typescript-eslint/unbound-method': 'off'
   },
   ignorePatterns: [
     'dist/',
