@@ -18,7 +18,11 @@
   },
   "include": [
     "src/**/*.ts",
-    "test/**/*.ts",
+    "spec/**/*.ts",
     ".eslintrc.js"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
   ]
 }
