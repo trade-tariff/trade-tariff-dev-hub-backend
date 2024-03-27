@@ -163,7 +163,7 @@ describe('CustomerApiKey Model', () => {
         Description: '',
         FpoId: '',
         CreatedAt: apiKey.CreatedAt,
-        UpdatedAt: apiKey.UpdatedAt,
+        UpdatedAt: apiKey.UpdatedAt
       })
     })
   })
