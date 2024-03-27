@@ -1,8 +1,5 @@
 import crypto from 'crypto'
 import { Buffer } from 'buffer'
-import dotenv from 'dotenv'
-
-dotenv.config({ path: '.env.test' })
 
 export class CustomerApiKeyEncryption {
   static cryptoKey: crypto.webcrypto.CryptoKey | null = null
