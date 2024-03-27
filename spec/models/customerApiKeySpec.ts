@@ -1,5 +1,6 @@
 import { validate } from 'class-validator'
 import { CustomerApiKey } from '../../src/models/customerApiKey'
+import { CustomerApiKeyEncryption } from '../../src/utils/customerApiKeyEncryption'
 
 describe('CustomerApiKey Model', () => {
   describe('when all of the values are the default', () => {
@@ -16,6 +17,7 @@ describe('CustomerApiKey Model', () => {
 
       apiKey.CustomerApiKeyId = 'some-id'
       apiKey.Secret = 'some-secret'
+      apiKey.ApiGatewayId = 'someother-id'
       apiKey.Enabled = true
       apiKey.Description = 'some-description'
       apiKey.FpoId = 'some-fpo-id'
@@ -31,6 +33,16 @@ describe('CustomerApiKey Model', () => {
     it('is invalid', async () => {
       const apiKey: CustomerApiKey = new CustomerApiKey()
       apiKey.CustomerApiKeyId = null as unknown as string
+
+      const errors = await validate(apiKey)
+      expect(errors.length).toBe(1)
+    })
+  })
+
+  describe('when the ApiGatewayId is invalid', () => {
+    it('is invalid', async () => {
+      const apiKey: CustomerApiKey = new CustomerApiKey()
+      apiKey.ApiGatewayId = null as unknown as string
 
       const errors = await validate(apiKey)
       expect(errors.length).toBe(1)
@@ -145,13 +157,34 @@ describe('CustomerApiKey Model', () => {
       const actual = apiKey.toItem()
       expect(actual).toEqual({
         CustomerApiKeyId: 'the-id',
+        ApiGatewayId: '',
         Secret: 'secret',
         Enabled: true,
         Description: '',
         FpoId: '',
         CreatedAt: apiKey.CreatedAt,
         UpdatedAt: apiKey.UpdatedAt,
-        Saved: false
+      })
+    })
+  })
+
+  describe('toDecryptedJson', () => {
+    it('returns a plain object', async () => {
+      const plainSecret = 'fomo'
+      const encryptedSecret = await new CustomerApiKeyEncryption().encrypt(plainSecret)
+      const apiKey = new CustomerApiKey()
+      apiKey.Secret = encryptedSecret
+
+      const actual = await apiKey.toDecryptedJson()
+      expect(actual).toEqual({
+        Secret: plainSecret,
+        Description: '',
+        Enabled: false,
+        FpoId: '',
+        ApiGatewayId: '',
+        CustomerApiKeyId: '',
+        CreatedAt: apiKey.CreatedAt,
+        UpdatedAt: apiKey.UpdatedAt
       })
     })
   })

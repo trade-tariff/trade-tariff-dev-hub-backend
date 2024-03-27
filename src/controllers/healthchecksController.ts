@@ -4,7 +4,7 @@ import path from 'path'
 
 const revision = fs.readFileSync(path.join(__dirname, '..', '..', 'REVISION'), 'utf-8').trim()
 
-class HealthCheckController {
+export class HealthchecksController {
   public show (_req: Request, res: Response): void {
     res.json({ git_sha1: revision })
   }
@@ -13,5 +13,3 @@ class HealthCheckController {
     res.json({ git_sha1: revision })
   }
 }
-
-export default new HealthCheckController()
