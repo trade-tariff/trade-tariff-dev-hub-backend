@@ -1,35 +1,24 @@
 import { type DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { type APIGatewayClient } from '@aws-sdk/client-api-gateway'
 import { type CustomerApiKey } from '../models/customerApiKey'
-import { ListCustomerApiKeysOperation } from '../operations/listCustomerApiKeysOperation'
-import { CreateCustomerApiKeyOperation } from '../operations/createCustomerApiKeyOperation'
-import { GetCustomerApiKeyOperation } from '../operations/getCustomerApiKeyOperation'
-import { UpdateCustomerApiKeyOperation } from '../operations/updateCustomerApiKeyOperation'
-import { get } from 'http'
+import { ListCustomerApiKeys } from '../operations/listCustomerApiKeys'
+import { CreateCustomerApiKey } from '../operations/createCustomerApiKey'
+import { GetCustomerApiKey } from '../operations/getCustomerApiKey'
+import { UpdateCustomerApiKey } from '../operations/updateCustomerApiKey'
 
 export class CustomerApiKeyRepository {
   constructor (
     private readonly dynamodbClient: DynamoDBClient,
     private readonly apiGatewayClient: APIGatewayClient,
-    private readonly listOperation: ListCustomerApiKeysOperation = new ListCustomerApiKeysOperation(dynamodbClient),
-    private readonly createOperation: CreateCustomerApiKeyOperation = new CreateCustomerApiKeyOperation(dynamodbClient, apiGatewayClient),
-    private readonly getOperation: GetCustomerApiKeyOperation = new GetCustomerApiKeyOperation(dynamodbClient),
-    private readonly updateOperation: UpdateCustomerApiKeyOperation = new UpdateCustomerApiKeyOperation(dynamodbClient, apiGatewayClient)
+    private readonly listOperation: ListCustomerApiKeys = new ListCustomerApiKeys(dynamodbClient),
+    private readonly createOperation: CreateCustomerApiKey = new CreateCustomerApiKey(dynamodbClient, apiGatewayClient),
+    private readonly getOperation: GetCustomerApiKey = new GetCustomerApiKey(dynamodbClient),
+    private readonly updateOperation: UpdateCustomerApiKey = new UpdateCustomerApiKey(dynamodbClient, apiGatewayClient)
 
   ) {}
 
-  async updateKey (fpoId: string, customerApiKeyId: string, updates: object = {}): Promise<CustomerApiKey | null> {
-    if (Object.keys(updates).length !== 0) {
-      const customerApiKey = await this.getKey(fpoId, customerApiKeyId)
-
-      if (customerApiKey === null) {
-        return null
-      }
-
-      return await this.updateOperation.call(customerApiKey, updates)
-    } else {
-      return null
-    }
+  async updateKey (customerApiKey: CustomerApiKey): Promise<CustomerApiKey> {
+    return await this.updateOperation.call(customerApiKey)
   }
 
   async listKeys (fpoId: string): Promise<CustomerApiKey[]> {

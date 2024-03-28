@@ -2,11 +2,11 @@ import 'jasmine'
 
 import { type DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { type ScanCommandOutput } from '@aws-sdk/lib-dynamodb'
-import { ListCustomerApiKeysOperation } from '../../src/operations/listCustomerApiKeysOperation'
+import { ListCustomerApiKeys } from '../../src/operations/listCustomerApiKeys'
 import { CustomerApiKey } from '../../src/models/customerApiKey'
 
-describe('ListCustomerApiKeysOperation', () => {
-  let operation: ListCustomerApiKeysOperation
+describe('ListCustomerApiKeys', () => {
+  let operation: ListCustomerApiKeys
   let mockClient: jasmine.SpyObj<DynamoDBClient>
   let mockResponse: ScanCommandOutput
 
@@ -26,7 +26,7 @@ describe('ListCustomerApiKeysOperation', () => {
       $metadata: {}
     }
     mockClient = jasmine.createSpyObj('DynamoDBClient', { send: mockResponse })
-    operation = new ListCustomerApiKeysOperation(mockClient)
+    operation = new ListCustomerApiKeys(mockClient)
   })
 
   it('should return CustomerApiKeys', async () => {

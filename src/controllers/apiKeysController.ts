@@ -1,29 +1,10 @@
 import { type Request, type Response } from 'express'
 import { type CustomerApiKeyRepository } from '../repositories/customerApiKeyRepository'
-// const allowedKeys = ['description', 'enabled']
 
 export class ApiKeyController {
   constructor (
     private readonly repository: CustomerApiKeyRepository
   ) {}
-
-  async patch (req: Request, res: Response): Promise<void> {
-    const fpoId: string = req.params.fpoId
-    const customerApiKeyId: string = req.params.customerApiKeyId
-    const body: string = req.body
-
-    if (typeof body !== 'object') {
-      res.status(400).json({ message: 'Invalid request' })
-    } else {
-      const apiKey = await this.repository.updateKey(fpoId, customerApiKeyId, body)
-
-      if (apiKey === null) {
-        res.status(404).json({ message: 'Did not succeed' })
-      } else {
-        res.status(200).json({message: 'Success' })
-      }
-    }
-  }
 
   async show (req: Request, res: Response): Promise<void> {
     const fpoId = req.params.fpoId
@@ -49,5 +30,34 @@ export class ApiKeyController {
     const apiKey = await this.repository.createKey(fpoId)
 
     res.status(201).json(apiKey.toJson())
+  }
+
+  async update (req: Request, res: Response): Promise<void> {
+    const fpoId: string = req.params.fpoId
+    const customerApiKeyId: string = req.params.customerApiKeyId
+    const body = req.body
+
+    if (typeof body !== 'object') {
+      res.status(400).json({ message: 'Invalid request' })
+      return
+    }
+
+    const customerApiKey = await this.repository.getKey(fpoId, customerApiKeyId)
+
+    if (customerApiKey === null) {
+      res.status(404).json({ message: 'API key not found' })
+      return
+    }
+
+    if (body.description !== undefined && typeof body.description === 'string') {
+      customerApiKey.Description = body.description
+    } else {
+      res.status(400).json({ message: 'Invalid request' })
+      return
+    }
+
+    await this.repository.updateKey(customerApiKey)
+
+    res.status(200).json(customerApiKey.toJson())
   }
 }
