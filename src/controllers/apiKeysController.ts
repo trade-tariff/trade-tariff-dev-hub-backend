@@ -3,26 +3,26 @@ import { type CustomerApiKeyRepository } from '../repositories/customerApiKeyRep
 // const allowedKeys = ['description', 'enabled']
 
 export class ApiKeyController {
-  //   async update (req: Request, res: Response): Promise<void> {
-  //     const fpoId = req.params.fpoId
-  //     const id = req.params.id
-  //     const body = req.body
-  //
-  //     if (typeof body !== 'object') {
-  //       res.status(400).json({ message: 'Invalid request' })
-  //     }
-  //     const apiKey = await repository.updateKey(fpoId, id, body)
+  constructor (
+    private readonly repository: CustomerApiKeyRepository
+  ) {}
 
-  //     if (apiKey === null) {
-  //       res.status(404).json({ message: 'Did not succeed' })
-  //     } else {
-  //       res.status(200).json(apiKey.toJson())
-  //     }
-  //   }
-  private readonly repository: CustomerApiKeyRepository
+  async patch (req: Request, res: Response): Promise<void> {
+    const fpoId: string = req.params.fpoId
+    const customerApiKeyId: string = req.params.customerApiKeyId
+    const body: string = req.body
 
-  constructor (repository: CustomerApiKeyRepository) {
-    this.repository = repository
+    if (typeof body !== 'object') {
+      res.status(400).json({ message: 'Invalid request' })
+    } else {
+      const apiKey = await this.repository.updateKey(fpoId, customerApiKeyId, body)
+
+      if (apiKey === null) {
+        res.status(404).json({ message: 'Did not succeed' })
+      } else {
+        res.status(200).json({message: 'Success' })
+      }
+    }
   }
 
   async show (req: Request, res: Response): Promise<void> {
