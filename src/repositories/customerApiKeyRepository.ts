@@ -1,20 +1,20 @@
 import { type DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { type APIGatewayClient } from '@aws-sdk/client-api-gateway'
 import { type CustomerApiKey } from '../models/customerApiKey'
-import { ListCustomerApiKeysService } from '../services/listCustomerApiKeysService'
-import { CreateCustomerApiKeyService } from '../services/createCustomerApiKeyService'
-import { GetCustomerApiKeyService } from '../services/getCustomerApiKeyService'
-import { UpdateCustomerApiKeyService } from '../services/updateCustomerApiKeyService'
+import { ListCustomerApiKeysOperation } from '../operations/listCustomerApiKeysOperation'
+import { CreateCustomerApiKeyOperation } from '../operations/createCustomerApiKeyOperation'
+import { GetCustomerApiKeyOperation } from '../operations/getCustomerApiKeyOperation'
+import { UpdateCustomerApiKeyOperation } from '../operations/updateCustomerApiKeyOperation'
 import { get } from 'http'
 
 export class CustomerApiKeyRepository {
   constructor (
     private readonly dynamodbClient: DynamoDBClient,
     private readonly apiGatewayClient: APIGatewayClient,
-    private readonly listService: ListCustomerApiKeysService = new ListCustomerApiKeysService(dynamodbClient),
-    private readonly createService: CreateCustomerApiKeyService = new CreateCustomerApiKeyService(dynamodbClient, apiGatewayClient),
-    private readonly getService: GetCustomerApiKeyService = new GetCustomerApiKeyService(dynamodbClient),
-    private readonly updateService: UpdateCustomerApiKeyService = new UpdateCustomerApiKeyService(dynamodbClient, apiGatewayClient)
+    private readonly listOperation: ListCustomerApiKeysOperation = new ListCustomerApiKeysOperation(dynamodbClient),
+    private readonly createOperation: CreateCustomerApiKeyOperation = new CreateCustomerApiKeyOperation(dynamodbClient, apiGatewayClient),
+    private readonly getOperation: GetCustomerApiKeyOperation = new GetCustomerApiKeyOperation(dynamodbClient),
+    private readonly updateOperation: UpdateCustomerApiKeyOperation = new UpdateCustomerApiKeyOperation(dynamodbClient, apiGatewayClient)
 
   ) {}
 
@@ -26,21 +26,21 @@ export class CustomerApiKeyRepository {
         return null
       }
 
-      return await this.updateService.call(customerApiKey, updates)
+      return await this.updateOperation.call(customerApiKey, updates)
     } else {
       return null
     }
   }
 
   async listKeys (fpoId: string): Promise<CustomerApiKey[]> {
-    return await this.listService.call(fpoId)
+    return await this.listOperation.call(fpoId)
   }
 
   async createKey (fpoId: string): Promise<CustomerApiKey> {
-    return await this.createService.call(fpoId)
+    return await this.createOperation.call(fpoId)
   }
 
   async getKey (fpoId: string, id: string): Promise<CustomerApiKey | null> {
-    return await this.getService.call(fpoId, id)
+    return await this.getOperation.call(fpoId, id)
   }
 }

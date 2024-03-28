@@ -2,7 +2,7 @@ import { type CustomerApiKey } from '../models/customerApiKey'
 import { UpdateItemCommand, type UpdateItemCommandInput, type DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { UpdateApiKeyCommand, type UpdateApiKeyCommandInput, type APIGatewayClient } from '@aws-sdk/client-api-gateway'
 
-class UpdateCustomerApiKeyService {
+class UpdateCustomerApiKeyOperation {
   constructor (
     private readonly dynamodbClient: DynamoDBClient,
     private readonly apigatewayClient: APIGatewayClient
@@ -55,4 +55,4 @@ class UpdateCustomerApiKeyService {
   }
 }
 
-export { UpdateCustomerApiKeyService }
+export { UpdateCustomerApiKeyOperation }
