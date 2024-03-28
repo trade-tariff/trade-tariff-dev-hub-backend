@@ -2,7 +2,7 @@ import { CustomerApiKey } from '../models/customerApiKey'
 import { type DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { ScanCommand } from '@aws-sdk/lib-dynamodb'
 
-class ListCustomerApiKeysService {
+class ListCustomerApiKeys {
   private readonly client: DynamoDBClient
 
   constructor (client: DynamoDBClient) {
@@ -24,4 +24,4 @@ class ListCustomerApiKeysService {
   }
 }
 
-export { ListCustomerApiKeysService }
+export { ListCustomerApiKeys }

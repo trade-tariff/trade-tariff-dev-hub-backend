@@ -5,7 +5,7 @@ import { type APIGatewayClient, CreateApiKeyCommand, type CreateApiKeyCommandInp
 
 import crypto from 'crypto'
 
-class CreateCustomerApiKeyService {
+class CreateCustomerApiKey {
   static CLIENT_ID_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
   static CLIENT_ID_LENGTH = 17
   static CLIENT_ID_PREFIX = 'HUB'
@@ -59,7 +59,7 @@ class CreateCustomerApiKeyService {
     const input: CreateUsagePlanKeyRequest = {
       keyId: customerApiKey.ApiGatewayId,
       usagePlanId: process.env.USAGE_PLAN_ID,
-      keyType: CreateCustomerApiKeyService.API_KEY_TYPE
+      keyType: CreateCustomerApiKey.API_KEY_TYPE
     }
 
     const command = new CreateUsagePlanKeyCommand(input)
@@ -68,23 +68,23 @@ class CreateCustomerApiKeyService {
   }
 
   private generateClientId (): string {
-    let clientId = CreateCustomerApiKeyService.CLIENT_ID_PREFIX
+    let clientId = CreateCustomerApiKey.CLIENT_ID_PREFIX
 
-    for (let i = 0; i < CreateCustomerApiKeyService.CLIENT_ID_LENGTH; i++) {
-      const randomIndex = Math.floor(Math.random() * CreateCustomerApiKeyService.CLIENT_ID_CHARS.length)
+    for (let i = 0; i < CreateCustomerApiKey.CLIENT_ID_LENGTH; i++) {
+      const randomIndex = Math.floor(Math.random() * CreateCustomerApiKey.CLIENT_ID_CHARS.length)
 
-      clientId += CreateCustomerApiKeyService.CLIENT_ID_CHARS[randomIndex]
+      clientId += CreateCustomerApiKey.CLIENT_ID_CHARS[randomIndex]
     }
 
     return clientId
   }
 
   private async generateRandomSecret (): Promise<string> {
-    const randomSecret: string = crypto.randomBytes(CreateCustomerApiKeyService.SECRET_LENGTH).toString('base64')
+    const randomSecret: string = crypto.randomBytes(CreateCustomerApiKey.SECRET_LENGTH).toString('base64')
     const encrypted = await new CustomerApiKeyEncryption().encrypt(randomSecret)
 
     return encrypted
   }
 }
 
-export { CreateCustomerApiKeyService }
+export { CreateCustomerApiKey }

@@ -3,15 +3,15 @@ import 'jasmine'
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { APIGatewayClient } from '@aws-sdk/client-api-gateway'
 import { CustomerApiKeyRepository } from '../../src/repositories/customerApiKeyRepository'
-import { type ListCustomerApiKeysService } from '../../src/services/listCustomerApiKeysService'
-import { type CreateCustomerApiKeyService } from '../../src/services/createCustomerApiKeyService'
+import { type ListCustomerApiKeys } from '../../src/operations/listCustomerApiKeys'
+import { type CreateCustomerApiKey } from '../../src/operations/createCustomerApiKey'
 import { CustomerApiKey } from '../../src/models/customerApiKey'
 
 describe('CustomerApiKeyRepository', () => {
   let apiGatewayClient: APIGatewayClient
   let dynamodbClient: DynamoDBClient
-  let mockListService: jasmine.SpyObj<ListCustomerApiKeysService>
-  let mockCreateService: jasmine.SpyObj<CreateCustomerApiKeyService>
+  let mockListOperation: jasmine.SpyObj<ListCustomerApiKeys>
+  let mockCreateOperation: jasmine.SpyObj<CreateCustomerApiKey>
   let repository: CustomerApiKeyRepository
   let result: CustomerApiKey[]
 
@@ -30,12 +30,12 @@ describe('CustomerApiKeyRepository', () => {
       )
     ]
     dynamodbClient = new DynamoDBClient({ region: 'us-west-2' })
-    mockListService = jasmine.createSpyObj('ListCustomerApiKeysService', { call: Promise.resolve(result) })
+    mockListOperation = jasmine.createSpyObj('ListCustomerApiKeys', { call: Promise.resolve(result) })
     repository = new CustomerApiKeyRepository(
       dynamodbClient,
       apiGatewayClient,
-      mockListService,
-      mockCreateService
+      mockListOperation,
+      mockCreateOperation
     )
   })
 
