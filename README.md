@@ -8,9 +8,9 @@ When this backend app is deployed to ECS we enable client credentials authentica
 
 ```mermaid
 sequenceDiagram
-participant Client Application
-participant Cognito Authorization Server
-participant Protected Resource / API
+participant Client Application as Client Application #00703c
+participant Cognito Authorization Server as Cognito Authorization Server #732282
+participant Protected Resource / API as Protected Resource / API #00703c
 
 Client Application->>Cognito Authorization Server: Request Access Token (Client ID, Client Secret)
 Cognito Authorization Server->>Cognito Authorization Server: Validate Credentials
