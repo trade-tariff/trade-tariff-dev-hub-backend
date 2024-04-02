@@ -5,6 +5,7 @@ import { ListCustomerApiKeys } from '../operations/listCustomerApiKeys'
 import { CreateCustomerApiKey } from '../operations/createCustomerApiKey'
 import { GetCustomerApiKey } from '../operations/getCustomerApiKey'
 import { UpdateCustomerApiKey } from '../operations/updateCustomerApiKey'
+import { DeleteCustomerApiKey } from '../operations/deleteCustomerApiKey'
 
 export class CustomerApiKeyRepository {
   constructor (
@@ -13,8 +14,8 @@ export class CustomerApiKeyRepository {
     private readonly listOperation: ListCustomerApiKeys = new ListCustomerApiKeys(dynamodbClient),
     private readonly createOperation: CreateCustomerApiKey = new CreateCustomerApiKey(dynamodbClient, apiGatewayClient),
     private readonly getOperation: GetCustomerApiKey = new GetCustomerApiKey(dynamodbClient),
-    private readonly updateOperation: UpdateCustomerApiKey = new UpdateCustomerApiKey(dynamodbClient, apiGatewayClient)
-
+    private readonly updateOperation: UpdateCustomerApiKey = new UpdateCustomerApiKey(dynamodbClient, apiGatewayClient),
+    private readonly deleteOperation: DeleteCustomerApiKey = new DeleteCustomerApiKey(dynamodbClient, apiGatewayClient)
   ) {}
 
   async updateKey (customerApiKey: CustomerApiKey): Promise<CustomerApiKey> {
@@ -31,5 +32,9 @@ export class CustomerApiKeyRepository {
 
   async getKey (fpoId: string, id: string): Promise<CustomerApiKey | null> {
     return await this.getOperation.call(fpoId, id)
+  }
+
+  async deleteKey (customerApiKey: CustomerApiKey): Promise<void> {
+    await this.deleteOperation.call(customerApiKey)
   }
 }

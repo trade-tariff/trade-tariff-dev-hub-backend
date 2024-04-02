@@ -131,4 +131,53 @@ describe('ApiKeyController', () => {
       })
     })
   })
+
+  describe('destroy', () => {
+    const res = {
+      status: function (code: number) {
+        this.statusCode = code
+        return this
+      },
+      json: function (data: any) {
+        this.data = data
+        return this
+      }
+    } as any
+
+    it('returns 200', async () => {
+      apiKey = new CustomerApiKey()
+      getKeyResult = Promise.resolve(apiKey)
+      const deleteKeyResult = Promise.resolve()
+      repository = jasmine.createSpyObj('CustomerApiKeyRepository', { getKey: getKeyResult, deleteKey: deleteKeyResult })
+      repository.getKey.bind(repository)
+      repository.deleteKey.bind(repository)
+      controller = new ApiKeyController(repository)
+      req = { params: { fpoId: 'fpoId', id: 'id' } } as any
+
+      await controller.destroy(req, res)
+
+      expect(repository.getKey).toHaveBeenCalledWith('fpoId', 'id')
+      expect(repository.deleteKey).toHaveBeenCalledWith(apiKey)
+      expect(res.statusCode).toBe(200)
+      expect(res.data).toEqual({
+        message: 'API key deleted'
+      })
+    })
+
+    it('returns 404 if the key is not found', async () => {
+      getKeyResult = Promise.resolve(null)
+      repository = jasmine.createSpyObj('CustomerApiKeyRepository', { getKey: getKeyResult })
+      repository.getKey.bind(repository)
+      controller = new ApiKeyController(repository)
+      req = { params: { fpoId: 'fpoId', id: 'id' } } as any
+
+      await controller.destroy(req, res)
+
+      expect(repository.getKey).toHaveBeenCalledWith('fpoId', 'id')
+      expect(res.statusCode).toBe(404)
+      expect(res.data).toEqual({
+        message: 'API key not found'
+      })
+    })
+  })
 })
