@@ -1,3 +1,23 @@
 # trade-tariff-fpo-developer-hub
 
 Express app giving FPO operators the ability to manage their own API credentials.
+
+## Authentication
+
+When this backend app is deployed to ECS we enable client credentials authentication using Cognito User Pools
+
+```mermaid
+sequenceDiagram
+participant Client Application
+participant Cognito Authorization Server
+participant Protected Resource / API
+
+Client Application->>Cognito Authorization Server: Request Access Token (Client ID, Client Secret)
+Cognito Authorization Server->>Cognito Authorization Server: Validate Credentials
+Cognito Authorization Server->>Client Application: Access Token 
+Client Application->>Protected Resource / API: API Request (Access Token)
+Protected Resource / API->>Protected Resource / API: Validate Token
+Protected Resource / API->>Client Application: API Response 
+```
+
+Access tokens need to be refreshed by the client and the backend decodes/verifies the JWT in the Authorisation header.
