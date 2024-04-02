@@ -3,47 +3,113 @@ import 'jasmine'
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { APIGatewayClient } from '@aws-sdk/client-api-gateway'
 import { CustomerApiKeyRepository } from '../../src/repositories/customerApiKeyRepository'
+
 import { type ListCustomerApiKeys } from '../../src/operations/listCustomerApiKeys'
 import { type CreateCustomerApiKey } from '../../src/operations/createCustomerApiKey'
+import { type GetCustomerApiKey } from '../../src/operations/getCustomerApiKey'
+import { type UpdateCustomerApiKey } from '../../src/operations/updateCustomerApiKey'
+import { type DeleteCustomerApiKey } from '../../src/operations/deleteCustomerApiKey'
+
 import { CustomerApiKey } from '../../src/models/customerApiKey'
 
 describe('CustomerApiKeyRepository', () => {
-  let apiGatewayClient: APIGatewayClient
-  let dynamodbClient: DynamoDBClient
-  let mockListOperation: jasmine.SpyObj<ListCustomerApiKeys>
-  let mockCreateOperation: jasmine.SpyObj<CreateCustomerApiKey>
-  let repository: CustomerApiKeyRepository
-  let result: CustomerApiKey[]
+  const apiGatewayClient: APIGatewayClient = new APIGatewayClient({ region: 'us-west-2' })
+  const dynamodbClient: DynamoDBClient = new DynamoDBClient({ region: 'us-west-2' })
+  const mockUpdateOperation: jasmine.SpyObj<UpdateCustomerApiKey> = jasmine.createSpyObj('UpdateCustomerApiKey', ['call'])
+  const mockListOperation: jasmine.SpyObj<ListCustomerApiKeys> = jasmine.createSpyObj('ListCustomerApiKeys', ['call'])
+  const mockCreateOperation: jasmine.SpyObj<CreateCustomerApiKey> = jasmine.createSpyObj('CreateCustomerApiKey', ['call'])
+  const mockGetOperation: jasmine.SpyObj<GetCustomerApiKey> = jasmine.createSpyObj('GetCustomerApiKey', ['call'])
+  const mockDeleteOperation: jasmine.SpyObj<DeleteCustomerApiKey> = jasmine.createSpyObj('DeleteCustomerApiKey', ['call'])
+  const repository: CustomerApiKeyRepository = new CustomerApiKeyRepository(
+    dynamodbClient,
+    apiGatewayClient,
+    mockListOperation,
+    mockCreateOperation,
+    mockGetOperation,
+    mockUpdateOperation,
+    mockDeleteOperation
+  )
 
-  beforeEach(() => {
-    result = [
-      CustomerApiKey.fromItem(
-        {
-          CustomerApiKeyId: 'customer-api-key-id',
-          Secret: 'secret',
-          Enabled: true,
-          Description: 'description',
-          FpoId: 'fpo-id',
-          CreatedAt: new Date().toISOString(),
-          UpdatedAt: new Date().toISOString()
-        }
-      )
-    ]
-    dynamodbClient = new DynamoDBClient({ region: 'us-west-2' })
-    mockListOperation = jasmine.createSpyObj('ListCustomerApiKeys', { call: Promise.resolve(result) })
-    repository = new CustomerApiKeyRepository(
-      dynamodbClient,
-      apiGatewayClient,
-      mockListOperation,
-      mockCreateOperation
-    )
+  describe('listKeys', () => {
+    beforeEach(() => {
+      const key = new CustomerApiKey()
+      const result: CustomerApiKey[] = [key]
+      key.CustomerApiKeyId = 'customer-api-key-id'
+
+      mockListOperation.call.and.returnValue(Promise.resolve(result))
+    })
+
+    it('returns CustomerApiKeys', async () => {
+      const actual = await repository.listKeys('customer-id')
+      const apiKey = actual[0]
+
+      expect(apiKey).toEqual(jasmine.any(CustomerApiKey))
+      expect(apiKey.CustomerApiKeyId).toEqual('customer-api-key-id')
+      expect(mockListOperation.call).toHaveBeenCalledWith('customer-id')
+    })
   })
 
-  it('should return CustomerApiKeys', async () => {
-    const actual = await repository.listKeys('customer-id')
-    const apiKey = actual[0]
+  describe('createKey', () => {
+    beforeEach(() => {
+      const result: CustomerApiKey = new CustomerApiKey()
 
-    expect(apiKey).toEqual(jasmine.any(CustomerApiKey))
-    expect(apiKey.CustomerApiKeyId).toEqual('customer-api-key-id')
+      result.CustomerApiKeyId = 'customer-api-key-id'
+
+      mockCreateOperation.call.and.returnValue(Promise.resolve(result))
+    })
+
+    it('returns a CustomerApiKey', async () => {
+      const actual = await repository.createKey('customer-id')
+
+      expect(actual).toEqual(jasmine.any(CustomerApiKey))
+      expect(actual.CustomerApiKeyId).toEqual('customer-api-key-id')
+      expect(mockCreateOperation.call).toHaveBeenCalledWith('customer-id')
+    })
+  })
+
+  describe('getKey', () => {
+    beforeEach(() => {
+      const result: CustomerApiKey = new CustomerApiKey()
+
+      result.CustomerApiKeyId = 'customer-api-key-id'
+
+      mockGetOperation.call.and.returnValue(Promise.resolve(result))
+    })
+
+    it('returns a CustomerApiKey', async () => {
+      const actual = await repository.getKey('customer-id-1', 'customer-id-2')
+
+      expect(actual).toEqual(jasmine.any(CustomerApiKey))
+      expect(actual?.CustomerApiKeyId).toEqual('customer-api-key-id')
+      expect(mockGetOperation.call).toHaveBeenCalledWith('customer-id-1', 'customer-id-2')
+    })
+  })
+
+  describe('updateKey', () => {
+    it('returns a CustomerApiKey', async () => {
+      const key: CustomerApiKey = new CustomerApiKey()
+
+      key.CustomerApiKeyId = 'customer-api-key-id'
+
+      mockUpdateOperation.call.and.returnValue(Promise.resolve(key))
+
+      const actual = await repository.updateKey(key)
+
+      expect(actual).toEqual(jasmine.any(CustomerApiKey))
+      expect(actual?.CustomerApiKeyId).toEqual('customer-api-key-id')
+      expect(mockUpdateOperation.call).toHaveBeenCalledWith(key)
+    })
+  })
+
+  describe('deleteKey', () => {
+    it('calls deleteOperation', async () => {
+      const key: CustomerApiKey = new CustomerApiKey()
+
+      key.CustomerApiKeyId = 'customer-api-key-id'
+
+      await repository.deleteKey(key)
+
+      expect(mockDeleteOperation.call).toHaveBeenCalledWith(key)
+    })
   })
 })

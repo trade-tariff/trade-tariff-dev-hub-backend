@@ -34,7 +34,7 @@ export class ApiKeyController {
 
   async update (req: Request, res: Response): Promise<void> {
     const fpoId: string = req.params.fpoId
-    const customerApiKeyId: string = req.params.customerApiKeyId
+    const id: string = req.params.id
     const body = req.body
 
     if (typeof body !== 'object') {
@@ -42,7 +42,7 @@ export class ApiKeyController {
       return
     }
 
-    const customerApiKey = await this.repository.getKey(fpoId, customerApiKeyId)
+    const customerApiKey = await this.repository.getKey(fpoId, id)
 
     if (customerApiKey === null) {
       res.status(404).json({ message: 'API key not found' })
@@ -59,5 +59,21 @@ export class ApiKeyController {
     await this.repository.updateKey(customerApiKey)
 
     res.status(200).json(customerApiKey.toJson())
+  }
+
+  async destroy (req: Request, res: Response): Promise<void> {
+    const fpoId: string = req.params.fpoId
+    const id: string = req.params.id
+
+    const customerApiKey = await this.repository.getKey(fpoId, id)
+
+    if (customerApiKey === null) {
+      res.status(404).json({ message: 'API key not found' })
+      return
+    }
+
+    await this.repository.deleteKey(customerApiKey)
+
+    res.status(200).json({ message: 'API key deleted' })
   }
 }
