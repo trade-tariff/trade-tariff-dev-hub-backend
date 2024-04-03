@@ -6,6 +6,8 @@ module "service" {
   service_name  = local.service
   service_count = var.service_count
 
+  private_dns_namespace = "tariff.internal"
+
   cluster_name              = "trade-tariff-cluster-${var.environment}"
   subnet_ids                = data.aws_subnets.private.ids
   security_groups           = [data.aws_security_group.this.id]
