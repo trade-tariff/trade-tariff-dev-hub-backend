@@ -123,6 +123,8 @@ dist
 .vscode-test
 
 # yarn v2
+package-lock.json
+.yarn-error.log
 .yarn/cache
 .yarn/unplugged
 .yarn/build-state.yml
