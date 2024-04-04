@@ -32,3 +32,11 @@ data "aws_ssm_parameter" "ecr_url" {
 data "aws_dynamodb_table" "customer_api_keys" {
   name = "CustomerApiKeys"
 }
+
+data "aws_secretsmanager_secret" "encryption_key" {
+  name = "dev-hub-backend-encryption-key"
+}
+
+data "aws_secretsmanager_secret" "usage_plan_id" {
+  name = "dev-hub-backend-usage-plan-id"
+}

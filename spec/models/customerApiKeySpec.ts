@@ -138,7 +138,8 @@ describe('CustomerApiKey Model', () => {
         FpoId: 'yodel',
         CreatedAt: new Date().toISOString(),
         UpdatedAt: new Date().toISOString(),
-        Saved: false
+        Saved: false,
+        UsagePlanId: ''
       }
 
       const actual = CustomerApiKey.fromItem(item)
@@ -163,7 +164,31 @@ describe('CustomerApiKey Model', () => {
         Description: '',
         FpoId: '',
         CreatedAt: apiKey.CreatedAt,
-        UpdatedAt: apiKey.UpdatedAt
+        UpdatedAt: apiKey.UpdatedAt,
+        UsagePlanId: ''
+      })
+    })
+  })
+
+  describe('toJson', () => {
+    it('returns a plain object', () => {
+      const apiKey = new CustomerApiKey()
+      apiKey.CustomerApiKeyId = 'the-id'
+      apiKey.Secret = 'secret'
+      apiKey.Enabled = true
+
+      const actual = apiKey.toJson()
+
+      expect(actual).toEqual({
+        CustomerApiKeyId: 'the-id',
+        ApiGatewayId: '',
+        Secret: 'secret',
+        Enabled: true,
+        Description: '',
+        FpoId: '',
+        CreatedAt: apiKey.CreatedAt,
+        UpdatedAt: apiKey.UpdatedAt,
+        UsagePlanId: ''
       })
     })
   })
@@ -184,7 +209,8 @@ describe('CustomerApiKey Model', () => {
         ApiGatewayId: '',
         CustomerApiKeyId: '',
         CreatedAt: apiKey.CreatedAt,
-        UpdatedAt: apiKey.UpdatedAt
+        UpdatedAt: apiKey.UpdatedAt,
+        UsagePlanId: ''
       })
     })
   })

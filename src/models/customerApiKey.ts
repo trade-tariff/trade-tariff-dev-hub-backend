@@ -25,13 +25,17 @@ export class CustomerApiKey {
     UpdatedAt: string
 
   @IsString()
-    ApiGatewayId: string | undefined
+    ApiGatewayId: string
+
+  @IsString()
+    UsagePlanId: string
 
   Saved: boolean
 
   constructor () {
     this.CustomerApiKeyId = ''
     this.ApiGatewayId = ''
+    this.UsagePlanId = ''
     this.Secret = ''
     this.Enabled = false
     this.Description = ''
