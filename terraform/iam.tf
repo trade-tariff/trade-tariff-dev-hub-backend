@@ -25,7 +25,8 @@ data "aws_iam_policy_document" "exec" {
     ]
     resources = [
       data.aws_secretsmanager_secret.encryption_key.arn,
-      data.aws_secretsmanager_secret.usage_plan_id.arn
+      data.aws_secretsmanager_secret.usage_plan_id.arn,
+      data.aws_secretsmanager_secret.sentry_dsn.arn
     ]
   }
 }
