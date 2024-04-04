@@ -27,4 +27,4 @@ Access tokens need to be refreshed by the client and the backend decodes/verifie
 
 Once the application is running, open a web browser and navigate to the Swagger UI URL: http://localhost:5001/api-docs
 
-This has been disabled to only run in development mode as the endpoints as designed to be be internal.
+This has been disabled to only run in development mode as the endpoints are designed to be be internal.
