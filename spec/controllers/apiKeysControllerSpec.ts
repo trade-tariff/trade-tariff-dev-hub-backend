@@ -35,7 +35,8 @@ describe('ApiKeyController', () => {
         Description: '',
         FpoId: '',
         CreatedAt: apiKey.CreatedAt,
-        UpdatedAt: apiKey.UpdatedAt
+        UpdatedAt: apiKey.UpdatedAt,
+        UsagePlanId: ''
       })
     })
 
@@ -76,7 +77,8 @@ describe('ApiKeyController', () => {
         Description: '',
         FpoId: '',
         CreatedAt: apiKey.CreatedAt,
-        UpdatedAt: apiKey.UpdatedAt
+        UpdatedAt: apiKey.UpdatedAt,
+        UsagePlanId: ''
       }])
     })
 
@@ -136,7 +138,8 @@ describe('ApiKeyController', () => {
         Description: 'description',
         FpoId: '',
         CreatedAt: apiKey.CreatedAt,
-        UpdatedAt: apiKey.UpdatedAt
+        UpdatedAt: apiKey.UpdatedAt,
+        UsagePlanId: ''
       })
     })
   })
@@ -173,7 +176,8 @@ describe('ApiKeyController', () => {
         Description: '',
         FpoId: '',
         CreatedAt: apiKey.CreatedAt,
-        UpdatedAt: apiKey.UpdatedAt
+        UpdatedAt: apiKey.UpdatedAt,
+        UsagePlanId: ''
       })
     })
   })
