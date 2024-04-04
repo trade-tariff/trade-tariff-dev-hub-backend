@@ -55,6 +55,7 @@ data "aws_iam_policy_document" "task" {
     actions = [
       "dynamodb:BatchGetItem",
       "dynamodb:BatchWriteItem",
+      "dynamodb:DeleteItem",
       "dynamodb:GetItem",
       "dynamodb:PutItem",
       "dynamodb:Query",
@@ -64,6 +65,12 @@ data "aws_iam_policy_document" "task" {
     resources = [
       data.aws_dynamodb_table.customer_api_keys.arn
     ]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["apigateway:*"]
+    resources = ["*"]
   }
 }
 
