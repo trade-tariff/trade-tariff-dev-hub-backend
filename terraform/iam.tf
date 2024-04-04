@@ -14,6 +14,20 @@ data "aws_iam_policy_document" "exec" {
       data.aws_kms_key.secretsmanager_key.arn
     ]
   }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "secretsmanager:GetResourcePolicy",
+      "secretsmanager:GetSecretValue",
+      "secretsmanager:DescribeSecret",
+      "secretsmanager:ListSecretVersionIds"
+    ]
+    resources = [
+      data.aws_secretsmanager_secret.encryption_key.arn,
+      data.aws_secretsmanager_secret.usage_plan_id.arn
+    ]
+  }
 }
 
 resource "aws_iam_policy" "exec" {
