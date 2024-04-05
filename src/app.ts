@@ -18,8 +18,11 @@ const sentryEnv = process.env.SENTRY_ENVIRONMENT ?? ''
 
 async function loadDev (): Promise<void> {
   if (isDev) {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const swaggerJsdoc = require('swagger-jsdoc')
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const swaggerUi = require('swagger-ui-express')
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const apiDocs = require('./docs/apiDocs').default
 
     app.use(morgan('dev'))
@@ -40,12 +43,19 @@ async function loadDev (): Promise<void> {
     }
     const swaggerSpec = swaggerJsdoc(swaggerOptions)
 
-    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
+    app.use(
+      '/api-docs',
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      swaggerUi.serve,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      swaggerUi.setup(swaggerSpec)
+    )
   } else {
     app.use(loggingMiddleware())
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   await loadDev()
 })()

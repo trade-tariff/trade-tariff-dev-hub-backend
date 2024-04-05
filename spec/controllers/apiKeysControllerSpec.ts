@@ -125,6 +125,7 @@ describe('ApiKeyController', () => {
       controller = new ApiKeyController(repository)
       req = { params: { fpoId: 'fpoId', id: 'id' }, body: { description: 'description' } } as any
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await controller.update(req, res)
 
       expect(repository.getKey).toHaveBeenCalledWith('fpoId', 'id')
@@ -164,6 +165,7 @@ describe('ApiKeyController', () => {
         }
       } as any
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await controller.create(req, res)
 
       expect(repository.createKey).toHaveBeenCalledWith('fpoId')
@@ -204,6 +206,7 @@ describe('ApiKeyController', () => {
       controller = new ApiKeyController(repository)
       req = { params: { fpoId: 'fpoId', id: 'id' } } as any
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await controller.destroy(req, res)
 
       expect(repository.getKey).toHaveBeenCalledWith('fpoId', 'id')
@@ -221,6 +224,7 @@ describe('ApiKeyController', () => {
       controller = new ApiKeyController(repository)
       req = { params: { fpoId: 'fpoId', id: 'id' } } as any
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await controller.destroy(req, res)
 
       expect(repository.getKey).toHaveBeenCalledWith('fpoId', 'id')
