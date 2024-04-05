@@ -71,9 +71,6 @@ app.use(express.static(path.join(__dirname, '../public')))
 
 app.use('/', indexRouter)
 app.use('/api', apiRouter)
-app.get('/debug-sentry', function mainHandler (_req, _res) {
-  throw new Error('My first Sentry error!')
-})
 
 if (sentryDsn !== '') {
   app.use(Sentry.Handlers.errorHandler())
