@@ -2,6 +2,8 @@ import { type CustomerApiKey } from '../models/customerApiKey'
 import { UpdateItemCommand, type UpdateItemCommandInput, type DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { UpdateApiKeyCommand, type UpdateApiKeyCommandInput, type APIGatewayClient } from '@aws-sdk/client-api-gateway'
 
+const TableName = process.env.CUSTOMER_API_KEYS_TABLE_NAME ?? ''
+
 class UpdateCustomerApiKey {
   constructor (
     private readonly dynamodbClient: DynamoDBClient,
@@ -17,7 +19,7 @@ class UpdateCustomerApiKey {
 
   private async updateDynamoDb (apiKey: CustomerApiKey): Promise<void> {
     const input: UpdateItemCommandInput = {
-      TableName: 'CustomerApiKeys',
+      TableName,
       Key: {
         FpoId: { S: apiKey.FpoId },
         CustomerApiKeyId: { S: apiKey.CustomerApiKeyId }
