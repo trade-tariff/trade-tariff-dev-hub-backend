@@ -2,6 +2,8 @@ import { type CustomerApiKey } from '../models/customerApiKey'
 import { DeleteItemCommand, type DeleteItemCommandInput, type DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { DeleteApiKeyCommand, type DeleteApiKeyCommandInput, type APIGatewayClient } from '@aws-sdk/client-api-gateway'
 
+const TableName = process.env.CUSTOMER_API_KEYS_TABLE_NAME ?? ''
+
 class DeleteCustomerApiKey {
   constructor (
     private readonly dynamodbClient: DynamoDBClient,
@@ -25,7 +27,7 @@ class DeleteCustomerApiKey {
 
   private async deleteInDynamoDb (apiKey: CustomerApiKey): Promise<void> {
     const input: DeleteItemCommandInput = {
-      TableName: 'CustomerApiKeys',
+      TableName,
       Key: {
         FpoId: { S: apiKey.FpoId },
         CustomerApiKeyId: { S: apiKey.CustomerApiKeyId }

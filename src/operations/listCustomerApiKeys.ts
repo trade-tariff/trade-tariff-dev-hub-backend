@@ -2,6 +2,8 @@ import { CustomerApiKey } from '../models/customerApiKey'
 import { type DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { ScanCommand } from '@aws-sdk/lib-dynamodb'
 
+const TableName = process.env.CUSTOMER_API_KEYS_TABLE_NAME ?? ''
+
 class ListCustomerApiKeys {
   private readonly client: DynamoDBClient
 
@@ -11,7 +13,7 @@ class ListCustomerApiKeys {
 
   async call (fpoId: string): Promise<CustomerApiKey[]> {
     const command = new ScanCommand({
-      TableName: 'CustomerApiKeys',
+      TableName,
       FilterExpression: 'FpoId = :FpoId',
       ExpressionAttributeValues: {
         ':FpoId': fpoId

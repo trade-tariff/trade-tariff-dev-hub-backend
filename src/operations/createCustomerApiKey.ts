@@ -5,6 +5,8 @@ import { type APIGatewayClient, CreateApiKeyCommand, type CreateApiKeyCommandInp
 
 import crypto from 'crypto'
 
+const TableName = process.env.CUSTOMER_API_KEYS_TABLE_NAME ?? ''
+
 class CreateCustomerApiKey {
   static CLIENT_ID_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
   static CLIENT_ID_LENGTH = 17
@@ -36,7 +38,7 @@ class CreateCustomerApiKey {
 
   private async createInDynamoDb (customerApiKey: CustomerApiKey): Promise<void> {
     const command = new PutCommand({
-      TableName: 'CustomerApiKeys',
+      TableName,
       Item: customerApiKey.toItem()
     })
 

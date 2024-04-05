@@ -14,17 +14,21 @@ participant Protected Resource / API
 
 Client Application->>Cognito Authorization Server: Request Access Token (Client ID, Client Secret)
 Cognito Authorization Server->>Cognito Authorization Server: Validate Credentials
-Cognito Authorization Server->>Client Application: Access Token 
+Cognito Authorization Server->>Client Application: Access Token
 Client Application->>Protected Resource / API: API Request (Access Token)
 Protected Resource / API->>Protected Resource / API: Validate Token
-Protected Resource / API->>Client Application: API Response 
+Protected Resource / API->>Client Application: API Response
 ```
 
 Access tokens need to be refreshed by the client and the backend decodes/verifies the JWT in the Authorisation header.
 
+## Point in time recovery
+
+When restoring from a PITR snapshot a new table will be generated with the data in it. Change the value of the env var in
+main.tf to update this to the new table name for all environments (e.g. development, staging and production) as this application is released.
 
 ## API Documentation
 
-Once the application is running, open a web browser and navigate to the Swagger UI URL: http://localhost:5001/api-docs
+Once the application is running, open a web browser and navigate to the Swagger UI URL: <http://localhost:5001/api-docs>
 
 This has been disabled to only run in development mode as the endpoints are designed to be be internal.

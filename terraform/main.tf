@@ -49,6 +49,10 @@ module "service" {
       name  = "SENTRY_ENVIRONMENT"
       value = var.environment
     },
+    {
+      name  = "CUSTOMER_API_KEYS_TABLE_NAME"
+      value = data.aws_dynamodb_table.customer_api_keys.name
+    }
   ]
 
   service_secrets_config = [
