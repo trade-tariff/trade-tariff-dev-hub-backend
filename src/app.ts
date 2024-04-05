@@ -1,12 +1,15 @@
-import { type Express, type Request, type Response, type NextFunction } from 'express'
+import express, { type Express, type Request, type Response, type NextFunction } from 'express'
 
 import createError from 'http-errors'
-import express from 'express'
 import path from 'path'
 
 import indexRouter from './routes/index'
 import apiRouter from './routes/api'
 import initEnvironment from './config/env'
+
+import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
+import { apiDocs } from './swaggerDocs/apiDocs';
 
 initEnvironment()
 
@@ -17,6 +20,29 @@ if (isDev) {
   const morgan = require('morgan')
   app.use(morgan('dev'))
 }
+
+const shouldServeSwaggerDocs = (): boolean => {
+  return 'development' === app.get('env');
+};
+
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'trade-tariff-dev-hub-backend',
+      version: '1.0.0',
+      description: 'An API app for managing FPO user keys',
+    },
+    paths: {
+      ...apiDocs,
+    },
+  },
+  apis: [],
+};
+
+const swaggerSpec = swaggerJsdoc(swaggerOptions);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
