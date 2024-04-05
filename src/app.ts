@@ -16,33 +16,39 @@ const isDev = app.get('env') === 'development'
 const sentryDsn = process.env.SENTRY_DSN ?? ''
 const sentryEnv = process.env.SENTRY_ENVIRONMENT ?? ''
 
-if (isDev) {
-  import swaggerJsdoc from 'swagger-jsdoc'
-  import swaggerUi from 'swagger-ui-express'
-  import apiDocs from './docs/apiDocs'
+async function loadDev (): Promise<void> {
+  if (isDev) {
+    const swaggerJsdoc = require('swagger-jsdoc')
+    const swaggerUi = require('swagger-ui-express')
+    const apiDocs = require('./docs/apiDocs').default
 
-  app.use(morgan('dev'))
+    app.use(morgan('dev'))
 
-  const swaggerOptions = {
-    definition: {
-      openapi: '3.0.0',
-      info: {
-        title: 'trade-tariff-dev-hub-backend',
-        version: '1.0.0',
-        description: 'An API app for managing FPO user keys'
+    const swaggerOptions = {
+      definition: {
+        openapi: '3.0.0',
+        info: {
+          title: 'trade-tariff-dev-hub-backend',
+          version: '1.0.0',
+          description: 'An API app for managing FPO user keys'
+        },
+        paths: {
+          ...apiDocs
+        }
       },
-      paths: {
-        ...apiDocs
-      }
-    },
-    apis: []
-  }
-  const swaggerSpec = swaggerJsdoc(swaggerOptions)
+      apis: []
+    }
+    const swaggerSpec = swaggerJsdoc(swaggerOptions)
 
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
-} else {
-  app.use(loggingMiddleware())
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
+  } else {
+    app.use(loggingMiddleware())
+  }
 }
+
+(async () => {
+  await loadDev()
+})()
 
 if (sentryDsn !== '') {
   Sentry.init({ dsn: sentryDsn, environment: sentryEnv })
