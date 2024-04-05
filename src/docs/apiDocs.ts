@@ -1,4 +1,4 @@
-export const apiDocs = {
+const apiDocs = {
   '/keys/{fpoId}': {
     post: {
       summary: 'Create a new API key',
@@ -8,19 +8,19 @@ export const apiDocs = {
           name: 'fpoId',
           required: true,
           schema: {
-            type: 'string',
+            type: 'string'
           },
-          description: 'The FPO ID for which to create an API key',
-        },
+          description: 'The FPO ID for which to create an API key'
+        }
       ],
       responses: {
-        '201': {
-          description: 'API key created successfully',
+        201: {
+          description: 'API key created successfully'
         },
-        '400': {
-          description: 'Invalid request',
-        },
-      },
+        400: {
+          description: 'Invalid request'
+        }
+      }
     },
     get: {
       summary: 'List all API keys for a given FPO',
@@ -30,20 +30,20 @@ export const apiDocs = {
           name: 'fpoId',
           required: true,
           schema: {
-            type: 'string',
+            type: 'string'
           },
-          description: 'The FPO ID for which to list API keys',
-        },
+          description: 'The FPO ID for which to list API keys'
+        }
       ],
       responses: {
-        '200': {
-          description: 'An array of API keys',
+        200: {
+          description: 'An array of API keys'
         },
-        '404': {
-          description: 'FPO not found',
-        },
-      },
-    },
+        404: {
+          description: 'FPO not found'
+        }
+      }
+    }
   },
   '/keys/{fpoId}/{id}': {
     get: {
@@ -54,28 +54,28 @@ export const apiDocs = {
           name: 'fpoId',
           required: true,
           schema: {
-            type: 'string',
+            type: 'string'
           },
-          description: 'The FPO ID',
+          description: 'The FPO ID'
         },
         {
           in: 'path',
           name: 'id',
           required: true,
           schema: {
-            type: 'string',
+            type: 'string'
           },
-          description: 'The API key ID',
-        },
+          description: 'The API key ID'
+        }
       ],
       responses: {
-        '200': {
-          description: 'Details of the API key',
+        200: {
+          description: 'Details of the API key'
         },
-        '404': {
-          description: 'API key not found',
-        },
-      },
+        404: {
+          description: 'API key not found'
+        }
+      }
     },
     patch: {
       summary: 'Update an existing API key',
@@ -85,19 +85,19 @@ export const apiDocs = {
           name: 'fpoId',
           required: true,
           schema: {
-            type: 'string',
+            type: 'string'
           },
-          description: 'The FPO ID',
+          description: 'The FPO ID'
         },
         {
           in: 'path',
           name: 'id',
           required: true,
           schema: {
-            type: 'string',
+            type: 'string'
           },
-          description: 'The API key ID to update',
-        },
+          description: 'The API key ID to update'
+        }
       ],
       requestBody: {
         required: true,
@@ -108,24 +108,24 @@ export const apiDocs = {
               properties: {
                 description: {
                   type: 'string',
-                  description: 'New description of the API key',
-                },
-              },
-            },
-          },
-        },
+                  description: 'New description of the API key'
+                }
+              }
+            }
+          }
+        }
       },
       responses: {
-        '200': {
-          description: 'API key updated successfully',
+        200: {
+          description: 'API key updated successfully'
         },
-        '400': {
-          description: 'Invalid request',
+        400: {
+          description: 'Invalid request'
         },
-        '404': {
-          description: 'API key not found',
-        },
-      },
+        404: {
+          description: 'API key not found'
+        }
+      }
     },
     delete: {
       summary: 'Delete an API key',
@@ -135,28 +135,30 @@ export const apiDocs = {
           name: 'fpoId',
           required: true,
           schema: {
-            type: 'string',
+            type: 'string'
           },
-          description: 'The FPO ID',
+          description: 'The FPO ID'
         },
         {
           in: 'path',
           name: 'id',
           required: true,
           schema: {
-            type: 'string',
+            type: 'string'
           },
-          description: 'The API key ID to delete',
-        },
+          description: 'The API key ID to delete'
+        }
       ],
       responses: {
-        '200': {
-          description: 'API key deleted successfully',
+        200: {
+          description: 'API key deleted successfully'
         },
-        '404': {
-          description: 'API key not found',
-        },
-      },
-    },
-  },
-};
+        404: {
+          description: 'API key not found'
+        }
+      }
+    }
+  }
+}
+
+export default apiDocs

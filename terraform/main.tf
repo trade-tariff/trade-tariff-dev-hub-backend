@@ -57,8 +57,12 @@ module "service" {
       valueFrom = data.aws_secretsmanager_secret.encryption_key.arn
     },
     {
+      name      = "SENTRY_DSN"
+      valueFrom = data.aws_secretsmanager_secret.sentry_dsn.arn
+    },
+    {
       name      = "USAGE_PLAN_ID"
       valueFrom = data.aws_secretsmanager_secret.usage_plan_id.arn
-    },
+    }
   ]
 }
