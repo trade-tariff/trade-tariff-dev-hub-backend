@@ -3,6 +3,10 @@ import { type JwtHeader, decode, verify } from 'jsonwebtoken'
 import jwksClient from 'jwks-rsa'
 
 const jwksUri = process.env.COGNITO_PUBLIC_KEYS_URL ?? ''
+const excludedPaths = [
+  '/healthcheck',
+  '/healthcheckz'
+]
 
 const client = jwksClient({ jwksUri })
 
@@ -13,6 +17,10 @@ const getKey = async (tokenHeader: JwtHeader): Promise<string | undefined> => {
 }
 
 export const verifyToken: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
+  if (excludedPaths.includes(req.path)) {
+    next()
+  }
+
   const bearer = req.headers.authorization
   let authorised: boolean = false
 

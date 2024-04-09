@@ -44,3 +44,7 @@ data "aws_secretsmanager_secret" "usage_plan_id" {
 data "aws_secretsmanager_secret" "sentry_dsn" {
   name = "dev-hub-backend-sentry-dsn"
 }
+
+data "aws_ssm_parameter" "cognito_public_keys_url" {
+  name = "/${var.environment}/FPO_DEVELOPER_HUB_COGNITO_PUBLIC_USER_URL"
+}
