@@ -130,3 +130,6 @@ package-lock.json
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# os nonsense
+.DS_Store

@@ -8,6 +8,7 @@ import indexRouter from './routes/index'
 import apiRouter from './routes/api'
 import initEnvironment from './config/env'
 import loggingMiddleware from './config/logging'
+import { verifyToken } from './utils/jwtVerify'
 
 initEnvironment()
 
@@ -63,6 +64,11 @@ async function loadDev (): Promise<void> {
 if (sentryDsn !== '') {
   Sentry.init({ dsn: sentryDsn, environment: sentryEnv })
   app.use(Sentry.Handlers.requestHandler())
+}
+
+// JWT Verification
+if (!isDev) {
+  app.use(verifyToken)
 }
 
 app.use(express.json())
