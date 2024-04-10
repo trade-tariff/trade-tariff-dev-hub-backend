@@ -6,9 +6,6 @@ export default function initEnvironment (): void {
   let envFilePath: string
 
   switch (process.env.NODE_ENV) {
-    case 'production':
-      envFilePath = path.join(process.cwd(), '.env')
-      break
     case 'test':
       envFilePath = path.join(process.cwd(), '.env.test')
       break
