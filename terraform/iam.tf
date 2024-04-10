@@ -29,6 +29,18 @@ data "aws_iam_policy_document" "exec" {
       data.aws_secretsmanager_secret.sentry_dsn.arn
     ]
   }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "ssm:DescribeParameters",
+      "ssm:GetParameter",
+      "ssm:GetParameters",
+    ]
+    resources = [
+      data.aws_ssm_parameter.cognito_public_keys_url.arn
+    ]
+  }
 }
 
 resource "aws_iam_policy" "exec" {

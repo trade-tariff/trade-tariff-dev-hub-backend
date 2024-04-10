@@ -55,7 +55,7 @@ module "service" {
     },
     {
       name  = "COGNITO_PUBLIC_KEYS_URL"
-      value = data.aws_ssm_parameter.cognito_public_keys_url
+      value = data.aws_ssm_parameter.cognito_public_keys_url.value
     }
   ]
 
