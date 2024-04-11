@@ -17,11 +17,11 @@ async function getSha (): Promise<string> {
 export class HealthchecksController {
   public async show (_req: Request, res: Response): Promise<void> {
     const revision = await getSha()
-    res.json({ git_sha1: revision })
+    res.status(200).json({ git_sha1: revision })
   }
 
   public async showz (_req: Request, res: Response): Promise<void> {
     const revision = await getSha()
-    res.json({ git_sha1: revision })
+    res.status(200).json({ git_sha1: revision })
   }
 }
