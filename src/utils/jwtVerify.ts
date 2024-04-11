@@ -4,8 +4,8 @@ import jwksClient from 'jwks-rsa'
 
 const jwksUri = process.env.COGNITO_PUBLIC_KEYS_URL ?? ''
 const excludedPaths = [
-  '/healthcheck',
-  '/healthcheckz'
+  '/api/healthcheck',
+  '/api/healthcheckz'
 ]
 
 const client = jwksClient({ jwksUri })
