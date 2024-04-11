@@ -18,7 +18,7 @@ const getKey = async (tokenHeader: JwtHeader): Promise<string | undefined> => {
 
 export const verifyToken: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
   if (excludedPaths.includes(req.path)) {
-    next()
+    next(); return
   }
 
   const bearer = req.headers.authorization

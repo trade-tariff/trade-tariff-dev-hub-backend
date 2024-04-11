@@ -8,8 +8,11 @@ async function getSha (): Promise<string> {
       path.join(__dirname, '..', '..', '..', 'REVISION'),
       'utf8',
       (err, data) => {
-        if (err != null) resolve('development')
-        resolve(data.trim())
+        if (err != null) {
+          resolve('development')
+        } else {
+          resolve(data.trim())
+        }
       })
   })
 }
