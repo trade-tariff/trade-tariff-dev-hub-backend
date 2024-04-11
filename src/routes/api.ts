@@ -15,14 +15,18 @@ const healthchecksController = new HealthchecksController()
 
 const router: Router = express.Router()
 
+// ESlint does not understand async express route handlers
+/* eslint-disable  @typescript-eslint/no-floating-promises */
+
 router.get('/healthcheck', (req, res) => { healthchecksController.show(req, res) })
 router.get('/healthcheckz', (req, res) => { healthchecksController.showz(req, res) })
 
-// ESlint does not understand async express route handlers
-router.post('/keys/:fpoId', (req, res) => { apiKeyController.create(req, res) }) // eslint-disable-line @typescript-eslint/no-floating-promises
-router.get('/keys/:fpoId', (req, res) => { apiKeyController.index(req, res) }) // eslint-disable-line @typescript-eslint/no-floating-promises
-router.get('/keys/:fpoId/:id', (req, res) => { apiKeyController.show(req, res) }) // eslint-disable-line @typescript-eslint/no-floating-promises
-router.patch('/keys/:fpoId/:id', (req, res) => { apiKeyController.update(req, res) }) // eslint-disable-line @typescript-eslint/no-floating-promises
-router.delete('/keys/:fpoId/:id', (req, res) => { apiKeyController.destroy(req, res) }) // eslint-disable-line @typescript-eslint/no-floating-promises
+router.post('/keys/:fpoId', (req, res) => { apiKeyController.create(req, res) })
+router.get('/keys/:fpoId', (req, res) => { apiKeyController.index(req, res) })
+router.get('/keys/:fpoId/:id', (req, res) => { apiKeyController.show(req, res) })
+router.patch('/keys/:fpoId/:id', (req, res) => { apiKeyController.update(req, res) })
+router.delete('/keys/:fpoId/:id', (req, res) => { apiKeyController.destroy(req, res) })
+
+/* eslint-enable @typescript-eslint/no-floating-promises */
 
 export default router

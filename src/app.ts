@@ -7,7 +7,7 @@ import morgan from 'morgan'
 import indexRouter from './routes/index'
 import apiRouter from './routes/api'
 import initEnvironment from './config/env'
-import loggingMiddleware from './config/logging'
+import { httpRequestLoggingMiddleware, logger } from './config/logging'
 import { verifyToken } from './utils/jwtVerify'
 
 initEnvironment()
@@ -16,6 +16,7 @@ const app: Express = express()
 const isDev = app.get('env') === 'development'
 const sentryDsn = process.env.SENTRY_DSN ?? ''
 const sentryEnv = process.env.SENTRY_ENVIRONMENT ?? ''
+const port = process.env.PORT ?? 8080
 
 async function loadDev (): Promise<void> {
   if (isDev) {
@@ -52,7 +53,7 @@ async function loadDev (): Promise<void> {
       swaggerUi.setup(swaggerSpec)
     )
   } else {
-    app.use(loggingMiddleware())
+    app.use(httpRequestLoggingMiddleware())
   }
 }
 
@@ -111,4 +112,6 @@ app.use(function (err: HttpError, _req: Request, res: Response, _next: NextFunct
   }
 })
 
-app.listen(process.env.PORT)
+app.listen(port, () => {
+  logger.info(`Server listening on ${port}`)
+})

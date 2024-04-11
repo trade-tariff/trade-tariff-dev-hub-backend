@@ -23,7 +23,8 @@
     "http-errors": "~2.0.0",
     "jsonwebtoken": "^9.0.2",
     "jwks-rsa": "^3.1.0",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "winston": "^3.13.0"
   },
   "devDependencies": {
     "@sentry/types": "^7.109.0",
@@ -44,6 +45,7 @@
     "eslint-plugin-promise": "^6.0.0",
     "jasmine": "^5.1.0",
     "jasmine-spec-reporter": "^7.0.0",
+    "nodemon": "^3.1.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
     "ts-node": "^10.9.2",
