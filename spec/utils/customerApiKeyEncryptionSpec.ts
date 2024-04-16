@@ -1,6 +1,6 @@
 import { CustomerApiKeyEncryption } from '../../src/utils/customerApiKeyEncryption'
 
-describe('CustomerApiKeyEncription', () => {
+describe('CustomerApiKeyEncryption', () => {
   describe('encrypt', () => {
     it('returns an encrypted key', async () => {
       const encryption = new CustomerApiKeyEncryption()

@@ -8,9 +8,8 @@ const excludedPaths = [
   '/api/healthcheckz'
 ]
 
-const client = jwksClient({ jwksUri })
-
 const getKey = async (tokenHeader: JwtHeader): Promise<string | undefined> => {
+  const client = jwksClient({ jwksUri })
   const key = await client.getSigningKey(tokenHeader.kid)
   const publicKey = key.getPublicKey()
   return publicKey
@@ -51,7 +50,7 @@ export const verifyToken: RequestHandler = (req: Request, res: Response, next: N
   }
 
   if (!authorised) {
-    res.status(401).contentType('application/json').json({
+    res.status(401).json({
       message: 'Unauthorised'
     })
   } else {
