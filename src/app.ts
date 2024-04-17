@@ -53,6 +53,7 @@ async function loadDev (): Promise<void> {
       swaggerUi.setup(swaggerSpec)
     )
   } else {
+    app.use(verifyToken)
     app.use(httpRequestLoggingMiddleware())
   }
 }
@@ -65,11 +66,6 @@ async function loadDev (): Promise<void> {
 if (sentryDsn !== '') {
   Sentry.init({ dsn: sentryDsn, environment: sentryEnv })
   app.use(Sentry.Handlers.requestHandler())
-}
-
-// JWT Verification
-if (!isDev) {
-  app.use(verifyToken)
 }
 
 app.use(express.json())
