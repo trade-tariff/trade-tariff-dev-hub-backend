@@ -25,5 +25,8 @@ stop-localstack:
 clean:
 	yarn run clean
 
+source:
+	source .env.development
+
 build:
 	yarn run build

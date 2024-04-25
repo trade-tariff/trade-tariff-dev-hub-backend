@@ -22,6 +22,8 @@ make localstack
 
 ### Starting the application
 
+> Make sure you have started localstack before running the application.
+
 ```sh
 make run
 ```
