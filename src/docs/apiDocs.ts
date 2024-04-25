@@ -106,9 +106,9 @@ const apiDocs = {
             schema: {
               type: 'object',
               properties: {
-                description: {
-                  type: 'string',
-                  description: 'New description of the API key'
+                enabled: {
+                  type: 'boolean',
+                  description: 'New value'
                 }
               }
             }

@@ -109,7 +109,7 @@ describe('ApiKeyController', () => {
       }
     } as any
 
-    it('updates the key', async () => {
+    it('disable the key', async () => {
       apiKey = new CustomerApiKey()
       const getKeyResult = Promise.resolve(apiKey)
       const updateKeyResult = Promise.resolve(apiKey)
@@ -123,7 +123,7 @@ describe('ApiKeyController', () => {
       )
       repository.updateKey.bind(repository)
       controller = new ApiKeyController(repository)
-      req = { params: { fpoId: 'fpoId', id: 'id' }, body: { description: 'description' } } as any
+      req = { params: { fpoId: 'fpoId', id: 'id' }, body: { enabled: false } } as any
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await controller.update(req, res)
@@ -136,7 +136,42 @@ describe('ApiKeyController', () => {
         ApiGatewayId: '',
         Secret: '',
         Enabled: false,
-        Description: 'description',
+        Description: '',
+        FpoId: '',
+        CreatedAt: apiKey.CreatedAt,
+        UpdatedAt: apiKey.UpdatedAt,
+        UsagePlanId: ''
+      })
+    })
+
+    it('enable the key', async () => {
+      apiKey = new CustomerApiKey()
+      const getKeyResult = Promise.resolve(apiKey)
+      const updateKeyResult = Promise.resolve(apiKey)
+
+      repository = jasmine.createSpyObj(
+        'CustomerApiKeyRepository',
+        {
+          updateKey: updateKeyResult,
+          getKey: getKeyResult
+        }
+      )
+      repository.updateKey.bind(repository)
+      controller = new ApiKeyController(repository)
+      req = { params: { fpoId: 'fpoId', id: 'id' }, body: { enabled: true } } as any
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      await controller.update(req, res)
+
+      expect(repository.getKey).toHaveBeenCalledWith('fpoId', 'id')
+      expect(repository.updateKey).toHaveBeenCalledWith(apiKey)
+      expect(res.statusCode).toBe(200)
+      expect(res.data).toEqual({
+        CustomerApiKeyId: '',
+        ApiGatewayId: '',
+        Secret: '',
+        Enabled: true,
+        Description: '',
         FpoId: '',
         CreatedAt: apiKey.CreatedAt,
         UpdatedAt: apiKey.UpdatedAt,
