@@ -1,7 +1,9 @@
 .PHONY: default build run clean
 
+SHELL := /usr/bin/env bash
+
 run: clean build
-	yarn run start
+	source .env.development && yarn run start
 
 test:
 	yarn run test
