@@ -1,32 +1,29 @@
 .PHONY: default build run clean
 
-IMAGE_NAME := trade-tariff-dev-hub-backend
-
-default: build run
-
-build:
-	docker build -t $(IMAGE_NAME) .
-
-run:
-	docker run \
-		--network=host \
-		--rm \
-		--name $(IMAGE_NAME) \
-		-e DEBUG=express:* \
-		-e NODE_ENV=test \
-		--env-file .env.development \
-		-it \
-		$(IMAGE_NAME) \
-
-clean:
-	docker rmi $(IMAGE_NAME)
-
-shell:
-	docker run \
-		--rm \
-		--name $(IMAGE_NAME)-shell \
-		--no-healthcheck \
-		-it $(IMAGE_NAME) /bin/sh
+run: clean build
+	yarn run start
 
 test:
 	yarn run test
+
+localstack: clean-localstack
+	$(eval USAGE_PLAN_ID=$(shell docker-compose up | grep -m1 -oP 'usagePlanId=\K\w+'))
+	@if [ -z "$(USAGE_PLAN_ID)" ]; then \
+		echo "Failed to extract USAGE_PLAN_ID"; \
+		exit 1; \
+	fi
+	@sed -i 's/export USAGE_PLAN_ID=.*/export USAGE_PLAN_ID=$(USAGE_PLAN_ID)/' .env.development
+	@echo "Updated USAGE_PLAN_ID in .env.development to $(USAGE_PLAN_ID)"
+	@echo "Localstack is running. Run make stop-localstack to stop it."
+
+clean-localstack: stop-localstack
+	docker-compose rm -f -s -v
+
+stop-localstack:
+	docker-compose down
+
+clean:
+	yarn run clean
+
+build:
+	yarn run build

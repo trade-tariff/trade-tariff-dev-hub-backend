@@ -6,8 +6,20 @@ import { CustomerApiKeyRepository } from '../repositories/customerApiKeyReposito
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { APIGatewayClient } from '@aws-sdk/client-api-gateway'
 
-const dynamodbClient = new DynamoDBClient({ region: process.env.AWS_REGION })
-const apiGatewayClient = new APIGatewayClient({ region: process.env.AWS_REGION })
+const endpoint = process.env.AWS_ENDPOINT
+
+const dynamodbClient = new DynamoDBClient(
+  {
+    region: process.env.AWS_REGION,
+    endpoint
+  }
+)
+const apiGatewayClient = new APIGatewayClient(
+  {
+    region: process.env.AWS_REGION,
+    endpoint
+  }
+)
 const repository = new CustomerApiKeyRepository(dynamodbClient, apiGatewayClient)
 
 const apiKeyController = new ApiKeyController(repository)
