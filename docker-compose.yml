@@ -1,0 +1,10 @@
+version: "2"
+services:
+  localstack:
+    image: localstack/localstack:latest
+    ports:
+      - 4566:4566           # LocalStack edge port
+      - 4510-4559:4510-4559 # maps various AWS services ports
+    volumes:
+      # Initialization Hook (see https://docs.localstack.cloud/references/init-hooks/)
+      - .bin/seed.sh:/etc/localstack/init/ready.d/script.sh

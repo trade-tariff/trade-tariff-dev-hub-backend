@@ -2,6 +2,38 @@
 
 Express app giving FPO operators the ability to manage their own API credentials.
 
+## Local development
+
+### Prerequisites
+
+- [docker-compose]
+- [docker app][docker-app]
+- [nodejs]
+- [aws cli (optional)][awscli]
+- [aws local cli (optional)][awscli-local]
+
+### Running localstack
+
+To reduce feedback loops and improve developer efficiency, we simulate aws services with [localstack]. You can bring up localstack using docker-compose with a simple `Makefile` wrapper
+
+```sh
+make localstack
+```
+
+### Starting the application
+
+> Make sure you have started localstack before running the application.
+
+```sh
+make run
+```
+
+### Running tests
+
+```sh
+make test
+```
+
 ## Authentication
 
 When this backend app is deployed to ECS we enable client credentials authentication using Cognito User Pools
@@ -36,3 +68,10 @@ Once the application is running, open a web browser and navigate to the Swagger 
 This has been disabled to only run in development mode as the endpoints are designed to be be internal.
 
 [pitr-manual]: https://docs.trade-tariff.service.gov.uk/manual/how-to-backup-and-restore-in-aws-dynamodb-pitr.html
+
+[docker-compose]: https://formulae.brew.sh/formula/docker-compose
+[nodejs]: https://formulae.brew.sh/formula/node
+[docker-app]: https://docs.docker.com/desktop/install/mac-install/
+[awscli]: https://formulae.brew.sh/formula/awscli
+[awscli-local]: https://formulae.brew.sh/formula/awscli-local
+[localstack]: https://www.localstack.cloud/
