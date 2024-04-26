@@ -16,7 +16,7 @@ describe('UpdateCustomerApiKey', () => {
     createCustomerApiKey = new UpdateCustomerApiKey(dynamodbClient, apigatewayClient)
   })
 
-  it('disable the api key', async () => {
+  it('disables the api key', async () => {
     const key = new CustomerApiKey()
     key.FpoId = 'fpoId'
     key.Enabled = false
@@ -54,7 +54,7 @@ describe('UpdateCustomerApiKey', () => {
     }))
   })
 
-  it('enable the api key', async () => {
+  it('enables the api key', async () => {
     const key = new CustomerApiKey()
     key.FpoId = 'fpoId'
     key.Enabled = true
