@@ -131,8 +131,5 @@ package-lock.json
 .yarn/install-state.gz
 .pnp.*
 
-# REVISION files
-REVISION
-
 # os nonsense
 .DS_Store
