@@ -47,9 +47,10 @@ describe('UpdateCustomerApiKey', () => {
         FpoId: { S: 'fpoId' },
         CustomerApiKeyId: { S: 'customerId' }
       },
-      UpdateExpression: 'SET Enabled = :enabled',
+      UpdateExpression: 'SET Enabled = :enabled, UpdatedAt = :updatedAt',
       ExpressionAttributeValues: {
-        ':enabled': { BOOL: false }
+        ':enabled': { BOOL: false },
+        ':updatedAt': { S: jasmine.stringMatching(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/) }
       }
     }))
   })
@@ -85,9 +86,10 @@ describe('UpdateCustomerApiKey', () => {
         FpoId: { S: 'fpoId' },
         CustomerApiKeyId: { S: 'customerId' }
       },
-      UpdateExpression: 'SET Enabled = :enabled',
+      UpdateExpression: 'SET Enabled = :enabled, UpdatedAt = :updatedAt',
       ExpressionAttributeValues: {
-        ':enabled': { BOOL: true }
+        ':enabled': { BOOL: true },
+        ':updatedAt': { S: jasmine.stringMatching(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/) }
       }
     }))
   })
