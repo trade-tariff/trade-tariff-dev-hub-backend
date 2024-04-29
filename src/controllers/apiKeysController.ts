@@ -48,9 +48,8 @@ export class ApiKeyController {
       res.status(404).json({ message: 'API key not found' })
       return
     }
-
-    if (body.description !== undefined && typeof body.description === 'string') {
-      customerApiKey.Description = body.description
+    if (body.enabled !== undefined && typeof body.enabled === 'boolean') {
+      customerApiKey.Enabled = body.enabled
     } else {
       res.status(400).json({ message: 'Invalid request' })
       return

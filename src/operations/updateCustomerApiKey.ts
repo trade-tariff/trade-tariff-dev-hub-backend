@@ -24,10 +24,10 @@ class UpdateCustomerApiKey {
         FpoId: { S: apiKey.FpoId },
         CustomerApiKeyId: { S: apiKey.CustomerApiKeyId }
       },
-      UpdateExpression: 'SET Description = :description',
+      UpdateExpression: 'SET Enabled = :enabled',
       // Only description is allowed to be updated
       ExpressionAttributeValues: {
-        ':description': { S: apiKey.Description }
+        ':enabled': { BOOL: apiKey.Enabled }
       }
     }
 
@@ -42,8 +42,8 @@ class UpdateCustomerApiKey {
       patchOperations: [
         {
           op: 'replace',
-          path: '/description',
-          value: apiKey.Description
+          path: '/enabled',
+          value: String(apiKey.Enabled)
         }
       ]
     }

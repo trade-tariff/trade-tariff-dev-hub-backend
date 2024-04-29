@@ -16,17 +16,17 @@ describe('UpdateCustomerApiKey', () => {
     createCustomerApiKey = new UpdateCustomerApiKey(dynamodbClient, apigatewayClient)
   })
 
-  it('updates the api key', async () => {
+  it('disables the api key', async () => {
     const key = new CustomerApiKey()
     key.FpoId = 'fpoId'
-    key.Description = 'new description'
+    key.Enabled = false
     key.ApiGatewayId = 'apiGatewayId'
     key.CustomerApiKeyId = 'customerId'
 
     const updated = await createCustomerApiKey.call(key)
 
     expect(updated.FpoId).toEqual('fpoId')
-    expect(updated.Description).toEqual('new description')
+    expect(updated.Enabled).toEqual(false)
     expect(dynamodbClient.send).toHaveBeenCalledTimes(1)
     expect(apigatewayClient.send).toHaveBeenCalledTimes(1)
 
@@ -35,8 +35,8 @@ describe('UpdateCustomerApiKey', () => {
       patchOperations: [
         {
           op: 'replace',
-          path: '/description',
-          value: 'new description'
+          path: '/enabled',
+          value: String(false)
         }
       ]
     }))
@@ -47,9 +47,47 @@ describe('UpdateCustomerApiKey', () => {
         FpoId: { S: 'fpoId' },
         CustomerApiKeyId: { S: 'customerId' }
       },
-      UpdateExpression: 'SET Description = :description',
+      UpdateExpression: 'SET Enabled = :enabled',
       ExpressionAttributeValues: {
-        ':description': { S: 'new description' }
+        ':enabled': { BOOL: false }
+      }
+    }))
+  })
+
+  it('enables the api key', async () => {
+    const key = new CustomerApiKey()
+    key.FpoId = 'fpoId'
+    key.Enabled = true
+    key.ApiGatewayId = 'apiGatewayId'
+    key.CustomerApiKeyId = 'customerId'
+
+    const updated = await createCustomerApiKey.call(key)
+
+    expect(updated.FpoId).toEqual('fpoId')
+    expect(updated.Enabled).toEqual(true)
+    expect(dynamodbClient.send).toHaveBeenCalledTimes(1)
+    expect(apigatewayClient.send).toHaveBeenCalledTimes(1)
+
+    expect(apigatewayClient.send.calls.first().args[0].input).toEqual(jasmine.objectContaining({
+      apiKey: 'apiGatewayId',
+      patchOperations: [
+        {
+          op: 'replace',
+          path: '/enabled',
+          value: String(true)
+        }
+      ]
+    }))
+
+    expect(dynamodbClient.send.calls.first().args[0].input).toEqual(jasmine.objectContaining({
+      TableName: 'CustomerApiKeys',
+      Key: {
+        FpoId: { S: 'fpoId' },
+        CustomerApiKeyId: { S: 'customerId' }
+      },
+      UpdateExpression: 'SET Enabled = :enabled',
+      ExpressionAttributeValues: {
+        ':enabled': { BOOL: true }
       }
     }))
   })
