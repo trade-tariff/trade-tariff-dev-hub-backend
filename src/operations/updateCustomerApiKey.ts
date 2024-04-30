@@ -24,10 +24,10 @@ class UpdateCustomerApiKey {
         FpoId: { S: apiKey.FpoId },
         CustomerApiKeyId: { S: apiKey.CustomerApiKeyId }
       },
-      UpdateExpression: 'SET Enabled = :enabled',
-      // Only description is allowed to be updated
+      UpdateExpression: 'SET Enabled = :enabled, UpdatedAt = :updatedAt',
       ExpressionAttributeValues: {
-        ':enabled': { BOOL: apiKey.Enabled }
+        ':enabled': { BOOL: apiKey.Enabled },
+        ':updatedAt': { S: new Date().toISOString() }
       }
     }
 
