@@ -6,7 +6,8 @@ set -o nounset
 
 export AWS_REGION=eu-west-2
 export EDGE_ENDPOINT=http://localhost:4566
-export DYNAMODB_TABLE_NAME=CustomerApiKeys
+export API_KEYS_TABLE_NAME=CustomerApiKeys
+export USERS_TABLE_NAME=Users
 
 create_table() {
     tableName=$1
@@ -23,6 +24,21 @@ create_table() {
         --key-schema \
         AttributeName="$hashKey",KeyType=HASH \
         AttributeName="$rangeKey",KeyType=RANGE \
+        --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
+}
+
+create_table_without_range_key() {
+    tableName=$1
+    hashKey=$2
+
+    aws --endpoint-url="$EDGE_ENDPOINT" \
+        --region "$AWS_REGION" \
+        dynamodb create-table \
+        --table-name "$tableName" \
+        --attribute-definitions \
+        AttributeName="$hashKey",AttributeType=S \
+        --key-schema \
+        AttributeName="$hashKey",KeyType=HASH \
         --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
 }
 
@@ -63,7 +79,7 @@ create_customer_api_key() {
     aws dynamodb put-item \
         --endpoint-url "$EDGE_ENDPOINT" \
         --region "$AWS_REGION" \
-        --table-name $DYNAMODB_TABLE_NAME --item "{
+        --table-name $API_KEYS_TABLE_NAME --item "{
             \"CustomerApiKeyId\": {\"S\": \"$id\"},
             \"Secret\": {\"S\": \"$secret\"},
             \"Enabled\": {\"BOOL\": $enabled},
@@ -76,10 +92,34 @@ create_customer_api_key() {
         }"
 }
 
+create_user() {
+    id=$1
+    fpoId="local-development"
+    updatedAt=$(date -u +"%Y-%m-%dT%H:%M:%S.%3NZ")
+
+
+    # create the dynnamodb item
+    aws dynamodb put-item \
+        --endpoint-url "$EDGE_ENDPOINT" \
+        --region "$AWS_REGION" \
+        --table-name $USERS_TABLE_NAME --item "{
+            \"UserId\": {\"S\": \"$id\"},
+            \"FpoId\": {\"S\": \"$fpoId\"},
+            \"CreatedAt\": {\"S\": \"$createdAt\"},
+            \"UpdatedAt\": {\"S\": \"$createdAt\"}
+        }"
+}
+
 usagePlanId=$(create_usage_plan)
 
-create_table "$DYNAMODB_TABLE_NAME" "CustomerApiKeyId" "FpoId"
+create_table "$API_KEYS_TABLE_NAME" "CustomerApiKeyId" "FpoId"
 create_customer_api_key "HUBU461PU63PXH7GZFSW" "$usagePlanId" "z3bCvLUzre+VFohy:zucSqkBr39kcDUnheZk/IiGJPhLBgYY89blaxffSDH8aZOHUY6oMtpILAAC6D6W/OZENOX4tSQHcFINY" true
 create_customer_api_key "HUBSFF5Z90SVHK1D5DY8" "$usagePlanId" "D8pFwdTRMXRSa2nm:mS6Xq6w0ZJaOIlPc7iiPNgYsqgUm0MSmBg8Q7M+O74Y09NRwns5gk/OAAZEdmOO71/0kCJWnOHbJt3Re" true
 create_customer_api_key "HUBPC7NFHXS6H3LKZCEW" "$usagePlanId" "VitXWo4eiEphvzqR:6TDaBB66dTv5GGwtjkzZREPEJNOvDoUxr7xyuziSJLLA6+MdoyDZyzdFDTg+3dHvhIIHC2ov8Hn0bQaF" true
 create_customer_api_key "HUBP4NMDNBUKZ168SQTL" "$usagePlanId" "CBsaehhd3Q/qDusw:yGfSGJgPtL8xMMpN9SFc+s+ZZXugnA1DOeu8A7HofaOR7qZMYN5pTZtjFs3HBM29ER4KA2tj9OnoKjUC" false
+
+create_table_without_range_key "$USERS_TABLE_NAME" "UserId"
+create_user "1234"
+create_user "2345"
+create_user "3456"
+create_user "4567"
