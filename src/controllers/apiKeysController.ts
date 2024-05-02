@@ -27,7 +27,14 @@ export class ApiKeyController {
 
   async create (req: Request, res: Response): Promise<void> {
     const fpoId = req.params.fpoId
-    const apiKey = await this.repository.createKey(fpoId)
+    const description = req.body.apiKeyDescription
+
+    if (typeof description !== 'string') {
+      res.status(400).json({ error: 'Invalid description type' })
+      return
+    }
+
+    const apiKey = await this.repository.createKey(fpoId, description)
 
     res.status(201).json(apiKey.toJson())
   }

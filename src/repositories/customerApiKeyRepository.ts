@@ -26,8 +26,8 @@ export class CustomerApiKeyRepository {
     return await this.listOperation.call(fpoId)
   }
 
-  async createKey (fpoId: string): Promise<CustomerApiKey> {
-    return await this.createOperation.call(fpoId)
+  async createKey (fpoId: string, description: string): Promise<CustomerApiKey> {
+    return await this.createOperation.call(fpoId, description)
   }
 
   async getKey (fpoId: string, id: string): Promise<CustomerApiKey | null> {
