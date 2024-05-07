@@ -187,7 +187,7 @@ describe('ApiKeyController', () => {
       repository = jasmine.createSpyObj('CustomerApiKeyRepository', { createKey: createKeyResult })
       repository.createKey.bind(repository)
       controller = new ApiKeyController(repository)
-      req = { params: { fpoId: 'fpoId' } } as any
+      req = { params: { fpoId: 'fpoId' }, body: { apiKeyDescription: 'description' } } as any
       const res = {
         status: function (code: number) {
           this.statusCode = code
@@ -202,7 +202,7 @@ describe('ApiKeyController', () => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await controller.create(req, res)
 
-      expect(repository.createKey).toHaveBeenCalledWith('fpoId')
+      expect(repository.createKey).toHaveBeenCalledWith('fpoId', 'description')
       expect(res.statusCode).toBe(201)
       expect(res.data).toEqual({
         CustomerApiKeyId: '',

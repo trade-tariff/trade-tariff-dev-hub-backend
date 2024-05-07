@@ -59,11 +59,11 @@ describe('CustomerApiKeyRepository', () => {
     })
 
     it('returns a CustomerApiKey', async () => {
-      const actual = await repository.createKey('customer-id')
+      const actual = await repository.createKey('customer-id', 'description')
 
       expect(actual).toEqual(jasmine.any(CustomerApiKey))
       expect(actual.CustomerApiKeyId).toEqual('customer-api-key-id')
-      expect(mockCreateOperation.call).toHaveBeenCalledWith('customer-id')
+      expect(mockCreateOperation.call).toHaveBeenCalledWith('customer-id', 'description')
     })
   })
 
