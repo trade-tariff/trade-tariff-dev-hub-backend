@@ -1,7 +1,6 @@
 import { type Request, type Response, type NextFunction, type RequestHandler } from 'express'
 import { type JwtHeader, decode, verify } from 'jsonwebtoken'
 import jwksClient from 'jwks-rsa'
-import { logger } from '../config/logging'
 
 const jwksUri = process.env.COGNITO_PUBLIC_KEYS_URL ?? ''
 const excludedPaths = [
@@ -16,49 +15,29 @@ const getKey = async (tokenHeader: JwtHeader): Promise<string | undefined> => {
   return publicKey
 }
 
+const unauthorised = (res: Response): void => { res.status(401).json({ message: 'Unauthorised' }) }
+
 export const verifyToken: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
-  if (excludedPaths.includes(req.path)) {
-    next(); return
-  }
+  const bearer = req.headers.authorization ?? ''
 
-  const bearer = req.headers.authorization
-  let authorised: boolean = false
+  if (excludedPaths.includes(req.path)) { next(); return }
+  if (bearer === '') { unauthorised(res); return }
 
-  if (bearer !== undefined) {
-    // Authorisation: Bearer <token>
-    const token = bearer.split(' ')[1]
-    const decodedToken = decode(token, { complete: true })
+  const token = bearer.split(' ')[1] // Authorisation: Bearer <token>
+  const decodedToken = decode(token, { complete: true }) ?? null
 
-    if (decodedToken !== null) {
-      if (decodedToken.header.kid !== null) {
-        getKey(decodedToken.header)
-          .then(key => {
-            if (key === undefined) {
-              logger.error('Key is undefined')
-              authorised = false
-            } else {
-              verify(token, key, (_err, payload) => {
-                if (payload !== undefined) {
-                  logger.info('*****************************************Authorised*****************************************')
-                  authorised = true
-                  logger.info('*****************************************Authorised*****************************************')
-                }
-              })
-            }
-          })
-          .catch((error) => {
-            logger.error(`Caught Error: ${error}`)
-            authorised = false
-          })
-      }
-    }
-  }
-  if (!authorised) {
-    logger.error('Unauthorised')
-    res.status(401).json({
-      message: 'Unauthorised'
+  if (decodedToken === null) { unauthorised(res); return }
+  if (decodedToken.header.kid === null) { unauthorised(res); return }
+
+  getKey(decodedToken.header)
+    .then(key => {
+      if (key === undefined) { unauthorised(res); return }
+
+      verify(token, key, (_, payload) => {
+        if (payload === undefined) { unauthorised(res) }
+
+        next()
+      })
     })
-  } else {
-    next()
-  }
+    .catch(() => { unauthorised(res) })
 }
