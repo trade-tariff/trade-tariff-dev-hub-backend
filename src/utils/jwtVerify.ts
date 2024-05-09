@@ -1,6 +1,7 @@
 import { type Request, type Response, type NextFunction, type RequestHandler } from 'express'
 import { type JwtHeader, decode, verify } from 'jsonwebtoken'
 import jwksClient from 'jwks-rsa'
+import { logger } from '../config/logging'
 
 const jwksUri = process.env.COGNITO_PUBLIC_KEYS_URL ?? ''
 const excludedPaths = [
@@ -9,51 +10,48 @@ const excludedPaths = [
 ]
 
 const getKey = async (tokenHeader: JwtHeader): Promise<string | undefined> => {
-  const client = jwksClient({ jwksUri })
-  const key = await client.getSigningKey(tokenHeader.kid)
-  const publicKey = key.getPublicKey()
-  return publicKey
+  try {
+    const client = jwksClient({ jwksUri })
+    const key = await client.getSigningKey(tokenHeader.kid)
+    const publicKey = key.getPublicKey()
+    return publicKey
+  } catch (error) {
+    logger.error('Error getting public key', error)
+    return undefined
+  }
+}
+
+const unauthorized = (res: Response, message: string): void => {
+  console.error(`Unauthorized access attempt: ${message}`)
+  res.status(401).json({ message: 'Unauthorized' })
 }
 
 export const verifyToken: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
-  if (excludedPaths.includes(req.path)) {
-    next(); return
+  const bearer = req.headers.authorization ?? ''
+
+  if (excludedPaths.includes(req.path)) { next(); return }
+  if (bearer === '') { unauthorized(res, 'Missing Authorization header'); return }
+
+  const token = bearer.split(' ')[1] // Authorisation: Bearer <token>
+  const decodedToken = decode(token, { complete: true }) ?? null
+
+  if (decodedToken?.header?.kid === null || decodedToken?.header?.kid === undefined) {
+    unauthorized(res, 'Invalid token or missing "kid" in header')
+    return
   }
 
-  const bearer = req.headers.authorization
-  let authorised: boolean = false
+  getKey(decodedToken.header)
+    .then(key => {
+      if (key === undefined) { unauthorized(res, 'Unable to retrieve signing key'); return }
 
-  if (bearer !== undefined) {
-    // Authorisation: Bearer <token>
-    const token = bearer.split(' ')[1]
-    const decodedToken = decode(token, { complete: true })
+      verify(token, key, (_, payload) => {
+        if (payload === undefined) { unauthorized(res, 'Invalid token signature or payload') }
 
-    if (decodedToken !== null) {
-      if (decodedToken.header.kid !== null) {
-        getKey(decodedToken.header)
-          .then(key => {
-            if (key === undefined) {
-              authorised = false
-            } else {
-              verify(token, key, (_, payload) => {
-                if (payload !== undefined) {
-                  authorised = true
-                }
-              })
-            }
-          })
-          .catch(() => {
-            authorised = false
-          })
-      }
-    }
-  }
-
-  if (!authorised) {
-    res.status(401).json({
-      message: 'Unauthorised'
+        next()
+      })
     })
-  } else {
-    next()
-  }
+    .catch((err) => {
+      logger.error(`Error in key retrieval or verification: ${err}`)
+      unauthorized(res, 'Key retrieval error')
+    })
 }
