@@ -37,10 +37,6 @@ data "aws_secretsmanager_secret" "encryption_key" {
   name = "dev-hub-backend-encryption-key"
 }
 
-data "aws_secretsmanager_secret" "usage_plan_id" {
-  name = "dev-hub-backend-usage-plan-id"
-}
-
 data "aws_secretsmanager_secret" "sentry_dsn" {
   name = "dev-hub-backend-sentry-dsn"
 }
