@@ -15,7 +15,7 @@ describe('User Model', () => {
       const user = new User()
 
       user.UserId = 'some-id'
-      user.FpoId = 'some-fpo-id'
+      user.OrganisationId = 'some-fpo-id'
       user.UpdatedAt = new Date().toISOString()
 
       const errors = await validate(user)
@@ -33,10 +33,10 @@ describe('User Model', () => {
     })
   })
 
-  describe('when the FpoId is invalid', () => {
+  describe('when the OrganisationId is invalid', () => {
     it('is invalid', async () => {
       const user: User = new User()
-      user.FpoId = null as unknown as string
+      user.OrganisationId = null as unknown as string
 
       const errors = await validate(user)
       expect(errors.length).toBe(1)
@@ -62,7 +62,7 @@ describe('User Model', () => {
     it('returns a User instance', () => {
       const item = {
         UserId: 'the-id',
-        FpoId: 'yodel',
+        OrganisationId: 'yodel',
         CreatedAt: new Date().toISOString(),
         UpdatedAt: new Date().toISOString(),
         Saved: false
@@ -78,12 +78,12 @@ describe('User Model', () => {
     it('returns a plain object', () => {
       const user = new User()
       user.UserId = 'the-id'
-      user.FpoId = 'the-fpo-id'
+      user.OrganisationId = 'the-fpo-id'
 
       const actual = user.toItem()
       expect(actual).toEqual({
         UserId: 'the-id',
-        FpoId: 'the-fpo-id',
+        OrganisationId: 'the-fpo-id',
         CreatedAt: user.CreatedAt,
         UpdatedAt: user.UpdatedAt
       })
@@ -99,7 +99,7 @@ describe('User Model', () => {
 
       expect(actual).toEqual({
         UserId: 'the-id',
-        FpoId: '',
+        OrganisationId: '',
         CreatedAt: user.CreatedAt,
         UpdatedAt: user.UpdatedAt
       })

@@ -70,7 +70,7 @@ describe('UserController', () => {
         return this
       }
     } as any
-    it('updates a user fpoId', async () => {
+    it('updates a user organisationId', async () => {
       user = new User()
       const getUserResult = Promise.resolve(user)
       const updateUserResult = Promise.resolve(user)
@@ -84,7 +84,7 @@ describe('UserController', () => {
       )
       repository.updateUser.bind(repository)
       controller = new UserController(repository)
-      req = { params: { id: 'id' }, body: { fpoId: 'fpoId' } } as any
+      req = { params: { id: 'id' }, body: { organisationId: 'organisationId' } } as any
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await controller.update(req, res)
@@ -94,7 +94,7 @@ describe('UserController', () => {
       expect(res.statusCode).toBe(200)
       expect(res.data).toEqual({
         UserId: '',
-        FpoId: 'fpoId',
+        OrganisationId: 'organisationId',
         CreatedAt: user.CreatedAt,
         UpdatedAt: user.UpdatedAt
       })
@@ -128,7 +128,7 @@ describe('UserController', () => {
       expect(res.statusCode).toBe(201)
       expect(res.data).toEqual({
         UserId: '',
-        FpoId: '',
+        OrganisationId: '',
         CreatedAt: user.CreatedAt,
         UpdatedAt: user.UpdatedAt
       })

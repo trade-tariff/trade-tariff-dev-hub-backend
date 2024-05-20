@@ -22,16 +22,16 @@ export class CustomerApiKeyRepository {
     return await this.updateOperation.call(customerApiKey)
   }
 
-  async listKeys (fpoId: string): Promise<CustomerApiKey[]> {
-    return await this.listOperation.call(fpoId)
+  async listKeys (organisationId: string): Promise<CustomerApiKey[]> {
+    return await this.listOperation.call(organisationId)
   }
 
-  async createKey (fpoId: string, description: string): Promise<CustomerApiKey> {
-    return await this.createOperation.call(fpoId, description)
+  async createKey (organisationId: string, description: string): Promise<CustomerApiKey> {
+    return await this.createOperation.call(organisationId, description)
   }
 
-  async getKey (fpoId: string, id: string): Promise<CustomerApiKey | null> {
-    return await this.getOperation.call(fpoId, id)
+  async getKey (organisationId: string, id: string): Promise<CustomerApiKey | null> {
+    return await this.getOperation.call(organisationId, id)
   }
 
   async deleteKey (customerApiKey: CustomerApiKey): Promise<void> {

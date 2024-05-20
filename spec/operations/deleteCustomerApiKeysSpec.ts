@@ -17,7 +17,7 @@ describe('DeleteCustomerApiKey', () => {
 
     apiKey = new CustomerApiKey()
     apiKey.CustomerApiKeyId = 'customerApiKeyId'
-    apiKey.FpoId = 'fpoId'
+    apiKey.OrganisationId = 'organisationId'
     apiKey.ApiGatewayId = 'apiGatewayId'
   })
 
@@ -38,7 +38,7 @@ describe('DeleteCustomerApiKey', () => {
     expect(actualCommand.input).toEqual(jasmine.objectContaining({
       TableName: 'CustomerApiKeys',
       Key: {
-        FpoId: { S: 'fpoId' },
+        OrganisationId: { S: 'organisationId' },
         CustomerApiKeyId: { S: 'customerApiKeyId' }
       }
     }))

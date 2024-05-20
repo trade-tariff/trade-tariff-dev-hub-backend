@@ -20,7 +20,7 @@ describe('CustomerApiKey Model', () => {
       apiKey.ApiGatewayId = 'someother-id'
       apiKey.Enabled = true
       apiKey.Description = 'some-description'
-      apiKey.FpoId = 'some-fpo-id'
+      apiKey.OrganisationId = 'some-fpo-id'
       apiKey.CreatedAt = new Date().toISOString()
       apiKey.UpdatedAt = new Date().toISOString()
 
@@ -88,10 +88,10 @@ describe('CustomerApiKey Model', () => {
     })
   })
 
-  describe('when the FpoId is invalid', () => {
+  describe('when the OrganisationId is invalid', () => {
     it('is invalid', async () => {
       const apiKey: CustomerApiKey = new CustomerApiKey()
-      apiKey.FpoId = null as unknown as string
+      apiKey.OrganisationId = null as unknown as string
 
       const errors = await validate(apiKey)
       expect(errors.length).toBe(1)
@@ -135,7 +135,7 @@ describe('CustomerApiKey Model', () => {
         Secret: 'secret',
         Enabled: true,
         Description: '',
-        FpoId: 'yodel',
+        OrganisationId: 'yodel',
         CreatedAt: new Date().toISOString(),
         UpdatedAt: new Date().toISOString(),
         Saved: false,
@@ -162,7 +162,7 @@ describe('CustomerApiKey Model', () => {
         Secret: 'secret',
         Enabled: true,
         Description: '',
-        FpoId: '',
+        OrganisationId: '',
         CreatedAt: apiKey.CreatedAt,
         UpdatedAt: apiKey.UpdatedAt,
         UsagePlanId: ''
@@ -185,7 +185,7 @@ describe('CustomerApiKey Model', () => {
         Secret: 'secret',
         Enabled: true,
         Description: '',
-        FpoId: '',
+        OrganisationId: '',
         CreatedAt: apiKey.CreatedAt,
         UpdatedAt: apiKey.UpdatedAt,
         UsagePlanId: ''
@@ -205,7 +205,7 @@ describe('CustomerApiKey Model', () => {
         Secret: plainSecret,
         Description: '',
         Enabled: false,
-        FpoId: '',
+        OrganisationId: '',
         ApiGatewayId: '',
         CustomerApiKeyId: '',
         CreatedAt: apiKey.CreatedAt,

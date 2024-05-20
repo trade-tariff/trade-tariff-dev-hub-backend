@@ -22,7 +22,7 @@ describe('CreateUser', () => {
     const created = await createUser.call('userId')
 
     expect(created.UserId).toEqual('userId')
-    expect(created.FpoId).toEqual('')
+    expect(created.OrganisationId).toEqual('')
     expect(created.Saved).toEqual(true)
 
     expect(dynamodbClient.send).toHaveBeenCalledTimes(1)

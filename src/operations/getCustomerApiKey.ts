@@ -9,12 +9,12 @@ class GetCustomerApiKey {
     this.client = client
   }
 
-  async call (fpoId: string, id: string): Promise<CustomerApiKey | null> {
+  async call (organisationId: string, id: string): Promise<CustomerApiKey | null> {
     const command = new GetItemCommand(
       {
         TableName: 'CustomerApiKeys',
         Key: {
-          FpoId: { S: fpoId },
+          OrganisationId: { S: organisationId },
           CustomerApiKeyId: { S: id }
         }
       }

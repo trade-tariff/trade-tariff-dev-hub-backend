@@ -7,9 +7,9 @@ export class ApiKeyController {
   ) {}
 
   async show (req: Request, res: Response): Promise<void> {
-    const fpoId = req.params.fpoId
+    const organisationId = req.params.organisationId
     const id = req.params.id
-    const apiKey = await this.repository.getKey(fpoId, id)
+    const apiKey = await this.repository.getKey(organisationId, id)
 
     if (apiKey === null) {
       res.status(404).json({ message: 'API key not found' })
@@ -19,14 +19,14 @@ export class ApiKeyController {
   }
 
   async index (req: Request, res: Response): Promise<void> {
-    const fpoId = req.params.fpoId
-    const apiKeys = await this.repository.listKeys(fpoId)
+    const organisationId = req.params.organisationId
+    const apiKeys = await this.repository.listKeys(organisationId)
 
     res.json(apiKeys.map(apiKey => apiKey.toJson()))
   }
 
   async create (req: Request, res: Response): Promise<void> {
-    const fpoId = req.params.fpoId
+    const organisationId = req.params.organisationId
     const description = req.body.apiKeyDescription
 
     if (typeof description !== 'string') {
@@ -34,13 +34,13 @@ export class ApiKeyController {
       return
     }
 
-    const apiKey = await this.repository.createKey(fpoId, description)
+    const apiKey = await this.repository.createKey(organisationId, description)
 
     res.status(201).json(apiKey.toJson())
   }
 
   async update (req: Request, res: Response): Promise<void> {
-    const fpoId: string = req.params.fpoId
+    const organisationId: string = req.params.organisationId
     const id: string = req.params.id
     const body = req.body
 
@@ -49,7 +49,7 @@ export class ApiKeyController {
       return
     }
 
-    const customerApiKey = await this.repository.getKey(fpoId, id)
+    const customerApiKey = await this.repository.getKey(organisationId, id)
 
     if (customerApiKey === null) {
       res.status(404).json({ message: 'API key not found' })
@@ -68,10 +68,10 @@ export class ApiKeyController {
   }
 
   async destroy (req: Request, res: Response): Promise<void> {
-    const fpoId: string = req.params.fpoId
+    const organisationId: string = req.params.organisationId
     const id: string = req.params.id
 
-    const customerApiKey = await this.repository.getKey(fpoId, id)
+    const customerApiKey = await this.repository.getKey(organisationId, id)
 
     if (customerApiKey === null) {
       res.status(404).json({ message: 'API key not found' })

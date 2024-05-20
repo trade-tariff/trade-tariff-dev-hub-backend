@@ -20,9 +20,9 @@ class UpdateUser {
       Key: {
         UserId: { S: user.UserId }
       },
-      UpdateExpression: 'SET FpoId = :fpoId, UpdatedAt = :updatedAt',
+      UpdateExpression: 'SET OrganisationId = :organisationId, UpdatedAt = :updatedAt',
       ExpressionAttributeValues: {
-        ':fpoId': { S: user.FpoId },
+        ':organisationId': { S: user.OrganisationId },
         ':updatedAt': { S: new Date().toISOString() }
       }
     }

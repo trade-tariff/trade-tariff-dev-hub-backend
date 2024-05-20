@@ -9,7 +9,7 @@ describe('GetUser', () => {
     const dynamodbResult = {
       Item: {
         UserId: { S: 'userId' },
-        FpoId: { S: 'fpoId' },
+        OrganisationId: { S: 'organisationId' },
         CreatedAt: { S: new Date().toISOString() },
         UpdatedAt: { S: new Date().toISOString() }
       },
@@ -23,7 +23,7 @@ describe('GetUser', () => {
     const user = await new GetUser(dynamodbClient).call('userId')
 
     expect(user?.UserId).toEqual('userId')
-    expect(user?.FpoId).toEqual('fpoId')
+    expect(user?.OrganisationId).toEqual('organisationId')
     expect(dynamodbClient.send).toHaveBeenCalledTimes(1)
   })
 

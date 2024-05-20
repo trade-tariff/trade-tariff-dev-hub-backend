@@ -1,7 +1,18 @@
 import { CustomerApiKey } from '../models/customerApiKey'
 import { CustomerApiKeyEncryption } from '../utils/customerApiKeyEncryption'
 import { PutCommand, type DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb'
-import { type APIGatewayClient, CreateApiKeyCommand, type CreateApiKeyCommandInput, CreateUsagePlanKeyCommand, type CreateUsagePlanKeyRequest } from '@aws-sdk/client-api-gateway'
+import {
+  CreateUsagePlanKeyCommand,
+  CreateUsagePlanCommand,
+  CreateApiKeyCommand,
+  GetUsagePlansCommand,
+  type APIGatewayClient,
+  type CreateUsagePlanKeyRequest,
+  type CreateApiKeyCommandInput,
+  type GetUsagePlansCommandInput,
+  type CreateUsagePlanCommandInput,
+  type UsagePlan
+} from '@aws-sdk/client-api-gateway'
 
 import crypto from 'crypto'
 
@@ -19,10 +30,10 @@ class CreateCustomerApiKey {
     private readonly apiGatewayClient: APIGatewayClient
   ) {}
 
-  async call (fpoId: string, description: string): Promise<CustomerApiKey> {
+  async call (organisationId: string, description: string): Promise<CustomerApiKey> {
     const customerApiKey = new CustomerApiKey()
 
-    customerApiKey.FpoId = fpoId
+    customerApiKey.OrganisationId = organisationId
     customerApiKey.CustomerApiKeyId = this.generateClientId()
     customerApiKey.Secret = await this.generateRandomSecret()
     customerApiKey.Enabled = true
@@ -59,15 +70,79 @@ class CreateCustomerApiKey {
   }
 
   private async associateToUsagePlan (customerApiKey: CustomerApiKey): Promise<void> {
+    await this.findOrCreateUsagePlan(customerApiKey)
+
     const input: CreateUsagePlanKeyRequest = {
       keyId: customerApiKey.ApiGatewayId,
-      usagePlanId: process.env.USAGE_PLAN_ID,
+      usagePlanId: customerApiKey.UsagePlanId,
       keyType: CreateCustomerApiKey.API_KEY_TYPE
     }
 
     const command = new CreateUsagePlanKeyCommand(input)
 
     await this.apiGatewayClient.send(command)
+  }
+
+  private async findOrCreateUsagePlan (customerApiKey: CustomerApiKey): Promise<void> {
+    let usagePlanId = await this.findUsagePlan(customerApiKey)
+
+    if (usagePlanId === null) { usagePlanId = await this.createUsagePlan(customerApiKey) }
+
+    customerApiKey.UsagePlanId = usagePlanId
+  }
+
+  private async findUsagePlan (customerApiKey: CustomerApiKey): Promise<string | null> {
+    const usagePlans = await this.getUsagePlans()
+
+    const usagePlan = usagePlans.find((plan) => plan.name === customerApiKey.OrganisationId)
+
+    return usagePlan?.id ?? null
+  }
+
+  private async getUsagePlans (): Promise<UsagePlan[]> {
+    const usagePlans: UsagePlan[] = []
+    const limit = 100
+    let position = '1'
+
+    while (position !== null) {
+      const input: GetUsagePlansCommandInput = { limit, position }
+
+      const command = new GetUsagePlansCommand(input)
+
+      const response = await this.apiGatewayClient.send(command)
+
+      const items = response.items ?? []
+
+      position = response.position ?? ''
+
+      if (items.length === 0) { break }
+
+      usagePlans.push(...items)
+
+      if (position === '') { break }
+
+      position = (parseInt(position) + 1).toString()
+    }
+
+    return usagePlans
+  }
+
+  private async createUsagePlan (customerApiKey: CustomerApiKey): Promise<string> {
+    const input: CreateUsagePlanCommandInput = {
+      name: customerApiKey.OrganisationId
+    }
+
+    const command = new CreateUsagePlanCommand(input)
+
+    const response = await this.apiGatewayClient.send(command)
+
+    const planId = response.id ?? 'unknown'
+
+    if (planId === 'unknown') {
+      throw new Error('Failed to create usage plan')
+    }
+
+    return planId
   }
 
   private generateClientId (): string {
