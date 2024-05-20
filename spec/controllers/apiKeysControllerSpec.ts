@@ -187,7 +187,7 @@ describe('ApiKeyController', () => {
       repository = jasmine.createSpyObj('CustomerApiKeyRepository', { createKey: createKeyResult })
       repository.createKey.bind(repository)
       controller = new ApiKeyController(repository)
-      req = { params: { organisationId: 'organisationId' }, body: { apiKeyDescription: 'description' } } as any
+      req = { params: { organisationId: 'organisationId' }, body: { description: 'description' } } as any
       const res = {
         status: function (code: number) {
           this.statusCode = code
