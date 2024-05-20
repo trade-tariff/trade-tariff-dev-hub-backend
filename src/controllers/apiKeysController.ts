@@ -27,7 +27,7 @@ export class ApiKeyController {
 
   async create (req: Request, res: Response): Promise<void> {
     const organisationId = req.params.organisationId
-    const description = req.body.apiKeyDescription
+    const description = req.body.description
 
     if (typeof description !== 'string') {
       res.status(400).json({ error: 'Invalid description type' })
