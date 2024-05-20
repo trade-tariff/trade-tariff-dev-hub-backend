@@ -56,6 +56,10 @@ module "service" {
     {
       name  = "COGNITO_PUBLIC_KEYS_URL"
       value = data.aws_ssm_parameter.cognito_public_keys_url.value
+    },
+    {
+      name  = "USAGE_PLAN_LIST_PAGINATION_LIMIT"
+      value = 100
     }
   ]
 

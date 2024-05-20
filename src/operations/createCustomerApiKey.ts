@@ -24,6 +24,7 @@ class CreateCustomerApiKey {
   static CLIENT_ID_PREFIX = 'HUB'
   static SECRET_LENGTH = 32
   static API_KEY_TYPE = 'API_KEY'
+  static PLAN_LIST_LIMIT = parseInt(process.env.USAGE_PLAN_LIST_PAGINATION_LIMIT ?? '100')
 
   constructor (
     private readonly dynamodbClient: DynamoDBDocumentClient,
@@ -101,7 +102,7 @@ class CreateCustomerApiKey {
 
   private async getUsagePlans (): Promise<UsagePlan[]> {
     const usagePlans: UsagePlan[] = []
-    const limit = 100
+    const limit = CreateCustomerApiKey.PLAN_LIST_LIMIT
     let position = '1'
 
     while (position !== null) {
