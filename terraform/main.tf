@@ -58,6 +58,10 @@ module "service" {
       value = data.aws_ssm_parameter.cognito_public_keys_url.value
     },
     {
+      name  = "USAGE_PLAN_PER_FPO_RATE_LIMIT"
+      value = 100
+    },
+    {
       name  = "USAGE_PLAN_LIST_PAGINATION_LIMIT"
       value = 100
     }

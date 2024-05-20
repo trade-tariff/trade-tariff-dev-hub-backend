@@ -25,6 +25,7 @@ class CreateCustomerApiKey {
   static SECRET_LENGTH = 32
   static API_KEY_TYPE = 'API_KEY'
   static PLAN_LIST_LIMIT = parseInt(process.env.USAGE_PLAN_LIST_PAGINATION_LIMIT ?? '100')
+  static PER_FPO_RATE_LIMIT = parseInt(process.env.USAGE_PLAN_PER_FPO_RATE_LIMIT ?? '100')
 
   constructor (
     private readonly dynamodbClient: DynamoDBDocumentClient,
@@ -130,7 +131,11 @@ class CreateCustomerApiKey {
 
   private async createUsagePlan (customerApiKey: CustomerApiKey): Promise<string> {
     const input: CreateUsagePlanCommandInput = {
-      name: customerApiKey.OrganisationId
+      name: customerApiKey.OrganisationId,
+      throttle: { rateLimit: 100 },
+      tags: {
+        customer: 'fpo'
+      }
     }
 
     const command = new CreateUsagePlanCommand(input)
