@@ -16,7 +16,7 @@ export class CustomerApiKey {
     Description: string
 
   @IsString()
-    FpoId: string
+    OrganisationId: string
 
   @IsDateString()
     CreatedAt: string
@@ -39,7 +39,7 @@ export class CustomerApiKey {
     this.Secret = ''
     this.Enabled = false
     this.Description = ''
-    this.FpoId = ''
+    this.OrganisationId = ''
     this.CreatedAt = new Date().toISOString()
     this.UpdatedAt = new Date().toISOString()
     this.Saved = false
@@ -58,7 +58,7 @@ export class CustomerApiKey {
     apiKey.Secret = plainObject.Secret.S
     apiKey.Enabled = plainObject.Enabled.BOOL
     apiKey.Description = plainObject.Description.S
-    apiKey.FpoId = plainObject.FpoId.S
+    apiKey.OrganisationId = plainObject.OrganisationId.S
     apiKey.CreatedAt = plainObject.CreatedAt.S
     apiKey.UpdatedAt = plainObject.UpdatedAt.S
     apiKey.ApiGatewayId = plainObject.ApiGatewayId?.S

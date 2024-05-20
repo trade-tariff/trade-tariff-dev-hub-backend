@@ -16,12 +16,12 @@ describe('UpdateUser', () => {
   it('updates a user', async () => {
     const user = new User()
     user.UserId = 'id'
-    user.FpoId = 'fpoId'
+    user.OrganisationId = 'organisationId'
 
     const updated = await createUser.call(user)
 
     expect(updated.UserId).toEqual('id')
-    expect(updated.FpoId).toEqual('fpoId')
+    expect(updated.OrganisationId).toEqual('organisationId')
     expect(dynamodbClient.send).toHaveBeenCalledTimes(1)
 
     expect(dynamodbClient.send.calls.first().args[0].input).toEqual(jasmine.objectContaining({
@@ -29,9 +29,9 @@ describe('UpdateUser', () => {
       Key: {
         UserId: { S: 'id' }
       },
-      UpdateExpression: 'SET FpoId = :fpoId, UpdatedAt = :updatedAt',
+      UpdateExpression: 'SET OrganisationId = :organisationId, UpdatedAt = :updatedAt',
       ExpressionAttributeValues: {
-        ':fpoId': { S: 'fpoId' },
+        ':organisationId': { S: 'organisationId' },
         ':updatedAt': { S: jasmine.stringMatching(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/) }
       }
     }))

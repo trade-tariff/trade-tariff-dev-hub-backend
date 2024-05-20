@@ -29,7 +29,7 @@ class DeleteCustomerApiKey {
     const input: DeleteItemCommandInput = {
       TableName,
       Key: {
-        FpoId: { S: apiKey.FpoId },
+        OrganisationId: { S: apiKey.OrganisationId },
         CustomerApiKeyId: { S: apiKey.CustomerApiKeyId }
       }
     }

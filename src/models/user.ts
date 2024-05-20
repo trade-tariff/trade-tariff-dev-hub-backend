@@ -6,7 +6,7 @@ export class User {
     UserId: string
 
   @IsString()
-    FpoId: string
+    OrganisationId: string
 
   @IsDateString()
     CreatedAt: string
@@ -18,7 +18,7 @@ export class User {
 
   constructor () {
     this.UserId = ''
-    this.FpoId = ''
+    this.OrganisationId = ''
     this.CreatedAt = new Date().toISOString()
     this.UpdatedAt = new Date().toISOString()
     this.Saved = false
@@ -34,7 +34,7 @@ export class User {
     const user = new User()
 
     user.UserId = plainObject.UserId.S
-    user.FpoId = plainObject.FpoId.S
+    user.OrganisationId = plainObject.OrganisationId.S
     user.CreatedAt = plainObject.CreatedAt.S
     user.UpdatedAt = plainObject.UpdatedAt.S
     user.Saved = true

@@ -12,7 +12,7 @@ describe('GetCustomerApiKey', () => {
         Secret: { S: 'secret' },
         Enabled: { BOOL: true },
         Description: { S: 'description' },
-        FpoId: { S: 'fpoId' },
+        OrganisationId: { S: 'organisationId' },
         CreatedAt: { S: new Date().toISOString() },
         UpdatedAt: { S: new Date().toISOString() }
       },
@@ -23,9 +23,9 @@ describe('GetCustomerApiKey', () => {
 
     dynamodbClient = jasmine.createSpyObj('DynamoDBClient', { send: Promise.resolve(dynamodbResult) })
 
-    const key = await new GetCustomerApiKey(dynamodbClient).call('fpoId', 'customerApiKeyId')
+    const key = await new GetCustomerApiKey(dynamodbClient).call('organisationId', 'customerApiKeyId')
 
-    expect(key?.FpoId).toEqual('fpoId')
+    expect(key?.OrganisationId).toEqual('organisationId')
     expect(key?.CustomerApiKeyId).toEqual('customerApiKeyId')
     expect(dynamodbClient.send).toHaveBeenCalledTimes(1)
   })
@@ -39,7 +39,7 @@ describe('GetCustomerApiKey', () => {
 
     dynamodbClient = jasmine.createSpyObj('DynamoDBClient', { send: Promise.resolve(dynamodbResult) })
 
-    const key = await new GetCustomerApiKey(dynamodbClient).call('fpoId', 'customerApiKeyId')
+    const key = await new GetCustomerApiKey(dynamodbClient).call('organisationId', 'customerApiKeyId')
 
     expect(key).toBeNull()
     expect(dynamodbClient.send).toHaveBeenCalledTimes(1)

@@ -21,19 +21,19 @@ describe('ApiKeyController', () => {
       repository = jasmine.createSpyObj('CustomerApiKeyRepository', { getKey: getKeyResult })
       repository.getKey.bind(repository)
       controller = new ApiKeyController(repository)
-      req = { params: { fpoId: 'fpoId', id: 'id' } } as any
+      req = { params: { organisationId: 'organisationId', id: 'id' } } as any
       res = { json: jasmine.createSpy() } as unknown as any
 
       await controller.show(req, res)
 
-      expect(repository.getKey).toHaveBeenCalledWith('fpoId', 'id')
+      expect(repository.getKey).toHaveBeenCalledWith('organisationId', 'id')
       expect(res.json).toHaveBeenCalledWith({
         CustomerApiKeyId: '',
         ApiGatewayId: '',
         Secret: 'secret',
         Enabled: false,
         Description: '',
-        FpoId: '',
+        OrganisationId: '',
         CreatedAt: apiKey.CreatedAt,
         UpdatedAt: apiKey.UpdatedAt,
         UsagePlanId: ''
@@ -45,12 +45,12 @@ describe('ApiKeyController', () => {
       repository = jasmine.createSpyObj('CustomerApiKeyRepository', { getKey: getKeyResult })
       repository.getKey.bind(repository)
       controller = new ApiKeyController(repository)
-      req = { params: { fpoId: 'fpoId', id: 'id' } } as any
+      req = { params: { organisationId: 'organisationId', id: 'id' } } as any
       res = { status: jasmine.createSpy().and.returnValue({ json: jasmine.createSpy() }) } as unknown as any
 
       await controller.show(req, res)
 
-      expect(repository.getKey).toHaveBeenCalledWith('fpoId', 'id')
+      expect(repository.getKey).toHaveBeenCalledWith('organisationId', 'id')
       expect(res.status).toHaveBeenCalledWith(404)
     })
   })
@@ -63,19 +63,19 @@ describe('ApiKeyController', () => {
       repository = jasmine.createSpyObj('CustomerApiKeyRepository', { listKeys: listKeysResult })
       repository.listKeys.bind(repository)
       controller = new ApiKeyController(repository)
-      req = { params: { fpoId: 'fpoId' } } as any
+      req = { params: { organisationId: 'organisationId' } } as any
       res = { json: jasmine.createSpy() } as unknown as any
 
       await controller.index(req, res)
 
-      expect(repository.listKeys).toHaveBeenCalledWith('fpoId')
+      expect(repository.listKeys).toHaveBeenCalledWith('organisationId')
       expect(res.json).toHaveBeenCalledWith([{
         CustomerApiKeyId: '',
         ApiGatewayId: '',
         Secret: 'TwdRsG9BC6yF8zER:vgPdLKDyFcxn8bfJYpUHS/+YTk8O2g==',
         Enabled: false,
         Description: '',
-        FpoId: '',
+        OrganisationId: '',
         CreatedAt: apiKey.CreatedAt,
         UpdatedAt: apiKey.UpdatedAt,
         UsagePlanId: ''
@@ -87,12 +87,12 @@ describe('ApiKeyController', () => {
       repository = jasmine.createSpyObj('CustomerApiKeyRepository', { listKeys: listKeysResult })
       repository.listKeys.bind(repository)
       controller = new ApiKeyController(repository)
-      req = { params: { fpoId: 'fpoId' } } as any
+      req = { params: { organisationId: 'organisationId' } } as any
       res = { json: jasmine.createSpy() } as unknown as any
 
       await controller.index(req, res)
 
-      expect(repository.listKeys).toHaveBeenCalledWith('fpoId')
+      expect(repository.listKeys).toHaveBeenCalledWith('organisationId')
       expect(res.json).toHaveBeenCalledWith([])
     })
   })
@@ -122,12 +122,12 @@ describe('ApiKeyController', () => {
       )
       repository.updateKey.bind(repository)
       controller = new ApiKeyController(repository)
-      req = { params: { fpoId: 'fpoId', id: 'id' }, body: { enabled: true } } as any
+      req = { params: { organisationId: 'organisationId', id: 'id' }, body: { enabled: true } } as any
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await controller.update(req, res)
 
-      expect(repository.getKey).toHaveBeenCalledWith('fpoId', 'id')
+      expect(repository.getKey).toHaveBeenCalledWith('organisationId', 'id')
       expect(repository.updateKey).toHaveBeenCalledWith(apiKey)
       expect(res.statusCode).toBe(200)
       expect(res.data).toEqual({
@@ -136,7 +136,7 @@ describe('ApiKeyController', () => {
         Secret: '',
         Enabled: true,
         Description: '',
-        FpoId: '',
+        OrganisationId: '',
         CreatedAt: apiKey.CreatedAt,
         UpdatedAt: apiKey.UpdatedAt,
         UsagePlanId: ''
@@ -157,12 +157,12 @@ describe('ApiKeyController', () => {
       )
       repository.updateKey.bind(repository)
       controller = new ApiKeyController(repository)
-      req = { params: { fpoId: 'fpoId', id: 'id' }, body: { enabled: false } } as any
+      req = { params: { organisationId: 'organisationId', id: 'id' }, body: { enabled: false } } as any
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await controller.update(req, res)
 
-      expect(repository.getKey).toHaveBeenCalledWith('fpoId', 'id')
+      expect(repository.getKey).toHaveBeenCalledWith('organisationId', 'id')
       expect(repository.updateKey).toHaveBeenCalledWith(apiKey)
       expect(res.statusCode).toBe(200)
       expect(res.data).toEqual({
@@ -171,7 +171,7 @@ describe('ApiKeyController', () => {
         Secret: '',
         Enabled: false,
         Description: '',
-        FpoId: '',
+        OrganisationId: '',
         CreatedAt: apiKey.CreatedAt,
         UpdatedAt: apiKey.UpdatedAt,
         UsagePlanId: ''
@@ -187,7 +187,7 @@ describe('ApiKeyController', () => {
       repository = jasmine.createSpyObj('CustomerApiKeyRepository', { createKey: createKeyResult })
       repository.createKey.bind(repository)
       controller = new ApiKeyController(repository)
-      req = { params: { fpoId: 'fpoId' }, body: { apiKeyDescription: 'description' } } as any
+      req = { params: { organisationId: 'organisationId' }, body: { apiKeyDescription: 'description' } } as any
       const res = {
         status: function (code: number) {
           this.statusCode = code
@@ -202,7 +202,7 @@ describe('ApiKeyController', () => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await controller.create(req, res)
 
-      expect(repository.createKey).toHaveBeenCalledWith('fpoId', 'description')
+      expect(repository.createKey).toHaveBeenCalledWith('organisationId', 'description')
       expect(res.statusCode).toBe(201)
       expect(res.data).toEqual({
         CustomerApiKeyId: '',
@@ -210,7 +210,7 @@ describe('ApiKeyController', () => {
         Secret: '',
         Enabled: false,
         Description: '',
-        FpoId: '',
+        OrganisationId: '',
         CreatedAt: apiKey.CreatedAt,
         UpdatedAt: apiKey.UpdatedAt,
         UsagePlanId: ''
@@ -238,12 +238,12 @@ describe('ApiKeyController', () => {
       repository.getKey.bind(repository)
       repository.deleteKey.bind(repository)
       controller = new ApiKeyController(repository)
-      req = { params: { fpoId: 'fpoId', id: 'id' } } as any
+      req = { params: { organisationId: 'organisationId', id: 'id' } } as any
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await controller.destroy(req, res)
 
-      expect(repository.getKey).toHaveBeenCalledWith('fpoId', 'id')
+      expect(repository.getKey).toHaveBeenCalledWith('organisationId', 'id')
       expect(repository.deleteKey).toHaveBeenCalledWith(apiKey)
       expect(res.statusCode).toBe(200)
       expect(res.data).toEqual({
@@ -256,12 +256,12 @@ describe('ApiKeyController', () => {
       repository = jasmine.createSpyObj('CustomerApiKeyRepository', { getKey: getKeyResult })
       repository.getKey.bind(repository)
       controller = new ApiKeyController(repository)
-      req = { params: { fpoId: 'fpoId', id: 'id' } } as any
+      req = { params: { organisationId: 'organisationId', id: 'id' } } as any
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await controller.destroy(req, res)
 
-      expect(repository.getKey).toHaveBeenCalledWith('fpoId', 'id')
+      expect(repository.getKey).toHaveBeenCalledWith('organisationId', 'id')
       expect(res.statusCode).toBe(404)
       expect(res.data).toEqual({
         message: 'API key not found'

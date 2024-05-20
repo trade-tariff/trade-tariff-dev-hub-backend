@@ -39,8 +39,8 @@ export class UserController {
       res.status(404).json({ message: 'User not found' })
       return
     }
-    if (body.fpoId !== undefined && typeof body.fpoId === 'string') {
-      user.FpoId = body.fpoId
+    if (body.organisationId !== undefined && typeof body.organisationId === 'string') {
+      user.OrganisationId = body.organisationId
     } else {
       res.status(400).json({ message: 'Invalid request' })
       return

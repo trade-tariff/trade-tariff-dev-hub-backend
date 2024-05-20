@@ -11,7 +11,7 @@ class CreateUser {
   async call (userId: string): Promise<User> {
     const user = new User()
     user.UserId = userId
-    user.FpoId = ''
+    user.OrganisationId = ''
     await this.createInDynamoDb(user)
     return user
   }

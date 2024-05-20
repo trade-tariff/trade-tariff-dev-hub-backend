@@ -1,11 +1,11 @@
 const apiDocs = {
-  '/keys/{fpoId}': {
+  '/keys/{organisationId}': {
     post: {
       summary: 'Create a new API key',
       parameters: [
         {
           in: 'path',
-          name: 'fpoId',
+          name: 'organisationId',
           required: true,
           schema: {
             type: 'string'
@@ -27,7 +27,7 @@ const apiDocs = {
       parameters: [
         {
           in: 'path',
-          name: 'fpoId',
+          name: 'organisationId',
           required: true,
           schema: {
             type: 'string'
@@ -45,13 +45,13 @@ const apiDocs = {
       }
     }
   },
-  '/keys/{fpoId}/{id}': {
+  '/keys/{organisationId}/{id}': {
     get: {
       summary: 'Get a specific API key',
       parameters: [
         {
           in: 'path',
-          name: 'fpoId',
+          name: 'organisationId',
           required: true,
           schema: {
             type: 'string'
@@ -82,7 +82,7 @@ const apiDocs = {
       parameters: [
         {
           in: 'path',
-          name: 'fpoId',
+          name: 'organisationId',
           required: true,
           schema: {
             type: 'string'
@@ -132,7 +132,7 @@ const apiDocs = {
       parameters: [
         {
           in: 'path',
-          name: 'fpoId',
+          name: 'organisationId',
           required: true,
           schema: {
             type: 'string'

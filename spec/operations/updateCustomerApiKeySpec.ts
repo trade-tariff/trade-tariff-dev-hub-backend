@@ -18,14 +18,14 @@ describe('UpdateCustomerApiKey', () => {
 
   it('disables the api key', async () => {
     const key = new CustomerApiKey()
-    key.FpoId = 'fpoId'
+    key.OrganisationId = 'organisationId'
     key.Enabled = false
     key.ApiGatewayId = 'apiGatewayId'
     key.CustomerApiKeyId = 'customerId'
 
     const updated = await createCustomerApiKey.call(key)
 
-    expect(updated.FpoId).toEqual('fpoId')
+    expect(updated.OrganisationId).toEqual('organisationId')
     expect(updated.Enabled).toEqual(false)
     expect(dynamodbClient.send).toHaveBeenCalledTimes(1)
     expect(apigatewayClient.send).toHaveBeenCalledTimes(1)
@@ -44,7 +44,7 @@ describe('UpdateCustomerApiKey', () => {
     expect(dynamodbClient.send.calls.first().args[0].input).toEqual(jasmine.objectContaining({
       TableName: 'CustomerApiKeys',
       Key: {
-        FpoId: { S: 'fpoId' },
+        OrganisationId: { S: 'organisationId' },
         CustomerApiKeyId: { S: 'customerId' }
       },
       UpdateExpression: 'SET Enabled = :enabled, UpdatedAt = :updatedAt',
@@ -57,14 +57,14 @@ describe('UpdateCustomerApiKey', () => {
 
   it('enables the api key', async () => {
     const key = new CustomerApiKey()
-    key.FpoId = 'fpoId'
+    key.OrganisationId = 'organisationId'
     key.Enabled = true
     key.ApiGatewayId = 'apiGatewayId'
     key.CustomerApiKeyId = 'customerId'
 
     const updated = await createCustomerApiKey.call(key)
 
-    expect(updated.FpoId).toEqual('fpoId')
+    expect(updated.OrganisationId).toEqual('organisationId')
     expect(updated.Enabled).toEqual(true)
     expect(dynamodbClient.send).toHaveBeenCalledTimes(1)
     expect(apigatewayClient.send).toHaveBeenCalledTimes(1)
@@ -83,7 +83,7 @@ describe('UpdateCustomerApiKey', () => {
     expect(dynamodbClient.send.calls.first().args[0].input).toEqual(jasmine.objectContaining({
       TableName: 'CustomerApiKeys',
       Key: {
-        FpoId: { S: 'fpoId' },
+        OrganisationId: { S: 'organisationId' },
         CustomerApiKeyId: { S: 'customerId' }
       },
       UpdateExpression: 'SET Enabled = :enabled, UpdatedAt = :updatedAt',

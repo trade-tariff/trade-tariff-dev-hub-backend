@@ -56,6 +56,14 @@ module "service" {
     {
       name  = "COGNITO_PUBLIC_KEYS_URL"
       value = data.aws_ssm_parameter.cognito_public_keys_url.value
+    },
+    {
+      name  = "USAGE_PLAN_PER_FPO_RATE_LIMIT"
+      value = 100
+    },
+    {
+      name  = "USAGE_PLAN_LIST_PAGINATION_LIMIT"
+      value = 100
     }
   ]
 
@@ -68,9 +76,5 @@ module "service" {
       name      = "SENTRY_DSN"
       valueFrom = data.aws_secretsmanager_secret.sentry_dsn.arn
     },
-    {
-      name      = "USAGE_PLAN_ID"
-      valueFrom = data.aws_secretsmanager_secret.usage_plan_id.arn
-    }
   ]
 }
