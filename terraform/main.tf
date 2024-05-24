@@ -64,6 +64,14 @@ module "service" {
     {
       name  = "USAGE_PLAN_LIST_PAGINATION_LIMIT"
       value = 100
+    },
+    {
+      name  = "REST_API_ID"
+      value = var.rest_api_id
+    },
+    {
+      name  = "REST_STAGE_NAME"
+      value = var.environment
     }
   ]
 

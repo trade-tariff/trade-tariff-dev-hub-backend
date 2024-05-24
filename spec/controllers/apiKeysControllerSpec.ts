@@ -182,6 +182,7 @@ describe('ApiKeyController', () => {
   describe('create', () => {
     it('creates a new key', async () => {
       apiKey = new CustomerApiKey()
+      apiKey.Secret = 'TwdRsG9BC6yF8zER:vgPdLKDyFcxn8bfJYpUHS/+YTk8O2g=='
 
       const createKeyResult = Promise.resolve(apiKey)
       repository = jasmine.createSpyObj('CustomerApiKeyRepository', { createKey: createKeyResult })
@@ -207,7 +208,7 @@ describe('ApiKeyController', () => {
       expect(res.data).toEqual({
         CustomerApiKeyId: '',
         ApiGatewayId: '',
-        Secret: '',
+        Secret: 'secret',
         Enabled: false,
         Description: '',
         OrganisationId: '',
