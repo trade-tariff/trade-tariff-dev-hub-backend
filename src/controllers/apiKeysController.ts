@@ -36,7 +36,9 @@ export class ApiKeyController {
 
     const apiKey = await this.repository.createKey(organisationId, description)
 
-    res.status(201).json(apiKey.toJson())
+    const serialized = await apiKey.toDecryptedJson()
+
+    res.status(201).json(serialized)
   }
 
   async update (req: Request, res: Response): Promise<void> {
