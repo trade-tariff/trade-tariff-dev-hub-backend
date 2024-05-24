@@ -26,6 +26,9 @@ class CreateCustomerApiKey {
   static API_KEY_TYPE = 'API_KEY'
   static PLAN_LIST_LIMIT = parseInt(process.env.USAGE_PLAN_LIST_PAGINATION_LIMIT ?? '100')
   static PER_FPO_RATE_LIMIT = parseInt(process.env.USAGE_PLAN_PER_FPO_RATE_LIMIT ?? '100')
+  static PER_FPO_BURST_LIMIT = parseInt(process.env.USAGE_PLAN_PER_FPO_BURST_LIMIT ?? '200')
+  static REST_API_ID = process.env.REST_API_ID ?? undefined
+  static STAGE_NAME = process.env.REST_STAGE_NAME ?? undefined
 
   constructor (
     private readonly dynamodbClient: DynamoDBDocumentClient,
@@ -104,10 +107,15 @@ class CreateCustomerApiKey {
   private async getUsagePlans (): Promise<UsagePlan[]> {
     const usagePlans: UsagePlan[] = []
     const limit = CreateCustomerApiKey.PLAN_LIST_LIMIT
-    let position = '1'
+    let position = ''
 
-    while (position !== null) {
-      const input: GetUsagePlansCommandInput = { limit, position }
+    while (true) {
+      let input: GetUsagePlansCommandInput
+      if (position === '') {
+        input = { limit }
+      } else {
+        input = { limit, position }
+      }
 
       const command = new GetUsagePlansCommand(input)
 
@@ -132,7 +140,17 @@ class CreateCustomerApiKey {
   private async createUsagePlan (customerApiKey: CustomerApiKey): Promise<string> {
     const input: CreateUsagePlanCommandInput = {
       name: customerApiKey.OrganisationId,
-      throttle: { rateLimit: 100 },
+      description: `Automatically generated usage plan for ${customerApiKey.OrganisationId}`,
+      throttle: {
+        rateLimit: CreateCustomerApiKey.PER_FPO_RATE_LIMIT, // Steady-state rate limit of 100 requests per second
+        burstLimit: CreateCustomerApiKey.PER_FPO_BURST_LIMIT // Burst limit allows for 200 requests in a short burst (default is no requests allowed)
+      },
+      apiStages: [
+        {
+          apiId: CreateCustomerApiKey.REST_API_ID,
+          stage: CreateCustomerApiKey.STAGE_NAME
+        }
+      ],
       tags: {
         customer: 'fpo'
       }
