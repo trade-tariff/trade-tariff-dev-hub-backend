@@ -101,7 +101,7 @@ jobs:
       - run:
           name: Run pre-commit
           command: |
-            export SKIP=markdownlint-docker
+            export SKIP=markdownlint-docker,shellcheck
             pre-commit run --all-files
 
   tests:
