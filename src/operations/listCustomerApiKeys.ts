@@ -21,8 +21,9 @@ class ListCustomerApiKeys {
     })
 
     const response = await this.client.send(command)
+    const customerApiKeys = response.Items?.map((item) => CustomerApiKey.fromItem(item)) ?? []
 
-    return response.Items?.map((item) => CustomerApiKey.fromItem(item)) ?? []
+    return customerApiKeys.sort((a, b) => a.UpdatedAt.localeCompare(b.UpdatedAt)).reverse()
   }
 }
 

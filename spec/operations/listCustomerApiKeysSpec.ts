@@ -14,13 +14,22 @@ describe('ListCustomerApiKeys', () => {
     mockResponse = {
       Items: [
         {
-          CustomerApiKeyId: 'customer-api-key-id',
+          CustomerApiKeyId: 'customer-api-key-id-1',
           Secret: 'secret',
           Enabled: true,
           Description: 'description',
           OrganisationId: 'fpo-id',
-          CreatedAt: new Date().toISOString(),
-          UpdatedAt: new Date().toISOString()
+          CreatedAt: '2024-05-24T14:05:45Z',
+          UpdatedAt: '2024-05-24T14:11:00Z'
+        },
+        {
+          CustomerApiKeyId: 'customer-api-key-id-2',
+          Secret: 'secret',
+          Enabled: true,
+          Description: 'description',
+          OrganisationId: 'fpo-id',
+          CreatedAt: '2024-05-24T14:05:45Z',
+          UpdatedAt: '2024-05-24T14:10:00Z'
         }
       ],
       $metadata: {}
@@ -34,6 +43,17 @@ describe('ListCustomerApiKeys', () => {
     const apiKey = apiKeys[0]
 
     expect(apiKey).toEqual(jasmine.any(CustomerApiKey))
-    expect(apiKey.CustomerApiKeyId).toEqual('customer-api-key-id')
+    expect(apiKey.CustomerApiKeyId).toEqual('customer-api-key-id-1')
+  })
+
+  it('should sort the keys by UpdatedAt', async () => {
+    const apiKeys = await operation.call('customer-id')
+    const firstKey = apiKeys[0]
+    const secondKey = apiKeys[1]
+
+    const firstKeyUpdatedAt = Date.parse(firstKey.UpdatedAt)
+    const secondKeyUpdatedAt = Date.parse(secondKey.UpdatedAt)
+
+    expect(firstKeyUpdatedAt).toBeGreaterThan(secondKeyUpdatedAt)
   })
 })
