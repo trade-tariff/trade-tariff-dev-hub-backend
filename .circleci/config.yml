@@ -284,7 +284,7 @@ workflows:
           environment: staging
           requires:
             - apply-terraform-staging
-          <<: *filter-not-main
+          <<: *filter-main
 
       - plan-terraform:
           name: plan-terraform-prod
@@ -299,7 +299,7 @@ workflows:
           context: trade-tariff-releases
           image-name: tariff-fpo-developer-hub-backend-production
           requires:
-            - apply-terraform-staging
+            - e2etest-staging
           <<: *filter-main
 
       - write-docker-tag:
@@ -312,7 +312,6 @@ workflows:
           context: trade-tariff-terraform-aws-production
           environment: production
           requires:
-            - e2etest-staging
             - write-docker-tag-prod-release
           <<: *filter-release
 
