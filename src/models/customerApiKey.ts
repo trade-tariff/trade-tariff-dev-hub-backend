@@ -89,8 +89,14 @@ export class CustomerApiKey {
     }
   }
 
-  toJson (): any {
-    return this.toItem()
+  async toJson (): Promise<any> {
+    const decryptedJson = await this.toDecryptedJson()
+
+    return {
+      ...decryptedJson,
+      Secret: `****${decryptedJson.Secret.slice(-4)}`
+
+    }
   }
 
   async toDecryptedJson (): Promise<any> {
