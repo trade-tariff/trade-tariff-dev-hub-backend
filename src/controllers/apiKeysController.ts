@@ -14,15 +14,16 @@ export class ApiKeyController {
     if (apiKey === null) {
       res.status(404).json({ message: 'API key not found' })
     } else {
-      res.json(await apiKey.toDecryptedJson())
+      res.json(await apiKey.toJson())
     }
   }
 
   async index (req: Request, res: Response): Promise<void> {
     const organisationId = req.params.organisationId
     const apiKeys = await this.repository.listKeys(organisationId)
+    const jsonKeys = await Promise.all(apiKeys.map(async apiKey => await apiKey.toJson()))
 
-    res.json(apiKeys.map(apiKey => apiKey.toJson()))
+    res.json(jsonKeys)
   }
 
   async create (req: Request, res: Response): Promise<void> {
@@ -66,7 +67,7 @@ export class ApiKeyController {
 
     await this.repository.updateKey(customerApiKey)
 
-    res.status(200).json(customerApiKey.toJson())
+    res.status(200).json(await customerApiKey.toJson())
   }
 
   async destroy (req: Request, res: Response): Promise<void> {

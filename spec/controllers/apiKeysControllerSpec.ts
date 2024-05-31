@@ -30,7 +30,7 @@ describe('ApiKeyController', () => {
       expect(res.json).toHaveBeenCalledWith({
         CustomerApiKeyId: '',
         ApiGatewayId: '',
-        Secret: 'secret',
+        Secret: '****cret',
         Enabled: false,
         Description: '',
         OrganisationId: '',
@@ -72,7 +72,7 @@ describe('ApiKeyController', () => {
       expect(res.json).toHaveBeenCalledWith([{
         CustomerApiKeyId: '',
         ApiGatewayId: '',
-        Secret: 'TwdRsG9BC6yF8zER:vgPdLKDyFcxn8bfJYpUHS/+YTk8O2g==',
+        Secret: '****cret',
         Enabled: false,
         Description: '',
         OrganisationId: '',
@@ -110,6 +110,7 @@ describe('ApiKeyController', () => {
     } as any
     it('enables the key', async () => {
       apiKey = new CustomerApiKey()
+      apiKey.Secret = 'TwdRsG9BC6yF8zER:vgPdLKDyFcxn8bfJYpUHS/+YTk8O2g=='
       const getKeyResult = Promise.resolve(apiKey)
       const updateKeyResult = Promise.resolve(apiKey)
 
@@ -133,7 +134,7 @@ describe('ApiKeyController', () => {
       expect(res.data).toEqual({
         CustomerApiKeyId: '',
         ApiGatewayId: '',
-        Secret: '',
+        Secret: '****cret',
         Enabled: true,
         Description: '',
         OrganisationId: '',
@@ -145,6 +146,7 @@ describe('ApiKeyController', () => {
 
     it('disables the key', async () => {
       apiKey = new CustomerApiKey()
+      apiKey.Secret = 'TwdRsG9BC6yF8zER:vgPdLKDyFcxn8bfJYpUHS/+YTk8O2g=='
       const getKeyResult = Promise.resolve(apiKey)
       const updateKeyResult = Promise.resolve(apiKey)
 
@@ -168,7 +170,7 @@ describe('ApiKeyController', () => {
       expect(res.data).toEqual({
         CustomerApiKeyId: '',
         ApiGatewayId: '',
-        Secret: '',
+        Secret: '****cret',
         Enabled: false,
         Description: '',
         OrganisationId: '',

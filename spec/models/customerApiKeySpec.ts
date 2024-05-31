@@ -171,18 +171,20 @@ describe('CustomerApiKey Model', () => {
   })
 
   describe('toJson', () => {
-    it('returns a plain object', () => {
+    it('returns a plain object', async () => {
+      const plainSecret = 'secret'
+      const encryptedSecret = await new CustomerApiKeyEncryption().encrypt(plainSecret)
       const apiKey = new CustomerApiKey()
       apiKey.CustomerApiKeyId = 'the-id'
-      apiKey.Secret = 'secret'
+      apiKey.Secret = encryptedSecret
       apiKey.Enabled = true
 
-      const actual = apiKey.toJson()
+      const actual = await apiKey.toJson()
 
       expect(actual).toEqual({
         CustomerApiKeyId: 'the-id',
         ApiGatewayId: '',
-        Secret: 'secret',
+        Secret: '****cret',
         Enabled: true,
         Description: '',
         OrganisationId: '',
