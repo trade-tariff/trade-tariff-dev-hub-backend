@@ -1,4 +1,4 @@
-import { IncomingHttpHeaders } from 'http'
+import { type IncomingHttpHeaders } from 'http'
 import { type Request } from 'express'
 import { PutCommand } from '@aws-sdk/lib-dynamodb'
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
@@ -17,20 +17,30 @@ export interface FrontendRequest extends Request {
   }
 }
 
-export interface AuditLogEntry {
-  userId: string;
-  table: string;
-  properties: any;
+interface AuditLogProperties {
+  operation: 'create' | 'update' | 'delete'
+  changedValue: {
+    name: string
+    value?: string
+  }
 }
 
-export const createAuditLogEntry = async (data: AuditLogEntry): Promise<void> => {
+export interface AuditLogEntry {
+  userId: string
+  table: string
+  properties: AuditLogProperties
+}
+
+export const createAuditLogEntry = async (
+  data: AuditLogEntry
+): Promise<void> => {
   const command = new PutCommand({
     TableName,
     Item: {
       userId: data.userId,
       createdAt: new Date().toISOString(),
       table: data.table,
-      properties: data.properties,
+      properties: data.properties
     }
   })
 

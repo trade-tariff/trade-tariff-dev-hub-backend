@@ -1,11 +1,9 @@
 import { type Request, type Response } from 'express'
 import { type CustomerApiKeyRepository } from '../repositories/customerApiKeyRepository'
-import { createAuditLogEntry, FrontendRequest } from '../utils/audit'
+import { createAuditLogEntry, type FrontendRequest } from '../utils/audit'
 
 export class ApiKeyController {
-  constructor (
-    private readonly repository: CustomerApiKeyRepository
-  ) {}
+  constructor (private readonly repository: CustomerApiKeyRepository) {}
 
   async show (req: Request, res: Response): Promise<void> {
     const organisationId = req.params.organisationId
@@ -22,7 +20,9 @@ export class ApiKeyController {
   async index (req: Request, res: Response): Promise<void> {
     const organisationId = req.params.organisationId
     const apiKeys = await this.repository.listKeys(organisationId)
-    const jsonKeys = await Promise.all(apiKeys.map(async apiKey => await apiKey.toJson()))
+    const jsonKeys = await Promise.all(
+      apiKeys.map(async (apiKey) => await apiKey.toJson())
+    )
 
     res.json(jsonKeys)
   }
@@ -45,8 +45,11 @@ export class ApiKeyController {
       userId,
       table: 'CustomerApiKeys',
       properties: {
-        apiKey: serialized,
-        operation: 'create'
+        operation: 'create',
+        changedValue: {
+          name: 'API Key',
+          value: serialized
+        }
       }
     })
 
@@ -83,8 +86,11 @@ export class ApiKeyController {
       userId,
       table: 'CustomerApiKeys',
       properties: {
-        apiKey: customerApiKey.Secret,
-        operation: 'update'
+        operation: 'update',
+        changedValue: {
+          name: 'API Key',
+          value: customerApiKey.Secret
+        }
       }
     })
 
@@ -105,13 +111,14 @@ export class ApiKeyController {
 
     await this.repository.deleteKey(customerApiKey)
 
-
     await createAuditLogEntry({
       userId,
       table: 'CustomerApiKeys',
       properties: {
-        apiKey: customerApiKey.Secret,
-        operation: 'delete'
+        operation: 'delete',
+        changedValue: {
+          name: 'API Key'
+        }
       }
     })
 

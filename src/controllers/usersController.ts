@@ -3,9 +3,7 @@ import { type UserRepository } from '../repositories/userRepository'
 import { createAuditLogEntry, type FrontendRequest } from '../utils/audit'
 
 export class UserController {
-  constructor (
-    private readonly repository: UserRepository
-  ) {}
+  constructor (private readonly repository: UserRepository) {}
 
   async show (req: Request, res: Response): Promise<void> {
     const id = req.params.id
@@ -41,7 +39,10 @@ export class UserController {
       res.status(404).json({ message: 'User not found' })
       return
     }
-    if (body.organisationId !== undefined && typeof body.organisationId === 'string') {
+    if (
+      body.organisationId !== undefined &&
+      typeof body.organisationId === 'string'
+    ) {
       user.OrganisationId = body.organisationId
     } else {
       res.status(400).json({ message: 'Invalid request' })
@@ -54,8 +55,11 @@ export class UserController {
       userId,
       table: 'Users',
       properties: {
-        organisationId: body.organisationId,
-        operation: 'update'
+        operation: 'update',
+        changedValue: {
+          name: 'Organisation ID',
+          value: body.organisationId
+        }
       }
     })
 
