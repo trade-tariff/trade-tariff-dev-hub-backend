@@ -1,5 +1,6 @@
 import 'jasmine'
-import { type Request, type Response } from 'express'
+import { type Response } from 'express'
+import { type FrontendRequest } from '../../src/utils/audit'
 
 import { ApiKeyController } from '../../src/controllers/apiKeysController'
 import { type CustomerApiKeyRepository } from '../../src/repositories/customerApiKeyRepository'
@@ -9,7 +10,7 @@ describe('ApiKeyController', () => {
   let repository: jasmine.SpyObj<CustomerApiKeyRepository>
   let controller: ApiKeyController
   let getKeyResult: Promise<CustomerApiKey | null>
-  let req: Request
+  let req: FrontendRequest
   let res: Response
   let apiKey: CustomerApiKey
 
@@ -63,7 +64,14 @@ describe('ApiKeyController', () => {
       repository = jasmine.createSpyObj('CustomerApiKeyRepository', { listKeys: listKeysResult })
       repository.listKeys.bind(repository)
       controller = new ApiKeyController(repository)
-      req = { params: { organisationId: 'organisationId' } } as any
+      req = {
+        headers: {
+          'X-Api-Key': 'secret-value'
+        },
+        params: {
+          organisationId: 'organisationId'
+        }
+      } as any
       res = { json: jasmine.createSpy() } as unknown as any
 
       await controller.index(req, res)
@@ -87,7 +95,14 @@ describe('ApiKeyController', () => {
       repository = jasmine.createSpyObj('CustomerApiKeyRepository', { listKeys: listKeysResult })
       repository.listKeys.bind(repository)
       controller = new ApiKeyController(repository)
-      req = { params: { organisationId: 'organisationId' } } as any
+      req = {
+        headers: {
+          'X-Api-Key': 'secret-value'
+        },
+        params: {
+          organisationId: 'organisationId'
+        }
+      } as any
       res = { json: jasmine.createSpy() } as unknown as any
 
       await controller.index(req, res)

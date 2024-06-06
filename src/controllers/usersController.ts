@@ -1,5 +1,6 @@
 import { type Request, type Response } from 'express'
 import { type UserRepository } from '../repositories/userRepository'
+import { createAuditLogEntry, type FrontendRequest } from '../utils/audit'
 
 export class UserController {
   constructor (
@@ -24,9 +25,10 @@ export class UserController {
     res.status(201).json(user.toJson())
   }
 
-  async update (req: Request, res: Response): Promise<void> {
+  async update (req: FrontendRequest, res: Response): Promise<void> {
     const id: string = req.params.id
     const body = req.body
+    const userId = req.headers['X-User-Id'] ?? ''
 
     if (typeof body !== 'object') {
       res.status(400).json({ message: 'Invalid request' })
@@ -47,6 +49,15 @@ export class UserController {
     }
 
     await this.repository.updateUser(user)
+
+    await createAuditLogEntry({
+      userId,
+      table: 'Users',
+      properties: {
+        organisationId: body.organisationId,
+        operation: 'update'
+      }
+    })
 
     res.status(200).json(user.toJson())
   }

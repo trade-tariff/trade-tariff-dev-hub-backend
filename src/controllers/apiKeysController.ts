@@ -1,5 +1,6 @@
 import { type Request, type Response } from 'express'
 import { type CustomerApiKeyRepository } from '../repositories/customerApiKeyRepository'
+import { createAuditLogEntry, FrontendRequest } from '../utils/audit'
 
 export class ApiKeyController {
   constructor (
@@ -26,9 +27,10 @@ export class ApiKeyController {
     res.json(jsonKeys)
   }
 
-  async create (req: Request, res: Response): Promise<void> {
+  async create (req: FrontendRequest, res: Response): Promise<void> {
     const organisationId = req.params.organisationId
     const description = req.body.description
+    const userId = req.headers['X-User-Id'] ?? ''
 
     if (typeof description !== 'string') {
       res.status(400).json({ error: 'Invalid description type' })
@@ -39,13 +41,23 @@ export class ApiKeyController {
 
     const serialized = await apiKey.toDecryptedJson()
 
+    await createAuditLogEntry({
+      userId,
+      table: 'CustomerApiKeys',
+      properties: {
+        apiKey: serialized,
+        operation: 'create'
+      }
+    })
+
     res.status(201).json(serialized)
   }
 
-  async update (req: Request, res: Response): Promise<void> {
+  async update (req: FrontendRequest, res: Response): Promise<void> {
     const organisationId: string = req.params.organisationId
     const id: string = req.params.id
     const body = req.body
+    const userId = req.headers['X-User-Id'] ?? ''
 
     if (typeof body !== 'object') {
       res.status(400).json({ message: 'Invalid request' })
@@ -67,12 +79,22 @@ export class ApiKeyController {
 
     await this.repository.updateKey(customerApiKey)
 
+    await createAuditLogEntry({
+      userId,
+      table: 'CustomerApiKeys',
+      properties: {
+        apiKey: customerApiKey.Secret,
+        operation: 'update'
+      }
+    })
+
     res.status(200).json(await customerApiKey.toJson())
   }
 
-  async destroy (req: Request, res: Response): Promise<void> {
+  async destroy (req: FrontendRequest, res: Response): Promise<void> {
     const organisationId: string = req.params.organisationId
     const id: string = req.params.id
+    const userId = req.headers['X-User-Id'] ?? ''
 
     const customerApiKey = await this.repository.getKey(organisationId, id)
 
@@ -82,6 +104,16 @@ export class ApiKeyController {
     }
 
     await this.repository.deleteKey(customerApiKey)
+
+
+    await createAuditLogEntry({
+      userId,
+      table: 'CustomerApiKeys',
+      properties: {
+        apiKey: customerApiKey.Secret,
+        operation: 'delete'
+      }
+    })
 
     res.status(200).json({ message: 'API key deleted' })
   }
