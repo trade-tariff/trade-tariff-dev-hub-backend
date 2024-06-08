@@ -17,8 +17,8 @@ export class UserRepository {
     return await this.updateOperation.call(user)
   }
 
-  async createUser (id: string): Promise<User> {
-    return await this.createOperation.call(id)
+  async createUser (id: string, organisationId: string): Promise<User> {
+    return await this.createOperation.call(id, organisationId)
   }
 
   async getUser (id: string): Promise<User | null> {

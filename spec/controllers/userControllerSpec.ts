@@ -112,6 +112,7 @@ describe('UserController', () => {
       expect(res.data).toEqual({
         UserId: '',
         OrganisationId: 'organisationId',
+        Status: '',
         CreatedAt: user.CreatedAt,
         UpdatedAt: user.UpdatedAt
       })
@@ -128,7 +129,7 @@ describe('UserController', () => {
       })
       repository.createUser.bind(repository)
       controller = new UserController(repository)
-      req = { params: { id: 'id' } } as any
+      req = { params: { id: 'id' }, body: { organisationId: 'some-group-id' } } as any
       const res = {
         status: function (code: number) {
           this.statusCode = code
@@ -143,11 +144,12 @@ describe('UserController', () => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await controller.create(req, res)
 
-      expect(repository.createUser).toHaveBeenCalledWith('id')
+      expect(repository.createUser).toHaveBeenCalledWith('id', 'some-group-id')
       expect(res.statusCode).toBe(201)
       expect(res.data).toEqual({
         UserId: '',
         OrganisationId: '',
+        Status: '',
         CreatedAt: user.CreatedAt,
         UpdatedAt: user.UpdatedAt
       })

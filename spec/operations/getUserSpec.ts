@@ -9,6 +9,7 @@ describe('GetUser', () => {
     const dynamodbResult = {
       Item: {
         UserId: { S: 'userId' },
+        Status: { S: 'Unregistered' },
         OrganisationId: { S: 'organisationId' },
         CreatedAt: { S: new Date().toISOString() },
         UpdatedAt: { S: new Date().toISOString() }

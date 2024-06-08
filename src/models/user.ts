@@ -8,6 +8,9 @@ export class User {
   @IsString()
     OrganisationId: string
 
+  @IsString()
+    Status: string
+
   @IsDateString()
     CreatedAt: string
 
@@ -19,6 +22,7 @@ export class User {
   constructor () {
     this.UserId = ''
     this.OrganisationId = ''
+    this.Status = ''
     this.CreatedAt = new Date().toISOString()
     this.UpdatedAt = new Date().toISOString()
     this.Saved = false
@@ -35,6 +39,7 @@ export class User {
 
     user.UserId = plainObject.UserId.S
     user.OrganisationId = plainObject.OrganisationId.S
+    user.Status = plainObject.Status.S
     user.CreatedAt = plainObject.CreatedAt.S
     user.UpdatedAt = plainObject.UpdatedAt.S
     user.Saved = true

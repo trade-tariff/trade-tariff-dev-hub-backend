@@ -95,6 +95,7 @@ create_customer_api_key() {
 create_user() {
     id=$1
     organisationId="local-development"
+    status="Unregistered"
 
     # create the dynnamodb item
     aws dynamodb put-item \
@@ -103,6 +104,7 @@ create_user() {
         --table-name "$USERS_TABLE_NAME" --item "{
             \"UserId\": {\"S\": \"$id\"},
             \"OrganisationId\": {\"S\": \"$organisationId\"},
+            \"Status\": {\"S\": \"$status\"},
             \"CreatedAt\": {\"S\": \"$createdAt\"},
             \"UpdatedAt\": {\"S\": \"$createdAt\"}
         }"

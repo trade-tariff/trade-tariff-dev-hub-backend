@@ -19,10 +19,10 @@ describe('CreateUser', () => {
   })
 
   it('creates a new user', async () => {
-    const created = await createUser.call('userId')
+    const created = await createUser.call('userId', 'groupId')
 
     expect(created.UserId).toEqual('userId')
-    expect(created.OrganisationId).toEqual('')
+    expect(created.OrganisationId).toEqual('groupId')
     expect(created.Saved).toEqual(true)
 
     expect(dynamodbClient.send).toHaveBeenCalledTimes(1)
