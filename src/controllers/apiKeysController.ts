@@ -48,7 +48,7 @@ export class ApiKeyController {
         operation: 'create',
         changedValue: {
           name: 'API Key',
-          value: serialized
+          value: apiKey.Secret
         }
       }
     })
@@ -117,7 +117,8 @@ export class ApiKeyController {
       properties: {
         operation: 'delete',
         changedValue: {
-          name: 'API Key'
+          name: 'API Key',
+          value: customerApiKey.Secret
         }
       }
     })
