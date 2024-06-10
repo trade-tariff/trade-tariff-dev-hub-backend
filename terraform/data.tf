@@ -33,6 +33,10 @@ data "aws_dynamodb_table" "customer_api_keys" {
   name = "CustomerApiKeys"
 }
 
+data "aws_dynamodb_table" "audit_log" {
+  name = "AuditLog"
+}
+
 data "aws_secretsmanager_secret" "encryption_key" {
   name = "dev-hub-backend-encryption-key"
 }

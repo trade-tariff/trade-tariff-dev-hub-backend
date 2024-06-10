@@ -1,3 +1,4 @@
+import { randomBytes } from 'crypto'
 import { type IncomingHttpHeaders } from 'http'
 import { type Request } from 'express'
 import { PutCommand } from '@aws-sdk/lib-dynamodb'
@@ -31,16 +32,25 @@ export interface AuditLogEntry {
   properties: AuditLogProperties
 }
 
+function randomString (length: number = 8): string {
+  return randomBytes(length).toString('hex')
+}
+
+function getHash (): string {
+  return `${new Date().toISOString()}-${randomString()}`
+}
+
 export const createAuditLogEntry = async (
   data: AuditLogEntry
 ): Promise<void> => {
   const command = new PutCommand({
     TableName,
     Item: {
-      userId: data.userId,
-      createdAt: new Date().toISOString(),
-      table: data.table,
-      properties: data.properties
+      LogId: `${getHash()}`,
+      CreatedAt: new Date().toISOString(),
+      Properties: data.properties,
+      Table: data.table,
+      UserId: data.userId
     }
   })
 
