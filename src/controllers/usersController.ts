@@ -26,7 +26,7 @@ export class UserController {
   async update (req: FrontendRequest, res: Response): Promise<void> {
     const id: string = req.params.id
     const body = req.body
-    const userId = req.headers['X-User-Id'] ?? ''
+    const userId = req.headers['x-user-id'] ?? ''
 
     if (typeof body !== 'object') {
       res.status(400).json({ message: 'Invalid request' })

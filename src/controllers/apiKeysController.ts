@@ -30,7 +30,7 @@ export class ApiKeyController {
   async create (req: FrontendRequest, res: Response): Promise<void> {
     const organisationId = req.params.organisationId
     const description = req.body.description
-    const userId = req.headers['X-User-Id'] ?? ''
+    const userId = req.headers['x-user-id'] ?? ''
 
     if (typeof description !== 'string') {
       res.status(400).json({ error: 'Invalid description type' })
@@ -60,9 +60,7 @@ export class ApiKeyController {
     const organisationId: string = req.params.organisationId
     const id: string = req.params.id
     const body = req.body
-    const userId = req.headers['X-User-Id'] ?? ''
-
-    console.log(req.headers)
+    const userId = req.headers['x-user-id'] ?? ''
 
     if (typeof body !== 'object') {
       res.status(400).json({ message: 'Invalid request' })
@@ -102,7 +100,7 @@ export class ApiKeyController {
   async destroy (req: FrontendRequest, res: Response): Promise<void> {
     const organisationId: string = req.params.organisationId
     const id: string = req.params.id
-    const userId = req.headers['X-User-Id'] ?? ''
+    const userId = req.headers['x-user-id'] ?? ''
 
     const customerApiKey = await this.repository.getKey(organisationId, id)
 

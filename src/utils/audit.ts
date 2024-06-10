@@ -14,7 +14,7 @@ const dynamodbClient = new DynamoDBClient({
 
 export interface FrontendRequest extends Request {
   headers: IncomingHttpHeaders & {
-    'X-User-Id'?: string
+    'x-user-id'?: string
   }
 }
 

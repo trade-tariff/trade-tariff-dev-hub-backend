@@ -146,7 +146,7 @@ describe('ApiKeyController', () => {
       )
       repository.updateKey.bind(repository)
       controller = new ApiKeyController(repository)
-      req = { headers: { 'X-User-Id': 'secret-value' }, params: { organisationId: 'organisationId', id: 'id' }, body: { enabled: true } } as any
+      req = { headers: { 'x-user-id': 'secret-value' }, params: { organisationId: 'organisationId', id: 'id' }, body: { enabled: true } } as any
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await controller.update(req, res)
@@ -182,7 +182,7 @@ describe('ApiKeyController', () => {
       )
       repository.updateKey.bind(repository)
       controller = new ApiKeyController(repository)
-      req = { headers: { 'X-User-Id': 'secret-value' }, params: { organisationId: 'organisationId', id: 'id' }, body: { enabled: false } } as any
+      req = { headers: { 'x-user-id': 'secret-value' }, params: { organisationId: 'organisationId', id: 'id' }, body: { enabled: false } } as any
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await controller.update(req, res)
@@ -213,7 +213,7 @@ describe('ApiKeyController', () => {
       repository = jasmine.createSpyObj('CustomerApiKeyRepository', { createKey: createKeyResult })
       repository.createKey.bind(repository)
       controller = new ApiKeyController(repository)
-      req = { headers: { 'X-User-Id': 'secret-value' }, params: { organisationId: 'organisationId' }, body: { description: 'description' } } as any
+      req = { headers: { 'x-user-id': 'secret-value' }, params: { organisationId: 'organisationId' }, body: { description: 'description' } } as any
       const res = {
         status: function (code: number) {
           this.statusCode = code
@@ -264,7 +264,7 @@ describe('ApiKeyController', () => {
       repository.getKey.bind(repository)
       repository.deleteKey.bind(repository)
       controller = new ApiKeyController(repository)
-      req = { headers: { 'X-User-Id': 'secret-value' }, params: { organisationId: 'organisationId', id: 'id' } } as any
+      req = { headers: { 'x-user-id': 'secret-value' }, params: { organisationId: 'organisationId', id: 'id' } } as any
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await controller.destroy(req, res)
@@ -282,7 +282,7 @@ describe('ApiKeyController', () => {
       repository = jasmine.createSpyObj('CustomerApiKeyRepository', { getKey: getKeyResult })
       repository.getKey.bind(repository)
       controller = new ApiKeyController(repository)
-      req = { headers: { 'X-User-Id': 'secret-value' }, params: { organisationId: 'organisationId', id: 'id' } } as any
+      req = { headers: { 'x-user-id': 'secret-value' }, params: { organisationId: 'organisationId', id: 'id' } } as any
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await controller.destroy(req, res)

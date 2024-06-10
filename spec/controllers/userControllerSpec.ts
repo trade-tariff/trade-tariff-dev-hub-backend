@@ -90,7 +90,7 @@ describe('UserController', () => {
       )
       repository.updateUser.bind(repository)
       controller = new UserController(repository)
-      req = { headers: { 'X-User-Id': 'secret-value' }, params: { id: 'id' }, body: { organisationId: 'organisationId' } } as any
+      req = { headers: { 'x-user-id': 'secret-value' }, params: { id: 'id' }, body: { organisationId: 'organisationId' } } as any
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await controller.update(req, res)
