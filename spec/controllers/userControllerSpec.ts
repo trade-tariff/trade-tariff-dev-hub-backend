@@ -5,6 +5,11 @@ import { UserController } from '../../src/controllers/usersController'
 import { type UserRepository } from '../../src/repositories/userRepository'
 import { User } from '../../src/models/user'
 import { type FrontendRequest } from '../../src/utils/audit'
+import * as audit from '../../src/utils/audit'
+
+beforeAll(() => {
+  spyOn(audit, 'createAuditLogEntry').and.returnValue(Promise.resolve())
+})
 
 describe('UserController', () => {
   let repository: jasmine.SpyObj<UserRepository>
@@ -85,7 +90,7 @@ describe('UserController', () => {
       )
       repository.updateUser.bind(repository)
       controller = new UserController(repository)
-      req = { headers: {'X-User-Id': 'secret-value'}, params: { id: 'id' }, body: { organisationId: 'organisationId' } } as any
+      req = { headers: { 'X-User-Id': 'secret-value' }, params: { id: 'id' }, body: { organisationId: 'organisationId' } } as any
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await controller.update(req, res)
