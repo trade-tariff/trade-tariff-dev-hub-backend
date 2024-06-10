@@ -62,6 +62,8 @@ export class ApiKeyController {
     const body = req.body
     const userId = req.headers['X-User-Id'] ?? ''
 
+    console.log(req.headers)
+
     if (typeof body !== 'object') {
       res.status(400).json({ message: 'Invalid request' })
       return

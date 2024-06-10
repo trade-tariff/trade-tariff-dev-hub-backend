@@ -56,9 +56,7 @@ export const createAuditLogEntry = async (
 
   const response = await dynamodbClient.send(command)
 
-  console.log(response)
-
-  if (response.$metadata.httpStatusCode !== 201) {
+  if (response.$metadata.httpStatusCode != 200) {
     logger.error('Failed to create audit entry!')
   }
 }
