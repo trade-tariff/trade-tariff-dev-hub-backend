@@ -46,7 +46,7 @@ export const createAuditLogEntry = async (
   const command = new PutCommand({
     TableName,
     Item: {
-      LogId: `${getHash()}`,
+      LogId: getHash(),
       CreatedAt: new Date().toISOString(),
       Properties: data.properties,
       Table: data.table,
