@@ -50,6 +50,10 @@ module "service" {
       value = var.environment
     },
     {
+      name  = "AUDIT_TABLE_NAME"
+      value = data.aws_dynamodb_table.audit_log.name
+    },
+    {
       name  = "CUSTOMER_API_KEYS_TABLE_NAME"
       value = data.aws_dynamodb_table.customer_api_keys.name
     },

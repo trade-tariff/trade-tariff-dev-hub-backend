@@ -1,24 +1,35 @@
 import 'jasmine'
-import { type Request, type Response } from 'express'
+import { type Response } from 'express'
+import { type FrontendRequest } from '../../src/utils/audit'
+import * as audit from '../../src/utils/audit'
 
 import { ApiKeyController } from '../../src/controllers/apiKeysController'
 import { type CustomerApiKeyRepository } from '../../src/repositories/customerApiKeyRepository'
 import { CustomerApiKey } from '../../src/models/customerApiKey'
 
+// we want to be able to spy on things multiple times
+jasmine.getEnv().allowRespy(true)
+
 describe('ApiKeyController', () => {
   let repository: jasmine.SpyObj<CustomerApiKeyRepository>
   let controller: ApiKeyController
   let getKeyResult: Promise<CustomerApiKey | null>
-  let req: Request
+  let req: FrontendRequest
   let res: Response
   let apiKey: CustomerApiKey
+
+  beforeEach(() => {
+    spyOn(audit, 'createAuditLogEntry').and.returnValue(Promise.resolve())
+  })
 
   describe('show', () => {
     it('returns the decrypted key', async () => {
       apiKey = new CustomerApiKey()
       apiKey.Secret = 'TwdRsG9BC6yF8zER:vgPdLKDyFcxn8bfJYpUHS/+YTk8O2g=='
       getKeyResult = Promise.resolve(apiKey)
-      repository = jasmine.createSpyObj('CustomerApiKeyRepository', { getKey: getKeyResult })
+      repository = jasmine.createSpyObj('CustomerApiKeyRepository', {
+        getKey: getKeyResult
+      })
       repository.getKey.bind(repository)
       controller = new ApiKeyController(repository)
       req = { params: { organisationId: 'organisationId', id: 'id' } } as any
@@ -42,11 +53,17 @@ describe('ApiKeyController', () => {
 
     it('returns 404 if the key is not found', async () => {
       getKeyResult = Promise.resolve(null)
-      repository = jasmine.createSpyObj('CustomerApiKeyRepository', { getKey: getKeyResult })
+      repository = jasmine.createSpyObj('CustomerApiKeyRepository', {
+        getKey: getKeyResult
+      })
       repository.getKey.bind(repository)
       controller = new ApiKeyController(repository)
       req = { params: { organisationId: 'organisationId', id: 'id' } } as any
-      res = { status: jasmine.createSpy().and.returnValue({ json: jasmine.createSpy() }) } as unknown as any
+      res = {
+        status: jasmine
+          .createSpy()
+          .and.returnValue({ json: jasmine.createSpy() })
+      } as unknown as any
 
       await controller.show(req, res)
 
@@ -60,34 +77,48 @@ describe('ApiKeyController', () => {
       apiKey = new CustomerApiKey()
       apiKey.Secret = 'TwdRsG9BC6yF8zER:vgPdLKDyFcxn8bfJYpUHS/+YTk8O2g=='
       const listKeysResult = Promise.resolve([apiKey])
-      repository = jasmine.createSpyObj('CustomerApiKeyRepository', { listKeys: listKeysResult })
+      repository = jasmine.createSpyObj('CustomerApiKeyRepository', {
+        listKeys: listKeysResult
+      })
       repository.listKeys.bind(repository)
       controller = new ApiKeyController(repository)
-      req = { params: { organisationId: 'organisationId' } } as any
+      req = {
+        params: {
+          organisationId: 'organisationId'
+        }
+      } as any
       res = { json: jasmine.createSpy() } as unknown as any
 
       await controller.index(req, res)
 
       expect(repository.listKeys).toHaveBeenCalledWith('organisationId')
-      expect(res.json).toHaveBeenCalledWith([{
-        CustomerApiKeyId: '',
-        ApiGatewayId: '',
-        Secret: '****cret',
-        Enabled: false,
-        Description: '',
-        OrganisationId: '',
-        CreatedAt: apiKey.CreatedAt,
-        UpdatedAt: apiKey.UpdatedAt,
-        UsagePlanId: ''
-      }])
+      expect(res.json).toHaveBeenCalledWith([
+        {
+          CustomerApiKeyId: '',
+          ApiGatewayId: '',
+          Secret: '****cret',
+          Enabled: false,
+          Description: '',
+          OrganisationId: '',
+          CreatedAt: apiKey.CreatedAt,
+          UpdatedAt: apiKey.UpdatedAt,
+          UsagePlanId: ''
+        }
+      ])
     })
 
     it('returns an empty list if there are no keys', async () => {
       const listKeysResult = Promise.resolve([])
-      repository = jasmine.createSpyObj('CustomerApiKeyRepository', { listKeys: listKeysResult })
+      repository = jasmine.createSpyObj('CustomerApiKeyRepository', {
+        listKeys: listKeysResult
+      })
       repository.listKeys.bind(repository)
       controller = new ApiKeyController(repository)
-      req = { params: { organisationId: 'organisationId' } } as any
+      req = {
+        params: {
+          organisationId: 'organisationId'
+        }
+      } as any
       res = { json: jasmine.createSpy() } as unknown as any
 
       await controller.index(req, res)
@@ -114,16 +145,17 @@ describe('ApiKeyController', () => {
       const getKeyResult = Promise.resolve(apiKey)
       const updateKeyResult = Promise.resolve(apiKey)
 
-      repository = jasmine.createSpyObj(
-        'CustomerApiKeyRepository',
-        {
-          updateKey: updateKeyResult,
-          getKey: getKeyResult
-        }
-      )
+      repository = jasmine.createSpyObj('CustomerApiKeyRepository', {
+        updateKey: updateKeyResult,
+        getKey: getKeyResult
+      })
       repository.updateKey.bind(repository)
       controller = new ApiKeyController(repository)
-      req = { params: { organisationId: 'organisationId', id: 'id' }, body: { enabled: true } } as any
+      req = {
+        headers: { 'x-user-id': 'secret-value' },
+        params: { organisationId: 'organisationId', id: 'id' },
+        body: { enabled: true }
+      } as any
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await controller.update(req, res)
@@ -150,16 +182,17 @@ describe('ApiKeyController', () => {
       const getKeyResult = Promise.resolve(apiKey)
       const updateKeyResult = Promise.resolve(apiKey)
 
-      repository = jasmine.createSpyObj(
-        'CustomerApiKeyRepository',
-        {
-          updateKey: updateKeyResult,
-          getKey: getKeyResult
-        }
-      )
+      repository = jasmine.createSpyObj('CustomerApiKeyRepository', {
+        updateKey: updateKeyResult,
+        getKey: getKeyResult
+      })
       repository.updateKey.bind(repository)
       controller = new ApiKeyController(repository)
-      req = { params: { organisationId: 'organisationId', id: 'id' }, body: { enabled: false } } as any
+      req = {
+        headers: { 'x-user-id': 'secret-value' },
+        params: { organisationId: 'organisationId', id: 'id' },
+        body: { enabled: false }
+      } as any
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await controller.update(req, res)
@@ -187,10 +220,16 @@ describe('ApiKeyController', () => {
       apiKey.Secret = 'TwdRsG9BC6yF8zER:vgPdLKDyFcxn8bfJYpUHS/+YTk8O2g=='
 
       const createKeyResult = Promise.resolve(apiKey)
-      repository = jasmine.createSpyObj('CustomerApiKeyRepository', { createKey: createKeyResult })
+      repository = jasmine.createSpyObj('CustomerApiKeyRepository', {
+        createKey: createKeyResult
+      })
       repository.createKey.bind(repository)
       controller = new ApiKeyController(repository)
-      req = { params: { organisationId: 'organisationId' }, body: { description: 'description' } } as any
+      req = {
+        headers: { 'x-user-id': 'secret-value' },
+        params: { organisationId: 'organisationId' },
+        body: { description: 'description' }
+      } as any
       const res = {
         status: function (code: number) {
           this.statusCode = code
@@ -205,7 +244,10 @@ describe('ApiKeyController', () => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await controller.create(req, res)
 
-      expect(repository.createKey).toHaveBeenCalledWith('organisationId', 'description')
+      expect(repository.createKey).toHaveBeenCalledWith(
+        'organisationId',
+        'description'
+      )
       expect(res.statusCode).toBe(201)
       expect(res.data).toEqual({
         CustomerApiKeyId: '',
@@ -237,11 +279,17 @@ describe('ApiKeyController', () => {
       apiKey = new CustomerApiKey()
       getKeyResult = Promise.resolve(apiKey)
       const deleteKeyResult = Promise.resolve()
-      repository = jasmine.createSpyObj('CustomerApiKeyRepository', { getKey: getKeyResult, deleteKey: deleteKeyResult })
+      repository = jasmine.createSpyObj('CustomerApiKeyRepository', {
+        getKey: getKeyResult,
+        deleteKey: deleteKeyResult
+      })
       repository.getKey.bind(repository)
       repository.deleteKey.bind(repository)
       controller = new ApiKeyController(repository)
-      req = { params: { organisationId: 'organisationId', id: 'id' } } as any
+      req = {
+        headers: { 'x-user-id': 'secret-value' },
+        params: { organisationId: 'organisationId', id: 'id' }
+      } as any
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await controller.destroy(req, res)
@@ -256,10 +304,15 @@ describe('ApiKeyController', () => {
 
     it('returns 404 if the key is not found', async () => {
       getKeyResult = Promise.resolve(null)
-      repository = jasmine.createSpyObj('CustomerApiKeyRepository', { getKey: getKeyResult })
+      repository = jasmine.createSpyObj('CustomerApiKeyRepository', {
+        getKey: getKeyResult
+      })
       repository.getKey.bind(repository)
       controller = new ApiKeyController(repository)
-      req = { params: { organisationId: 'organisationId', id: 'id' } } as any
+      req = {
+        headers: { 'x-user-id': 'secret-value' },
+        params: { organisationId: 'organisationId', id: 'id' }
+      } as any
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await controller.destroy(req, res)

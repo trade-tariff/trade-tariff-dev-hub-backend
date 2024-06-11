@@ -1,10 +1,9 @@
 import { type Request, type Response } from 'express'
 import { type UserRepository } from '../repositories/userRepository'
+import { createAuditLogEntry, type FrontendRequest } from '../utils/audit'
 
 export class UserController {
-  constructor (
-    private readonly repository: UserRepository
-  ) {}
+  constructor (private readonly repository: UserRepository) {}
 
   async show (req: Request, res: Response): Promise<void> {
     const id = req.params.id
@@ -24,9 +23,10 @@ export class UserController {
     res.status(201).json(user.toJson())
   }
 
-  async update (req: Request, res: Response): Promise<void> {
+  async update (req: FrontendRequest, res: Response): Promise<void> {
     const id: string = req.params.id
     const body = req.body
+    const userId = req.headers['x-user-id'] ?? ''
 
     if (typeof body !== 'object') {
       res.status(400).json({ message: 'Invalid request' })
@@ -39,7 +39,10 @@ export class UserController {
       res.status(404).json({ message: 'User not found' })
       return
     }
-    if (body.organisationId !== undefined && typeof body.organisationId === 'string') {
+    if (
+      body.organisationId !== undefined &&
+      typeof body.organisationId === 'string'
+    ) {
       user.OrganisationId = body.organisationId
     } else {
       res.status(400).json({ message: 'Invalid request' })
@@ -47,6 +50,18 @@ export class UserController {
     }
 
     await this.repository.updateUser(user)
+
+    await createAuditLogEntry({
+      userId,
+      table: 'Users',
+      properties: {
+        operation: 'update',
+        changedValue: {
+          name: 'Organisation ID',
+          value: body.organisationId
+        }
+      }
+    })
 
     res.status(200).json(user.toJson())
   }

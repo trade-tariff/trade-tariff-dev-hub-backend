@@ -1,15 +1,21 @@
 import 'jasmine'
-import { type Request, type Response } from 'express'
+import { type Response } from 'express'
 
 import { UserController } from '../../src/controllers/usersController'
 import { type UserRepository } from '../../src/repositories/userRepository'
 import { User } from '../../src/models/user'
+import { type FrontendRequest } from '../../src/utils/audit'
+import * as audit from '../../src/utils/audit'
+
+beforeAll(() => {
+  spyOn(audit, 'createAuditLogEntry').and.returnValue(Promise.resolve())
+})
 
 describe('UserController', () => {
   let repository: jasmine.SpyObj<UserRepository>
   let controller: UserController
   let getUserResult: Promise<User | null>
-  let req: Request
+  let req: FrontendRequest
   let res: Response
   let user: User
 
@@ -17,7 +23,9 @@ describe('UserController', () => {
     it('returns the user', async () => {
       user = new User()
       getUserResult = Promise.resolve(user)
-      repository = jasmine.createSpyObj('UserRepository', { getUser: getUserResult })
+      repository = jasmine.createSpyObj('UserRepository', {
+        getUser: getUserResult
+      })
       repository.getUser.bind(repository)
       controller = new UserController(repository)
       req = { params: { id: 'id' } } as any
@@ -31,11 +39,17 @@ describe('UserController', () => {
 
     it('returns 404 if the user is not found', async () => {
       getUserResult = Promise.resolve(null)
-      repository = jasmine.createSpyObj('UserRepository', { getUser: getUserResult })
+      repository = jasmine.createSpyObj('UserRepository', {
+        getUser: getUserResult
+      })
       repository.getUser.bind(repository)
       controller = new UserController(repository)
       req = { params: { id: 'id' } } as any
-      res = { status: jasmine.createSpy().and.returnValue({ json: jasmine.createSpy() }) } as unknown as any
+      res = {
+        status: jasmine
+          .createSpy()
+          .and.returnValue({ json: jasmine.createSpy() })
+      } as unknown as any
 
       await controller.show(req, res)
 
@@ -46,7 +60,9 @@ describe('UserController', () => {
   describe('index', () => {
     it('returns an empty list if there are no users', async () => {
       const listUsersResult = Promise.resolve([])
-      repository = jasmine.createSpyObj('UserRepository', { getUser: listUsersResult })
+      repository = jasmine.createSpyObj('UserRepository', {
+        getUser: listUsersResult
+      })
       repository.getUser.bind(repository)
       controller = new UserController(repository)
       req = { params: { id: 'userId' } } as any
@@ -75,16 +91,17 @@ describe('UserController', () => {
       const getUserResult = Promise.resolve(user)
       const updateUserResult = Promise.resolve(user)
 
-      repository = jasmine.createSpyObj(
-        'UserRepository',
-        {
-          updateUser: updateUserResult,
-          getUser: getUserResult
-        }
-      )
+      repository = jasmine.createSpyObj('UserRepository', {
+        updateUser: updateUserResult,
+        getUser: getUserResult
+      })
       repository.updateUser.bind(repository)
       controller = new UserController(repository)
-      req = { params: { id: 'id' }, body: { organisationId: 'organisationId' } } as any
+      req = {
+        headers: { 'x-user-id': 'secret-value' },
+        params: { id: 'id' },
+        body: { organisationId: 'organisationId' }
+      } as any
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await controller.update(req, res)
@@ -106,7 +123,9 @@ describe('UserController', () => {
       user = new User()
 
       const createUserResult = Promise.resolve(user)
-      repository = jasmine.createSpyObj('UserRepository', { createUser: createUserResult })
+      repository = jasmine.createSpyObj('UserRepository', {
+        createUser: createUserResult
+      })
       repository.createUser.bind(repository)
       controller = new UserController(repository)
       req = { params: { id: 'id' } } as any
