@@ -6,6 +6,7 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { logger } from '../config/logging'
 
 const TableName = process.env.AUDIT_TABLE_NAME ?? ''
+const isProduction = process.env.NODE_ENV === 'production'
 
 const dynamodbClient = new DynamoDBClient({
   region: process.env.AWS_REGION,
@@ -43,6 +44,11 @@ function getHash (): string {
 export const createAuditLogEntry = async (
   data: AuditLogEntry
 ): Promise<void> => {
+  if (!isProduction && TableName === '') {
+    logger.debug('No audit table configured!')
+    return
+  }
+
   const command = new PutCommand({
     TableName,
     Item: {
