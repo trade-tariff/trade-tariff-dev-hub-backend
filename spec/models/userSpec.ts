@@ -63,6 +63,7 @@ describe('User Model', () => {
       const item = {
         UserId: 'the-id',
         OrganisationId: 'yodel',
+        Status: 'Unregistered',
         CreatedAt: new Date().toISOString(),
         UpdatedAt: new Date().toISOString(),
         Saved: false
@@ -71,6 +72,7 @@ describe('User Model', () => {
       const actual = User.fromItem(item)
       expect(actual).toBeInstanceOf(User)
       expect(actual.UserId).toBe('the-id')
+      expect(actual.Status).toBe('Unregistered')
     })
   })
 
@@ -84,6 +86,7 @@ describe('User Model', () => {
       expect(actual).toEqual({
         UserId: 'the-id',
         OrganisationId: 'the-fpo-id',
+        Status: '',
         CreatedAt: user.CreatedAt,
         UpdatedAt: user.UpdatedAt
       })
@@ -100,6 +103,7 @@ describe('User Model', () => {
       expect(actual).toEqual({
         UserId: 'the-id',
         OrganisationId: '',
+        Status: '',
         CreatedAt: user.CreatedAt,
         UpdatedAt: user.UpdatedAt
       })

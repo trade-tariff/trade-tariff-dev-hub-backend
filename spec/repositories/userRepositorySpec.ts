@@ -21,29 +21,32 @@ describe('UserRepository', () => {
     mockUpdateOperation
   )
 
-  describe('createKey', () => {
+  describe('createUser', () => {
     beforeEach(() => {
       const result: User = new User()
 
       result.UserId = 'id'
+      result.OrganisationId = 'groupId'
 
       mockCreateOperation.call.and.returnValue(Promise.resolve(result))
     })
 
     it('returns a User', async () => {
-      const actual = await repository.createUser('id')
+      const actual = await repository.createUser('id', 'groupId')
 
       expect(actual).toEqual(jasmine.any(User))
       expect(actual.UserId).toEqual('id')
-      expect(mockCreateOperation.call).toHaveBeenCalledWith('id')
+      expect(actual.OrganisationId).toEqual('groupId')
+      expect(mockCreateOperation.call).toHaveBeenCalledWith('id', 'groupId')
     })
   })
 
-  describe('getKey', () => {
+  describe('getUser', () => {
     beforeEach(() => {
       const result: User = new User()
 
       result.UserId = 'id'
+      result.OrganisationId = 'groupId'
 
       mockGetOperation.call.and.returnValue(Promise.resolve(result))
     })
@@ -53,6 +56,7 @@ describe('UserRepository', () => {
 
       expect(actual).toEqual(jasmine.any(User))
       expect(actual?.UserId).toEqual('id')
+      expect(actual?.OrganisationId).toEqual('groupId')
       expect(mockGetOperation.call).toHaveBeenCalledWith('id')
     })
   })

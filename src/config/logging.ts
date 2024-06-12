@@ -12,7 +12,8 @@ function jsonFormat (tokens: morgan.TokenIndexer, req: Request, res: Response): 
     status: tokens.status(req, res),
     'content-length': tokens.res(req, res, 'content-length'),
     referrer: tokens.referrer(req, res),
-    'user-agent': tokens['user-agent'](req, res)
+    'user-agent': tokens['user-agent'](req, res),
+    body: req.body
   })
 }
 

@@ -18,8 +18,8 @@ export class UserController {
 
   async create (req: Request, res: Response): Promise<void> {
     const userId = req.params.id
-    const user = await this.repository.createUser(userId)
-
+    const organisationId = req.body.organisationId as string
+    const user = await this.repository.createUser(userId, organisationId)
     res.status(201).json(user.toJson())
   }
 

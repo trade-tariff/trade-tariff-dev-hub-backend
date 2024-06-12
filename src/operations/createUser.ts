@@ -8,10 +8,11 @@ class CreateUser {
     private readonly dynamodbClient: DynamoDBDocumentClient
   ) {}
 
-  async call (userId: string): Promise<User> {
+  async call (userId: string, organisationId: string): Promise<User> {
     const user = new User()
     user.UserId = userId
-    user.OrganisationId = ''
+    user.OrganisationId = organisationId
+    user.Status = 'Unregistered'
     await this.createInDynamoDb(user)
     return user
   }

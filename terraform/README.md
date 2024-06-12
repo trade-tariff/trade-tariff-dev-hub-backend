@@ -6,7 +6,7 @@ Terraform to deploy the service into AWS.
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | 1.8.2 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | 1.8.4 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 4 |
 
 ## Providers
@@ -29,6 +29,7 @@ Terraform to deploy the service into AWS.
 | [aws_iam_policy.task](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_dynamodb_table.audit_log](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/dynamodb_table) | data source |
 | [aws_dynamodb_table.customer_api_keys](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/dynamodb_table) | data source |
+| [aws_dynamodb_table.users](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/dynamodb_table) | data source |
 | [aws_iam_policy_document.exec](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.task](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_kms_key.secretsmanager_key](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/kms_key) | data source |
