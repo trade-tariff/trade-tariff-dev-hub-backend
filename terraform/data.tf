@@ -37,6 +37,10 @@ data "aws_dynamodb_table" "audit_log" {
   name = "AuditLog"
 }
 
+data "aws_dynamodb_table" "users" {
+  name = "Users"
+}
+
 data "aws_secretsmanager_secret" "encryption_key" {
   name = "dev-hub-backend-encryption-key"
 }
