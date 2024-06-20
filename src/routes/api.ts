@@ -5,6 +5,7 @@ import { UserController } from '../controllers/usersController'
 
 import { CustomerApiKeyRepository } from '../repositories/customerApiKeyRepository'
 import { UserRepository } from '../repositories/userRepository'
+import { OrganisationRepository } from '../repositories/organisationRepository'
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { APIGatewayClient } from '@aws-sdk/client-api-gateway'
 
@@ -24,9 +25,10 @@ const apiGatewayClient = new APIGatewayClient(
 )
 const repository = new CustomerApiKeyRepository(dynamodbClient, apiGatewayClient)
 const userRepository = new UserRepository(dynamodbClient)
+const organisationRepository = new OrganisationRepository(dynamodbClient)
 
 const apiKeyController = new ApiKeyController(repository)
-const userController = new UserController(userRepository)
+const userController = new UserController(userRepository, organisationRepository)
 const healthchecksController = new HealthchecksController()
 
 const router: Router = express.Router()
@@ -45,7 +47,6 @@ router.delete('/keys/:organisationId/:id', (req, res) => { apiKeyController.dest
 
 router.post('/users/:id', (req, res) => { userController.create(req, res) })
 router.get('/users/:id', (req, res) => { userController.show(req, res) })
-router.patch('/users/:id', (req, res) => { userController.update(req, res) })
 
 /* eslint-enable @typescript-eslint/no-floating-promises */
 
