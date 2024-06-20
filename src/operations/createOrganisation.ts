@@ -1,7 +1,7 @@
 import { Organisation } from '../models/organisation'
 import { PutCommand, type DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb'
 
-const TableName = process.env.USERS_TABLE_NAME ?? ''
+const TableName = process.env.ORGANISATIONS_TABLE_NAME ?? ''
 
 class CreateOrganisation {
   constructor (

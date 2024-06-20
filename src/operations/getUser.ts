@@ -2,6 +2,8 @@ import { User } from '../models/user'
 import { type DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { GetItemCommand } from '@aws-sdk/client-dynamodb'
 
+const TableName = process.env.USERS_TABLE_NAME ?? ''
+
 class GetUser {
   private readonly client: DynamoDBClient
 
@@ -12,7 +14,7 @@ class GetUser {
   async call (id: string): Promise<User | null> {
     const command = new GetItemCommand(
       {
-        TableName: 'Users',
+        TableName,
         Key: {
           UserId: { S: id }
         }
