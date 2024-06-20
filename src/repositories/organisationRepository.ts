@@ -8,7 +8,7 @@ export class OrganisationRepository {
   constructor (
     private readonly dynamodbClient: DynamoDBClient,
     private readonly createOperation: CreateOrganisation = new CreateOrganisation(dynamodbClient),
-    private readonly getOperation: GetOrganisation = new GetOrganisation(dynamodbClient),
+    private readonly getOperation: GetOrganisation = new GetOrganisation(dynamodbClient)
   ) {}
 
   async createOrganisation (id: string): Promise<Organisation> {

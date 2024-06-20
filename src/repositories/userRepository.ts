@@ -8,7 +8,7 @@ export class UserRepository {
   constructor (
     private readonly dynamodbClient: DynamoDBClient,
     private readonly createOperation: CreateUser = new CreateUser(dynamodbClient),
-    private readonly getOperation: GetUser = new GetUser(dynamodbClient),
+    private readonly getOperation: GetUser = new GetUser(dynamodbClient)
   ) {}
 
   async createUser (id: string, organisationId: string): Promise<User> {
