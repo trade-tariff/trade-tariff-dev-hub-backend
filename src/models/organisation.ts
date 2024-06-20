@@ -1,12 +1,15 @@
 import { IsString, IsDateString } from 'class-validator'
 import { classToPlain, plainToClass } from 'class-transformer'
 
-export class User {
-  @IsString()
-    UserId: string
-
+export class Organisation {
   @IsString()
     OrganisationId: string
+
+  @IsString()
+    Status: string
+
+  @IsString()
+    Description: string
 
   @IsDateString()
     CreatedAt: string
@@ -17,26 +20,27 @@ export class User {
   Saved: boolean
 
   constructor () {
-    this.UserId = ''
     this.OrganisationId = ''
+    this.Description = ''
     this.CreatedAt = new Date().toISOString()
     this.UpdatedAt = new Date().toISOString()
+    this.Status = 'Unregistered'
     this.Saved = false
   }
 
-  static fromItem (plainObject: any): User {
+  static fromItem (plainObject: any): Organisation {
     delete plainObject.Saved
 
-    return plainToClass(User, plainObject)
+    return plainToClass(Organisation, plainObject)
   }
 
-  static fromNestedItem (plainObject: any): User {
-    const user = new User()
+  static fromNestedItem (plainObject: any): Organisation {
+    const user = new Organisation()
 
-    user.UserId = plainObject.UserId.S
     user.OrganisationId = plainObject.OrganisationId.S
     user.CreatedAt = plainObject.CreatedAt.S
     user.UpdatedAt = plainObject.UpdatedAt.S
+    user.Status = plainObject.Status.S
     user.Saved = true
     return user
   }

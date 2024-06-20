@@ -3,7 +3,9 @@ import { type Response } from 'express'
 
 import { UserController } from '../../src/controllers/usersController'
 import { type UserRepository } from '../../src/repositories/userRepository'
+import { type OrganisationRepository } from '../../src/repositories/organisationRepository'
 import { User } from '../../src/models/user'
+import { Organisation } from '../../src/models/organisation'
 import { type FrontendRequest } from '../../src/utils/audit'
 import * as audit from '../../src/utils/audit'
 
@@ -12,38 +14,57 @@ beforeAll(() => {
 })
 
 describe('UserController', () => {
-  let repository: jasmine.SpyObj<UserRepository>
+  let userRepository: jasmine.SpyObj<UserRepository>
+  let organisationRepository: jasmine.SpyObj<OrganisationRepository>
   let controller: UserController
   let getUserResult: Promise<User | null>
+  let getOrganisationResult: Promise<Organisation | null>
+  let createOrganisationResult: Promise<Organisation | null>
   let req: FrontendRequest
   let res: Response
   let user: User
+  let organisation: Organisation
 
   describe('show', () => {
     it('returns the user', async () => {
       user = new User()
+      user.OrganisationId = 'organisationId'
+      organisation = new Organisation()
       getUserResult = Promise.resolve(user)
-      repository = jasmine.createSpyObj('UserRepository', {
+      getOrganisationResult = Promise.resolve(null)
+      createOrganisationResult = Promise.resolve(organisation)
+      userRepository = jasmine.createSpyObj('UserRepository', {
         getUser: getUserResult
       })
-      repository.getUser.bind(repository)
-      controller = new UserController(repository)
+      organisationRepository = jasmine.createSpyObj('OrganisationRepository', {
+        getOrganisation: getOrganisationResult,
+        createOrganisation: createOrganisationResult
+      })
+      userRepository.getUser.bind(userRepository)
+      organisationRepository.getOrganisation.bind(organisationRepository)
+      organisationRepository.createOrganisation.bind(organisationRepository)
+      controller = new UserController(userRepository, organisationRepository)
       req = { params: { id: 'id' } } as any
       res = { json: jasmine.createSpy() } as unknown as any
 
       await controller.show(req, res)
 
-      expect(repository.getUser).toHaveBeenCalledWith('id')
-      expect(res.json).toHaveBeenCalledWith(user)
+      expect(userRepository.getUser).toHaveBeenCalledWith('id')
+      expect(organisationRepository.getOrganisation).toHaveBeenCalledWith('organisationId')
+      expect(organisationRepository.createOrganisation).toHaveBeenCalledWith('organisationId')
+      expect(res.json).toHaveBeenCalledWith({ ...user.toJson(), Status: organisation.Status })
     })
 
     it('returns 404 if the user is not found', async () => {
       getUserResult = Promise.resolve(null)
-      repository = jasmine.createSpyObj('UserRepository', {
+      userRepository = jasmine.createSpyObj('UserRepository', {
         getUser: getUserResult
       })
-      repository.getUser.bind(repository)
-      controller = new UserController(repository)
+      organisationRepository = jasmine.createSpyObj('OrganisationRepository', {
+        getOrganisation: Promise.resolve(null)
+      })
+      userRepository.getUser.bind(userRepository)
+      controller = new UserController(userRepository, organisationRepository)
       req = { params: { id: 'id' } } as any
       res = {
         status: jasmine
@@ -57,79 +78,30 @@ describe('UserController', () => {
     })
   })
 
-  describe('index', () => {
-    it('returns an empty list if there are no users', async () => {
-      const listUsersResult = Promise.resolve([])
-      repository = jasmine.createSpyObj('UserRepository', {
-        getUser: listUsersResult
-      })
-      repository.getUser.bind(repository)
-      controller = new UserController(repository)
-      req = { params: { id: 'userId' } } as any
-      res = { json: jasmine.createSpy() } as unknown as any
-
-      await controller.show(req, res)
-
-      expect(repository.getUser).toHaveBeenCalledWith('userId')
-      expect(res.json).toHaveBeenCalledWith([])
-    })
-  })
-
-  describe('update', () => {
-    const res = {
-      status: function (code: number) {
-        this.statusCode = code
-        return this
-      },
-      json: function (data: any) {
-        this.data = data
-        return this
-      }
-    } as any
-    it('updates a user organisationId', async () => {
+  describe('create', () => {
+    it('returns a created a user', async () => {
       user = new User()
-      const getUserResult = Promise.resolve(user)
-      const updateUserResult = Promise.resolve(user)
-
-      repository = jasmine.createSpyObj('UserRepository', {
-        updateUser: updateUserResult,
-        getUser: getUserResult
+      user.OrganisationId = 'organisationId'
+      organisation = new Organisation()
+      organisation.OrganisationId = 'organisationId'
+      getUserResult = Promise.resolve(user)
+      getOrganisationResult = Promise.resolve(null)
+      createOrganisationResult = Promise.resolve(organisation)
+      userRepository = jasmine.createSpyObj('UserRepository', {
+        createUser: Promise.resolve(user)
       })
-      repository.updateUser.bind(repository)
-      controller = new UserController(repository)
+      organisationRepository = jasmine.createSpyObj('OrganisationRepository', {
+        getOrganisation: getOrganisationResult,
+        createOrganisation: createOrganisationResult
+      })
+      userRepository.createUser.bind(userRepository)
+      organisationRepository.getOrganisation.bind(organisationRepository)
+      organisationRepository.createOrganisation.bind(organisationRepository)
+      controller = new UserController(userRepository, organisationRepository)
       req = {
-        headers: { 'x-user-id': 'secret-value' },
         params: { id: 'id' },
         body: { organisationId: 'organisationId' }
       } as any
-
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      await controller.update(req, res)
-
-      expect(repository.getUser).toHaveBeenCalledWith('id')
-      expect(repository.updateUser).toHaveBeenCalledWith(user)
-      expect(res.statusCode).toBe(200)
-      expect(res.data).toEqual({
-        UserId: '',
-        OrganisationId: 'organisationId',
-        Status: '',
-        CreatedAt: user.CreatedAt,
-        UpdatedAt: user.UpdatedAt
-      })
-    })
-  })
-
-  describe('create', () => {
-    it('creates a new user', async () => {
-      user = new User()
-
-      const createUserResult = Promise.resolve(user)
-      repository = jasmine.createSpyObj('UserRepository', {
-        createUser: createUserResult
-      })
-      repository.createUser.bind(repository)
-      controller = new UserController(repository)
-      req = { params: { id: 'id' }, body: { organisationId: 'some-group-id' } } as any
       const res = {
         status: function (code: number) {
           this.statusCode = code
@@ -144,15 +116,11 @@ describe('UserController', () => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await controller.create(req, res)
 
-      expect(repository.createUser).toHaveBeenCalledWith('id', 'some-group-id')
+      expect(userRepository.createUser).toHaveBeenCalledWith('id', 'organisationId')
+      expect(organisationRepository.getOrganisation).toHaveBeenCalledWith('organisationId')
+      expect(organisationRepository.createOrganisation).toHaveBeenCalledWith('organisationId')
       expect(res.statusCode).toBe(201)
-      expect(res.data).toEqual({
-        UserId: '',
-        OrganisationId: '',
-        Status: '',
-        CreatedAt: user.CreatedAt,
-        UpdatedAt: user.UpdatedAt
-      })
+      expect(res.data).toEqual({ ...user.toJson(), Status: organisation.Status })
     })
   })
 })
