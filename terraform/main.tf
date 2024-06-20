@@ -62,6 +62,10 @@ module "service" {
       value = data.aws_dynamodb_table.users.name
     },
     {
+      name  = "ORGANISATIONS_TABLE_NAME"
+      value = data.aws_dynamodb_table.organisations.name
+    },
+    {
       name  = "COGNITO_PUBLIC_KEYS_URL"
       value = data.aws_ssm_parameter.cognito_public_keys_url.value
     },

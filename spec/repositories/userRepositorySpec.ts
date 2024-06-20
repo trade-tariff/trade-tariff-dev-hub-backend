@@ -5,20 +5,17 @@ import { UserRepository } from '../../src/repositories/userRepository'
 
 import { type CreateUser } from '../../src/operations/createUser'
 import { type GetUser } from '../../src/operations/getUser'
-import { type UpdateUser } from '../../src/operations/updateUser'
 
 import { User } from '../../src/models/user'
 
 describe('UserRepository', () => {
   const dynamodbClient: DynamoDBClient = new DynamoDBClient({ region: 'us-west-2' })
-  const mockUpdateOperation: jasmine.SpyObj<UpdateUser> = jasmine.createSpyObj('UpdateUser', ['call'])
   const mockCreateOperation: jasmine.SpyObj<CreateUser> = jasmine.createSpyObj('CreateUser', ['call'])
   const mockGetOperation: jasmine.SpyObj<GetUser> = jasmine.createSpyObj('GetUser', ['call'])
   const repository: UserRepository = new UserRepository(
     dynamodbClient,
     mockCreateOperation,
-    mockGetOperation,
-    mockUpdateOperation
+    mockGetOperation
   )
 
   describe('createUser', () => {
@@ -58,21 +55,6 @@ describe('UserRepository', () => {
       expect(actual?.UserId).toEqual('id')
       expect(actual?.OrganisationId).toEqual('groupId')
       expect(mockGetOperation.call).toHaveBeenCalledWith('id')
-    })
-  })
-
-  describe('updateUser', () => {
-    it('returns a user', async () => {
-      const key: User = new User()
-      key.UserId = 'id'
-
-      mockUpdateOperation.call.and.returnValue(Promise.resolve(key))
-
-      const actual = await repository.updateUser(key)
-
-      expect(actual).toEqual(jasmine.any(User))
-      expect(actual?.UserId).toEqual('id')
-      expect(mockUpdateOperation.call).toHaveBeenCalledWith(key)
     })
   })
 })

@@ -77,6 +77,7 @@ data "aws_iam_policy_document" "task" {
     resources = [
       data.aws_dynamodb_table.audit_log.arn,
       data.aws_dynamodb_table.customer_api_keys.arn,
+      data.aws_dynamodb_table.organisations.arn,
       data.aws_dynamodb_table.users.arn
     ]
   }

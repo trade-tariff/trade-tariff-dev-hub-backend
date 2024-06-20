@@ -2,7 +2,7 @@ import { validate } from 'class-validator'
 import { CustomerApiKey } from '../../src/models/customerApiKey'
 import { CustomerApiKeyEncryption } from '../../src/utils/customerApiKeyEncryption'
 
-describe('CustomerApiKey Model', () => {
+describe('CustomerApiKey', () => {
   describe('when all of the values are the default', () => {
     it('should validate with no errors', async () => {
       const apiKey: CustomerApiKey = new CustomerApiKey()

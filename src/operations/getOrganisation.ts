@@ -1,23 +1,22 @@
-import { CustomerApiKey } from '../models/customerApiKey'
+import { Organisation } from '../models/organisation'
 import { type DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { GetItemCommand } from '@aws-sdk/client-dynamodb'
 
-const TableName = process.env.CUSTOMER_API_KEYS_TABLE_NAME ?? ''
+const TableName = process.env.ORGANISATIONS_TABLE_NAME ?? ''
 
-class GetCustomerApiKey {
+class GetOrganisation {
   private readonly client: DynamoDBClient
 
   constructor (client: DynamoDBClient) {
     this.client = client
   }
 
-  async call (organisationId: string, id: string): Promise<CustomerApiKey | null> {
+  async call (id: string): Promise<Organisation | null> {
     const command = new GetItemCommand(
       {
         TableName,
         Key: {
-          OrganisationId: { S: organisationId },
-          CustomerApiKeyId: { S: id }
+          OrganisationId: { S: id }
         }
       }
     )
@@ -28,8 +27,8 @@ class GetCustomerApiKey {
       return null
     }
 
-    return CustomerApiKey.fromNestedItem(response.Item)
+    return Organisation.fromNestedItem(response.Item)
   }
 }
 
-export { GetCustomerApiKey }
+export { GetOrganisation }
