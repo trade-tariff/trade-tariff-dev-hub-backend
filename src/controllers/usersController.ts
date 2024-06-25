@@ -1,6 +1,7 @@
 import { type Request, type Response } from 'express'
 import { type UserRepository } from '../repositories/userRepository'
 import { type OrganisationRepository } from '../repositories/organisationRepository'
+import { logger } from '../config/logging'
 
 export class UserController {
   constructor (
@@ -20,8 +21,12 @@ export class UserController {
       if (organisation === null) {
         organisation = await this.organisationRepository.createOrganisation(user.OrganisationId)
       }
-
+      logger.info(`UserController show user ${JSON.stringify(organisation)}`)
+      logger.debug(`UserController show user ${JSON.stringify(organisation)}`)
+      console.log(`UserController show user ${JSON.stringify(organisation)}`)
       const status = organisation?.Status
+      const response = { ...user.toJson(), Status: status }
+      console.log(`UserController show user response ${JSON.stringify(response)}`)
       res.json({ ...user.toJson(), Status: status })
     }
   }
@@ -36,7 +41,11 @@ export class UserController {
       organisation = await this.organisationRepository.createOrganisation(organisationId)
     }
     const status = organisation.Status
-
+    logger.info(`UserController show user ${JSON.stringify(organisation)}`)
+    logger.debug(`UserController show user ${JSON.stringify(organisation)}`)
+    console.log(`UserController show user ${JSON.stringify(organisation)}`)
+    const response = { ...user.toJson(), Status: status }
+    console.log(`UserController show user response ${JSON.stringify(response)}`)
     res.status(201).json({ ...user.toJson(), Status: status })
   }
 }
