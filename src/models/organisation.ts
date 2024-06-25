@@ -19,12 +19,16 @@ export class Organisation {
 
   Saved: boolean
 
+  @IsString()
+    ApplicationReference: string
+
   constructor () {
     this.OrganisationId = ''
     this.Description = ''
     this.CreatedAt = new Date().toISOString()
     this.UpdatedAt = new Date().toISOString()
     this.Status = 'Unregistered'
+    this.ApplicationReference = ''
     this.Saved = false
   }
 
