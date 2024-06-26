@@ -1,7 +1,7 @@
 import { type Request, type Response } from 'express'
 import { type UserRepository } from '../repositories/userRepository'
 import { type OrganisationRepository } from '../repositories/organisationRepository'
-import { NextFunction } from 'express-serve-static-core'
+import { type NextFunction } from 'express-serve-static-core'
 
 export class UserController {
   constructor (
@@ -26,7 +26,7 @@ export class UserController {
         const status = organisation?.Status
         res.json({ ...user.toJson(), Status: status })
       }
-    } catch(e) {
+    } catch (e) {
       next(e)
     }
   }
@@ -44,7 +44,7 @@ export class UserController {
       const status = organisation.Status
 
       res.status(201).json({ ...user.toJson(), Status: status })
-    } catch(e) {
+    } catch (e) {
       next(e)
     }
   }

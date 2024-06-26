@@ -1,4 +1,4 @@
-import { NextFunction, type Request, type Response } from 'express'
+import { type NextFunction, type Request, type Response } from 'express'
 import { type CustomerApiKeyRepository } from '../repositories/customerApiKeyRepository'
 import { createAuditLogEntry, type FrontendRequest } from '../utils/audit'
 
@@ -16,7 +16,7 @@ export class ApiKeyController {
       } else {
         res.json(await apiKey.toJson())
       }
-    } catch(e) {
+    } catch (e) {
       next(e)
     }
   }
@@ -30,7 +30,7 @@ export class ApiKeyController {
       )
 
       res.json(jsonKeys)
-    } catch(e) {
+    } catch (e) {
       next(e)
     }
   }
@@ -63,7 +63,7 @@ export class ApiKeyController {
       })
 
       res.status(201).json(serialized)
-    } catch(e) {
+    } catch (e) {
       next(e)
     }
   }
@@ -108,7 +108,7 @@ export class ApiKeyController {
       })
 
       res.status(200).json(await customerApiKey.toJson())
-    } catch(e) {
+    } catch (e) {
       next(e)
     }
   }
@@ -141,7 +141,7 @@ export class ApiKeyController {
       })
 
       res.status(200).json({ message: 'API key deleted' })
-    } catch(e) {
+    } catch (e) {
       next(e)
     }
   }
