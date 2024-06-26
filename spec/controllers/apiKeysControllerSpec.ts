@@ -34,7 +34,7 @@ describe('ApiKeyController', () => {
       controller = new ApiKeyController(repository)
       req = { params: { organisationId: 'organisationId', id: 'id' } } as any
       res = { json: jasmine.createSpy() } as unknown as any
-      const next = () => {};
+      const next = (): void => {}
 
       await controller.show(req, res, next)
 
@@ -65,7 +65,7 @@ describe('ApiKeyController', () => {
           .createSpy()
           .and.returnValue({ json: jasmine.createSpy() })
       } as unknown as any
-      const next = () => {};
+      const next = (): void => {}
 
       await controller.show(req, res, next)
 
@@ -90,7 +90,7 @@ describe('ApiKeyController', () => {
         }
       } as any
       res = { json: jasmine.createSpy() } as unknown as any
-      const next = () => {};
+      const next = (): void => {}
 
       await controller.index(req, res, next)
 
@@ -123,7 +123,7 @@ describe('ApiKeyController', () => {
         }
       } as any
       res = { json: jasmine.createSpy() } as unknown as any
-      const next = () => {};
+      const next = (): void => {}
 
       await controller.index(req, res, next)
 
@@ -160,7 +160,7 @@ describe('ApiKeyController', () => {
         params: { organisationId: 'organisationId', id: 'id' },
         body: { enabled: true }
       } as any
-      const next = () => {};
+      const next = (): void => {}
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await controller.update(req, res, next)
@@ -198,7 +198,7 @@ describe('ApiKeyController', () => {
         params: { organisationId: 'organisationId', id: 'id' },
         body: { enabled: false }
       } as any
-      const next = () => {};
+      const next = (): void => {}
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await controller.update(req, res, next)
@@ -236,7 +236,7 @@ describe('ApiKeyController', () => {
         params: { organisationId: 'organisationId' },
         body: { description: 'description' }
       } as any
-      const next = () => {};
+      const next = (): void => {}
 
       const res = {
         status: function (code: number) {
@@ -298,7 +298,7 @@ describe('ApiKeyController', () => {
         headers: { 'x-user-id': 'secret-value' },
         params: { organisationId: 'organisationId', id: 'id' }
       } as any
-      const next = () => {};
+      const next = (): void => {}
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await controller.destroy(req, res, next)
@@ -322,7 +322,7 @@ describe('ApiKeyController', () => {
         headers: { 'x-user-id': 'secret-value' },
         params: { organisationId: 'organisationId', id: 'id' }
       } as any
-      const next = () => {};
+      const next = (): void => {}
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await controller.destroy(req, res, next)

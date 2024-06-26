@@ -46,7 +46,7 @@ describe('UserController', () => {
       controller = new UserController(userRepository, organisationRepository)
       req = { params: { id: 'id' } } as any
       res = { json: jasmine.createSpy() } as unknown as any
-      const next = () => {};
+      const next = (): void => {}
 
       await controller.show(req, res, next)
 
@@ -72,7 +72,7 @@ describe('UserController', () => {
           .createSpy()
           .and.returnValue({ json: jasmine.createSpy() })
       } as unknown as any
-      const next = () => {};
+      const next = (): void => {}
 
       await controller.show(req, res, next)
 
@@ -114,7 +114,7 @@ describe('UserController', () => {
           return this
         }
       } as any
-      const next = () => {};
+      const next = (): void => {}
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await controller.create(req, res, next)
