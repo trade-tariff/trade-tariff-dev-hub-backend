@@ -34,8 +34,9 @@ describe('ApiKeyController', () => {
       controller = new ApiKeyController(repository)
       req = { params: { organisationId: 'organisationId', id: 'id' } } as any
       res = { json: jasmine.createSpy() } as unknown as any
+      const next = () => {};
 
-      await controller.show(req, res)
+      await controller.show(req, res, next)
 
       expect(repository.getKey).toHaveBeenCalledWith('organisationId', 'id')
       expect(res.json).toHaveBeenCalledWith({
@@ -64,8 +65,9 @@ describe('ApiKeyController', () => {
           .createSpy()
           .and.returnValue({ json: jasmine.createSpy() })
       } as unknown as any
+      const next = () => {};
 
-      await controller.show(req, res)
+      await controller.show(req, res, next)
 
       expect(repository.getKey).toHaveBeenCalledWith('organisationId', 'id')
       expect(res.status).toHaveBeenCalledWith(404)
@@ -88,8 +90,9 @@ describe('ApiKeyController', () => {
         }
       } as any
       res = { json: jasmine.createSpy() } as unknown as any
+      const next = () => {};
 
-      await controller.index(req, res)
+      await controller.index(req, res, next)
 
       expect(repository.listKeys).toHaveBeenCalledWith('organisationId')
       expect(res.json).toHaveBeenCalledWith([
@@ -120,8 +123,9 @@ describe('ApiKeyController', () => {
         }
       } as any
       res = { json: jasmine.createSpy() } as unknown as any
+      const next = () => {};
 
-      await controller.index(req, res)
+      await controller.index(req, res, next)
 
       expect(repository.listKeys).toHaveBeenCalledWith('organisationId')
       expect(res.json).toHaveBeenCalledWith([])
@@ -156,9 +160,10 @@ describe('ApiKeyController', () => {
         params: { organisationId: 'organisationId', id: 'id' },
         body: { enabled: true }
       } as any
+      const next = () => {};
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      await controller.update(req, res)
+      await controller.update(req, res, next)
 
       expect(repository.getKey).toHaveBeenCalledWith('organisationId', 'id')
       expect(repository.updateKey).toHaveBeenCalledWith(apiKey)
@@ -193,9 +198,10 @@ describe('ApiKeyController', () => {
         params: { organisationId: 'organisationId', id: 'id' },
         body: { enabled: false }
       } as any
+      const next = () => {};
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      await controller.update(req, res)
+      await controller.update(req, res, next)
 
       expect(repository.getKey).toHaveBeenCalledWith('organisationId', 'id')
       expect(repository.updateKey).toHaveBeenCalledWith(apiKey)
@@ -230,6 +236,8 @@ describe('ApiKeyController', () => {
         params: { organisationId: 'organisationId' },
         body: { description: 'description' }
       } as any
+      const next = () => {};
+
       const res = {
         status: function (code: number) {
           this.statusCode = code
@@ -242,7 +250,7 @@ describe('ApiKeyController', () => {
       } as any
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      await controller.create(req, res)
+      await controller.create(req, res, next)
 
       expect(repository.createKey).toHaveBeenCalledWith(
         'organisationId',
@@ -290,9 +298,10 @@ describe('ApiKeyController', () => {
         headers: { 'x-user-id': 'secret-value' },
         params: { organisationId: 'organisationId', id: 'id' }
       } as any
+      const next = () => {};
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      await controller.destroy(req, res)
+      await controller.destroy(req, res, next)
 
       expect(repository.getKey).toHaveBeenCalledWith('organisationId', 'id')
       expect(repository.deleteKey).toHaveBeenCalledWith(apiKey)
@@ -313,9 +322,10 @@ describe('ApiKeyController', () => {
         headers: { 'x-user-id': 'secret-value' },
         params: { organisationId: 'organisationId', id: 'id' }
       } as any
+      const next = () => {};
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      await controller.destroy(req, res)
+      await controller.destroy(req, res, next)
 
       expect(repository.getKey).toHaveBeenCalledWith('organisationId', 'id')
       expect(res.statusCode).toBe(404)
