@@ -39,14 +39,14 @@ const router: Router = express.Router()
 router.get('/healthcheck', (req, res) => { healthchecksController.show(req, res) })
 router.get('/healthcheckz', (req, res) => { healthchecksController.showz(req, res) })
 
-router.post('/keys/:organisationId', (req, res) => { apiKeyController.create(req, res) })
-router.get('/keys/:organisationId', (req, res) => { apiKeyController.index(req, res) })
-router.get('/keys/:organisationId/:id', (req, res) => { apiKeyController.show(req, res) })
-router.patch('/keys/:organisationId/:id', (req, res) => { apiKeyController.update(req, res) })
-router.delete('/keys/:organisationId/:id', (req, res) => { apiKeyController.destroy(req, res) })
+router.post('/keys/:organisationId', (req, res, next) => { apiKeyController.create(req, res, next) })
+router.get('/keys/:organisationId', (req, res, next) => { apiKeyController.index(req, res, next) })
+router.get('/keys/:organisationId/:id', (req, res, next) => { apiKeyController.show(req, res, next) })
+router.patch('/keys/:organisationId/:id', (req, res, next) => { apiKeyController.update(req, res, next) })
+router.delete('/keys/:organisationId/:id', (req, res, next) => { apiKeyController.destroy(req, res, next) })
 
-router.post('/users/:id', (req, res) => { userController.create(req, res) })
-router.get('/users/:id', (req, res) => { userController.show(req, res) })
+router.post('/users/:id', (req, res, next) => { userController.create(req, res, next) })
+router.get('/users/:id', (req, res, next) => { userController.show(req, res, next) })
 
 /* eslint-enable @typescript-eslint/no-floating-promises */
 
