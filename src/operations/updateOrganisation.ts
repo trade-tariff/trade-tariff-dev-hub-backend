@@ -15,13 +15,14 @@ class UpdateOrganisation {
       Key: {
         OrganisationId: { S: id }
       },
-      UpdateExpression: 'SET ApplicationReference = :applicationReference, #Status = :applicationStatus, OrganisationName = :organisationName, EoriNumber = :eoriNumber,  UkAcsReference = :ukacsReference',
+      UpdateExpression: 'SET ApplicationReference = :applicationReference, #Status = :applicationStatus, OrganisationName = :organisationName, EoriNumber = :eoriNumber,  UkAcsReference = :ukacsReference, UpdatedAt = :updatedAt',
       ExpressionAttributeValues: {
         ':applicationReference': { S: applicationReference },
         ':applicationStatus': { S: applicationStatus },
         ':organisationName': { S: organisationName },
         ':eoriNumber': { S: eoriNumber },
-        ':ukacsReference': { S: ukacsReference }
+        ':ukacsReference': { S: ukacsReference },
+        ':updatedAt': { S: new Date().toISOString() }
       },
       ExpressionAttributeNames: {
         '#Status': 'Status'
