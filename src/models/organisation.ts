@@ -39,13 +39,20 @@ export class Organisation {
   }
 
   static fromNestedItem (plainObject: any): Organisation {
-    const user = new Organisation()
+    let appReference: string = ''
+    const foundAppReference: boolean = plainObject.ApplicationReference !== null && plainObject.ApplicationReference !== ''
+    if (foundAppReference) {
+      appReference = plainObject.ApplicationReference
+    }
 
+    const user = new Organisation()
     user.OrganisationId = plainObject.OrganisationId.S
     user.CreatedAt = plainObject.CreatedAt.S
     user.UpdatedAt = plainObject.UpdatedAt.S
     user.Status = plainObject.Status.S
+    user.ApplicationReference = appReference
     user.Saved = true
+
     return user
   }
 
