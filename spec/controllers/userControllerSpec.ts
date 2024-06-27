@@ -48,8 +48,9 @@ describe('UserController', () => {
       controller = new UserController(userRepository, organisationRepository)
       req = { params: { id: 'id' } } as any
       res = { json: jasmine.createSpy() } as unknown as any
+      const next = (): void => {}
 
-      await controller.show(req, res)
+      await controller.show(req, res, next)
 
       expect(userRepository.getUser).toHaveBeenCalledWith('id')
       expect(organisationRepository.getOrganisation).toHaveBeenCalledWith('organisationId')
@@ -73,8 +74,9 @@ describe('UserController', () => {
           .createSpy()
           .and.returnValue({ json: jasmine.createSpy() })
       } as unknown as any
+      const next = (): void => {}
 
-      await controller.show(req, res)
+      await controller.show(req, res, next)
 
       expect(res.status).toHaveBeenCalledWith(404)
     })
@@ -114,9 +116,10 @@ describe('UserController', () => {
           return this
         }
       } as any
+      const next = (): void => {}
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      await controller.create(req, res)
+      await controller.create(req, res, next)
 
       expect(userRepository.createUser).toHaveBeenCalledWith('id', 'organisationId')
       expect(organisationRepository.getOrganisation).toHaveBeenCalledWith('organisationId')
