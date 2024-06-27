@@ -9,13 +9,20 @@ class UpdateOrganisation {
     this.client = client
   }
 
-  async call (id: string, reference: string, status: string): Promise<void> {
+  async call (id: string, applicationReference: string, applicationStatus: string): Promise<void> {
     const input: UpdateItemCommandInput = {
       TableName,
       Key: {
         OrganisationId: { S: id }
       },
-      UpdateExpression: 'SET ApplicationReference = :reference, Status = :status'
+      UpdateExpression: 'SET ApplicationReference = :applicationReference, #Status = :applicationStatus',
+      ExpressionAttributeValues: {
+        ':applicationReference': { S: applicationReference },
+        ':applicationStatus': { S: applicationStatus }
+      },
+      ExpressionAttributeNames: {
+        '#Status': 'Status'
+      }
     }
 
     const command = new UpdateItemCommand(input)
