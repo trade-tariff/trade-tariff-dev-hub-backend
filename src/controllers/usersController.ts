@@ -40,6 +40,17 @@ export class UserController {
     res.status(201).json({ ...user.toJson(), Status: status })
   }
 
+  async update (req: Request, res: Response): Promise<void> {
+    const userId = req.params.userId
+    const organisationName = req.body.organisationName as string
+    const eoriNumber = req.body.eoriNumber as string
+    const ukacsReference = req.body.ukacsReference as string
+    const emailAddress = req.body.statemailAddressus as string
+
+    await this.userRepository.updateUser(userId, organisationName, eoriNumber, ukacsReference, emailAddress)
+    res.status(201).json({ userId })
+  }
+
   async updateOrganisation (req: Request, res: Response): Promise<void> {
     const organisationId = req.params.organisationId
     const reference = req.body.applicationReference as string
