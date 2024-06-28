@@ -48,4 +48,13 @@ export class UserController {
       next(e)
     }
   }
+
+  async updateOrganisation (req: Request, res: Response): Promise<void> {
+    const organisationId = req.params.organisationId
+    const reference = req.body.applicationReference as string
+    const status = req.body.status as string
+
+    await this.organisationRepository.updateOrganisation(organisationId, reference, status)
+    res.status(201).json({ organisationId })
+  }
 }

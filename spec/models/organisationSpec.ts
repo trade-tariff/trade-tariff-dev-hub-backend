@@ -82,6 +82,7 @@ describe('Organisation', () => {
         OrganisationId: 'the-id',
         Description: organisation.Description,
         Status: organisation.Status,
+        ApplicationReference: organisation.ApplicationReference,
         CreatedAt: organisation.CreatedAt,
         UpdatedAt: organisation.UpdatedAt
       })
@@ -99,6 +100,7 @@ describe('Organisation', () => {
         OrganisationId: 'the-id',
         Description: organisation.Description,
         Status: organisation.Status,
+        ApplicationReference: organisation.ApplicationReference,
         CreatedAt: organisation.CreatedAt,
         UpdatedAt: organisation.UpdatedAt
       })
