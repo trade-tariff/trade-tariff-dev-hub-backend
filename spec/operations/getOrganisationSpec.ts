@@ -11,6 +11,7 @@ describe('GetOrganisation', () => {
         OrganisationId: { S: 'organisationId' },
         Description: { S: 'description' },
         Status: { S: 'Unregistered' },
+        ApplicationReference: { S: 'ApplicationReference' },
         CreatedAt: { S: new Date().toISOString() },
         UpdatedAt: { S: new Date().toISOString() }
       },
