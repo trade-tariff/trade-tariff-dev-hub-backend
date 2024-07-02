@@ -69,4 +69,14 @@ export class UserController {
       res.status(200).json({ ...organisation.toJson() })
     }
   }
+
+  async getOrganisation (req: Request, res: Response): Promise<void> {
+    const organisationId = req.params.organisationId
+    const organisation = await this.organisationRepository.getOrganisation(organisationId)
+    if (organisation === null) {
+      res.status(404).json({ message: 'organisation not found' })
+    } else {
+      res.status(201).json({ ...organisation.toJson() })
+    }
+  }
 }
