@@ -9,18 +9,16 @@ class UpdateUser {
     this.client = client
   }
 
-  async call (id: string, organisationName: string, eoriNumber: string, ukacsReference: string, emailAddress: string): Promise<void> {
+  async call (id: string, emailAddress: string): Promise<void> {
     const input: UpdateItemCommandInput = {
       TableName,
       Key: {
         UserId: { S: id }
       },
-      UpdateExpression: 'SET organisationName = :organisationName, #Status = :eoriNumber',
+      UpdateExpression: 'SET EmailAddress = :emailAddress, UpdatedAt = :updatedAt',
       ExpressionAttributeValues: {
-        ':organisationName': { S: organisationName },
-        ':eoriNumber': { S: eoriNumber },
-        ':ukacsReference': { S: ukacsReference },
-        ':emailAddress': { S: emailAddress }
+        ':emailAddress': { S: emailAddress },
+        ':updatedAt': { S: new Date().toISOString() }
       }
     }
 

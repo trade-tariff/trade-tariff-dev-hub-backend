@@ -1,10 +1,10 @@
 import 'jasmine'
 import { type DynamoDBClient } from '@aws-sdk/client-dynamodb'
-import { UpdateOrganisation } from '../../src/operations/updateOrganisation'
+import { UpdateUser } from '../../src/operations/updateUser'
 
-describe('CreateOrganisation', () => {
+describe('CreateUser', () => {
   let dynamodbClient: jasmine.SpyObj<DynamoDBClient>
-  let updateOrganisation: UpdateOrganisation
+  let updateUser: UpdateUser
 
   beforeEach(() => {
     const dynamodbResult = {
@@ -15,11 +15,11 @@ describe('CreateOrganisation', () => {
 
     dynamodbClient = jasmine.createSpyObj('DynamoDBClient', { send: Promise.resolve(dynamodbResult) })
 
-    updateOrganisation = new UpdateOrganisation(dynamodbClient)
+    updateUser = new UpdateUser(dynamodbClient)
   })
 
-  it('updates existing organisation', async () => {
-    await updateOrganisation.call('organisationId', 'reference', 'status', 'organisationName', 'eoriNumber', 'uk')
+  it('updates existing User', async () => {
+    await updateUser.call('UserId', 'emailAddress')
     expect(dynamodbClient.send).toHaveBeenCalledTimes(1)
   })
 })

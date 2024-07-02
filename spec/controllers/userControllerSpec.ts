@@ -18,6 +18,7 @@ describe('UserController', () => {
   let organisationRepository: jasmine.SpyObj<OrganisationRepository>
   let controller: UserController
   let getUserResult: Promise<User | null>
+  let updateUserResult: Promise<User | null>
   let getOrganisationResult: Promise<Organisation | null>
   let createOrganisationResult: Promise<Organisation | null>
   let updateOrganisationResult: Promise<Organisation | null>
@@ -30,6 +31,7 @@ describe('UserController', () => {
     it('returns the user', async () => {
       user = new User()
       user.OrganisationId = 'organisationId'
+      user.EmailAddress = 'abc@test.com'
       organisation = new Organisation()
       getUserResult = Promise.resolve(user)
       getOrganisationResult = Promise.resolve(null)
@@ -119,10 +121,58 @@ describe('UserController', () => {
       await controller.create(req, res)
 
       expect(userRepository.createUser).toHaveBeenCalledWith('id', 'organisationId')
-      expect(organisationRepository.getOrganisation).toHaveBeenCalledWith('organisationId')
-      expect(organisationRepository.createOrganisation).toHaveBeenCalledWith('organisationId')
       expect(res.statusCode).toBe(201)
       expect(res.data).toEqual({ ...user.toJson(), Status: organisation.Status })
+    })
+  })
+
+  describe('updateUser', () => {
+    it('returns updated user', async () => {
+      user = new User()
+      user.UserId = 'userId'
+      user.OrganisationId = 'organisationId'
+      getUserResult = Promise.resolve(user)
+      updateUserResult = Promise.resolve(user)
+      getOrganisationResult = Promise.resolve(null)
+      createOrganisationResult = Promise.resolve(organisation)
+      updateOrganisationResult = Promise.resolve(organisation)
+      userRepository = jasmine.createSpyObj('UserRepository', {
+        createUser: Promise.resolve(user),
+        GetUser: getUserResult,
+        updateUser: updateUserResult
+      })
+
+      organisationRepository = jasmine.createSpyObj('OrganisationRepository', {
+        getOrganisation: getOrganisationResult,
+        createOrganisation: createOrganisationResult,
+        updateOrganisation: updateOrganisationResult
+      })
+      userRepository.updateUser.bind(userRepository)
+      userRepository.createUser.bind(userRepository)
+      organisationRepository.getOrganisation.bind(organisationRepository)
+      organisationRepository.createOrganisation.bind(organisationRepository)
+      organisationRepository.updateOrganisation.bind(organisationRepository)
+      controller = new UserController(userRepository, organisationRepository)
+      req = {
+        params: { userId: 'userId' },
+        body: { emailAddress: 'emailAddress' }
+      } as any
+      const res = {
+        status: function (code: number) {
+          this.statusCode = code
+          return this
+        },
+        json: function (data: any) {
+          this.data = data
+          return this
+        }
+      } as any
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      await controller.update(req, res)
+      expect(userRepository.updateUser).toHaveBeenCalledWith('userId', 'emailAddress')
+      expect(res.statusCode).toBe(201)
+      expect(res.data).toEqual({ userId: 'userId' })
     })
   })
 
@@ -150,7 +200,7 @@ describe('UserController', () => {
       controller = new UserController(userRepository, organisationRepository)
       req = {
         params: { organisationId: 'organisationId' },
-        body: { applicationReference: 'reference', status: 'status' }
+        body: { applicationReference: 'reference', status: 'status', organisationName: 'organisationName', eoriNumber: 'eoriNumber', ukAcsReference: 'ukAcsReference' }
       } as any
       const res = {
         status: function (code: number) {
@@ -165,7 +215,7 @@ describe('UserController', () => {
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await controller.updateOrganisation(req, res)
-      expect(organisationRepository.updateOrganisation).toHaveBeenCalledWith('organisationId', 'reference', 'status')
+      expect(organisationRepository.updateOrganisation).toHaveBeenCalledWith('organisationId', 'reference', 'status', 'organisationName', 'eoriNumber', 'ukAcsReference')
       expect(res.statusCode).toBe(201)
       expect(res.data).toEqual({ organisationId: 'organisationId' })
     })

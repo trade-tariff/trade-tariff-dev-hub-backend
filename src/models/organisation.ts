@@ -1,5 +1,6 @@
 import { IsString, IsDateString } from 'class-validator'
 import { classToPlain, plainToClass } from 'class-transformer'
+import getFieldValue from './utils'
 
 export class Organisation {
   @IsString()
@@ -22,6 +23,15 @@ export class Organisation {
   @IsString()
     ApplicationReference: string
 
+  @IsString()
+    OrganisationName: string
+
+  @IsString()
+    EoriNumber: string
+
+  @IsString()
+    UkAcsReference: string
+
   constructor () {
     this.OrganisationId = ''
     this.Description = ''
@@ -29,6 +39,9 @@ export class Organisation {
     this.UpdatedAt = new Date().toISOString()
     this.Status = 'Unregistered'
     this.ApplicationReference = ''
+    this.OrganisationName = ''
+    this.EoriNumber = ''
+    this.UkAcsReference = ''
     this.Saved = false
   }
 
@@ -39,11 +52,10 @@ export class Organisation {
   }
 
   static fromNestedItem (plainObject: any): Organisation {
-    let appReference: string = ''
-    const foundAppReference: boolean = plainObject.ApplicationReference !== null && plainObject.ApplicationReference !== ''
-    if (foundAppReference) {
-      appReference = plainObject.ApplicationReference
-    }
+    const appReference = getFieldValue(plainObject, 'ApplicationReference')
+    const organisationName = getFieldValue(plainObject, 'organisationName')
+    const eoriNumber = getFieldValue(plainObject, 'EoriNumber')
+    const UkAcsReference = getFieldValue(plainObject, 'UkAcsReference')
 
     const user = new Organisation()
     user.OrganisationId = plainObject.OrganisationId.S
@@ -51,6 +63,9 @@ export class Organisation {
     user.UpdatedAt = plainObject.UpdatedAt.S
     user.Status = plainObject.Status.S
     user.ApplicationReference = appReference
+    user.OrganisationName = organisationName
+    user.EoriNumber = eoriNumber
+    user.UkAcsReference = UkAcsReference
     user.Saved = true
 
     return user

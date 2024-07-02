@@ -21,7 +21,7 @@ export class UserRepository {
     return await this.getOperation.call(id)
   }
 
-  async updateUser (id: string, organisationName: string, eoriNumber: string, ukacsReference: string, emailAddress: string): Promise<void> {
-    await this.updateOperation.call(id, organisationName, eoriNumber, ukacsReference, emailAddress)
+  async updateUser (id: string, emailAddress: string): Promise<void> {
+    await this.updateOperation.call(id, emailAddress)
   }
 }

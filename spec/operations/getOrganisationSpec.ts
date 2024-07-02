@@ -12,6 +12,9 @@ describe('GetOrganisation', () => {
         Description: { S: 'description' },
         Status: { S: 'Unregistered' },
         ApplicationReference: { S: 'ApplicationReference' },
+        OrganisationName: { S: 'OrganisationName' },
+        EoriNumber: { S: 'EoriNumber' },
+        UkAcsReference: { S: 'UkAcsReference' },
         CreatedAt: { S: new Date().toISOString() },
         UpdatedAt: { S: new Date().toISOString() }
       },

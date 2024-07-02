@@ -11,6 +11,7 @@ describe('GetUser', () => {
         UserId: { S: 'userId' },
         Status: { S: 'Unregistered' },
         OrganisationId: { S: 'organisationId' },
+        EmailAddress: { S: 'abc@test.com' },
         CreatedAt: { S: new Date().toISOString() },
         UpdatedAt: { S: new Date().toISOString() }
       },

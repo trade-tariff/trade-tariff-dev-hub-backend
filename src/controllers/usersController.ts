@@ -42,12 +42,9 @@ export class UserController {
 
   async update (req: Request, res: Response): Promise<void> {
     const userId = req.params.userId
-    const organisationName = req.body.organisationName as string
-    const eoriNumber = req.body.eoriNumber as string
-    const ukacsReference = req.body.ukacsReference as string
-    const emailAddress = req.body.statemailAddressus as string
+    const emailAddress = req.body.emailAddress as string
 
-    await this.userRepository.updateUser(userId, organisationName, eoriNumber, ukacsReference, emailAddress)
+    await this.userRepository.updateUser(userId, emailAddress)
     res.status(201).json({ userId })
   }
 
@@ -55,8 +52,11 @@ export class UserController {
     const organisationId = req.params.organisationId
     const reference = req.body.applicationReference as string
     const status = req.body.status as string
+    const organisationName = req.body.organisationName as string
+    const eoriNumber = req.body.eoriNumber as string
+    const ukAcsReference = req.body.ukAcsReference as string
 
-    await this.organisationRepository.updateOrganisation(organisationId, reference, status)
+    await this.organisationRepository.updateOrganisation(organisationId, reference, status, organisationName, eoriNumber, ukAcsReference)
     res.status(201).json({ organisationId })
   }
 
