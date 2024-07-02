@@ -171,7 +171,7 @@ describe('UserController', () => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await controller.update(req, res)
       expect(userRepository.updateUser).toHaveBeenCalledWith('userId', 'emailAddress')
-      expect(res.statusCode).toBe(201)
+      expect(res.statusCode).toBe(200)
       expect(res.data).toEqual({ userId: 'userId' })
     })
   })
@@ -216,7 +216,7 @@ describe('UserController', () => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await controller.updateOrganisation(req, res)
       expect(organisationRepository.updateOrganisation).toHaveBeenCalledWith('organisationId', 'reference', 'status', 'organisationName', 'eoriNumber', 'ukAcsReference')
-      expect(res.statusCode).toBe(201)
+      expect(res.statusCode).toBe(200)
       expect(res.data).toEqual({ organisationId: 'organisationId' })
     })
   })

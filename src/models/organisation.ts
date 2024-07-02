@@ -1,6 +1,6 @@
 import { IsString, IsDateString } from 'class-validator'
 import { classToPlain, plainToClass } from 'class-transformer'
-import getFieldValue from './utils'
+import getNestFieldValue from './utils'
 
 export class Organisation {
   @IsString()
@@ -52,10 +52,10 @@ export class Organisation {
   }
 
   static fromNestedItem (plainObject: any): Organisation {
-    const appReference = getFieldValue(plainObject, 'ApplicationReference')
-    const organisationName = getFieldValue(plainObject, 'organisationName')
-    const eoriNumber = getFieldValue(plainObject, 'EoriNumber')
-    const UkAcsReference = getFieldValue(plainObject, 'UkAcsReference')
+    const appReference = getNestFieldValue(plainObject, 'ApplicationReference')
+    const organisationName = getNestFieldValue(plainObject, 'organisationName')
+    const eoriNumber = getNestFieldValue(plainObject, 'EoriNumber')
+    const UkAcsReference = getNestFieldValue(plainObject, 'UkAcsReference')
 
     const user = new Organisation()
     user.OrganisationId = plainObject.OrganisationId.S

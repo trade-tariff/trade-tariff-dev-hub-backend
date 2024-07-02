@@ -45,7 +45,7 @@ export class UserController {
     const emailAddress = req.body.emailAddress as string
 
     await this.userRepository.updateUser(userId, emailAddress)
-    res.status(201).json({ userId })
+    res.status(200).json({ userId })
   }
 
   async updateOrganisation (req: Request, res: Response): Promise<void> {
@@ -57,7 +57,7 @@ export class UserController {
     const ukAcsReference = req.body.ukAcsReference as string
 
     await this.organisationRepository.updateOrganisation(organisationId, reference, status, organisationName, eoriNumber, ukAcsReference)
-    res.status(201).json({ organisationId })
+    res.status(200).json({ organisationId })
   }
 
   async getOrganisation (req: Request, res: Response): Promise<void> {
@@ -66,7 +66,7 @@ export class UserController {
     if (organisation === null) {
       res.status(404).json({ message: 'organisation not found' })
     } else {
-      res.status(201).json({ ...organisation.toJson() })
+      res.status(200).json({ ...organisation.toJson() })
     }
   }
 }

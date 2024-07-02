@@ -1,6 +1,6 @@
 import { IsString, IsDateString } from 'class-validator'
 import { classToPlain, plainToClass } from 'class-transformer'
-import getFieldValue from './utils'
+import getNestFieldValue from './utils'
 
 export class User {
   @IsString()
@@ -37,7 +37,7 @@ export class User {
 
   static fromNestedItem (plainObject: any): User {
     const user = new User()
-    const emailAddress = getFieldValue(plainObject, 'EmailAddress')
+    const emailAddress = getNestFieldValue(plainObject, 'EmailAddress')
     user.UserId = plainObject.UserId.S
     user.OrganisationId = plainObject.OrganisationId.S
     user.EmailAddress = emailAddress
