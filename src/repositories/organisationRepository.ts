@@ -21,7 +21,7 @@ export class OrganisationRepository {
     return await this.getOperation.call(id)
   }
 
-  async updateOrganisation (id: string, reference: string, status: string): Promise<void> {
-    await this.updateOperation.call(id, reference, status)
+  async updateOrganisation (id: string, reference: string, status: string, organisationName: string, eoriNumber: string, ukacsReference: string): Promise<void> {
+    await this.updateOperation.call(id, reference, status, organisationName, eoriNumber, ukacsReference)
   }
 }

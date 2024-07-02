@@ -61,6 +61,9 @@ describe('Organisation', () => {
     it('returns a Organisation instance', () => {
       const item = {
         OrganisationId: 'the-id',
+        OrganisationName: 'the-organisation-name',
+        EoriNumber: 'the-eori-number',
+        UkAcsReference: 'the-uk-acs-reference',
         CreatedAt: new Date().toISOString(),
         UpdatedAt: new Date().toISOString(),
         Saved: false
@@ -76,6 +79,9 @@ describe('Organisation', () => {
     it('returns a plain object', () => {
       const organisation = new Organisation()
       organisation.OrganisationId = 'the-id'
+      organisation.OrganisationName = 'the-organisation-name'
+      organisation.EoriNumber = 'the-eori-number'
+      organisation.UkAcsReference = 'the-uk-acs-reference'
 
       const actual = organisation.toItem()
       expect(actual).toEqual({
@@ -83,6 +89,9 @@ describe('Organisation', () => {
         Description: organisation.Description,
         Status: organisation.Status,
         ApplicationReference: organisation.ApplicationReference,
+        OrganisationName: organisation.OrganisationName,
+        EoriNumber: organisation.EoriNumber,
+        UkAcsReference: organisation.UkAcsReference,
         CreatedAt: organisation.CreatedAt,
         UpdatedAt: organisation.UpdatedAt
       })
@@ -101,6 +110,9 @@ describe('Organisation', () => {
         Description: organisation.Description,
         Status: organisation.Status,
         ApplicationReference: organisation.ApplicationReference,
+        OrganisationName: organisation.OrganisationName,
+        EoriNumber: organisation.EoriNumber,
+        UkAcsReference: organisation.UkAcsReference,
         CreatedAt: organisation.CreatedAt,
         UpdatedAt: organisation.UpdatedAt
       })

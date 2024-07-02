@@ -47,8 +47,10 @@ router.delete('/keys/:organisationId/:id', (req, res) => { apiKeyController.dest
 
 router.post('/users/:id', (req, res) => { userController.create(req, res) })
 router.get('/users/:id', (req, res) => { userController.show(req, res) })
+router.patch('/users/:id', (req, res) => { userController.update(req, res) })
 
 router.patch('/organisations/:organisationId', (req, res) => { userController.updateOrganisation(req, res) })
+router.get('/organisations/:organisationId', (req, res) => { userController.getOrganisation(req, res) })
 
 /* eslint-enable @typescript-eslint/no-floating-promises */
 

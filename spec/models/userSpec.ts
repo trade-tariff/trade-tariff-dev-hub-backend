@@ -63,6 +63,7 @@ describe('User', () => {
       const item = {
         UserId: 'the-id',
         OrganisationId: 'yodel',
+        EmailAddress: '',
         CreatedAt: new Date().toISOString(),
         UpdatedAt: new Date().toISOString(),
         Saved: false
@@ -79,11 +80,13 @@ describe('User', () => {
       const user = new User()
       user.UserId = 'the-id'
       user.OrganisationId = 'the-fpo-id'
+      user.EmailAddress = 'abc@hmrc.gov.uk'
 
       const actual = user.toItem()
       expect(actual).toEqual({
         UserId: 'the-id',
         OrganisationId: 'the-fpo-id',
+        EmailAddress: 'abc@hmrc.gov.uk',
         CreatedAt: user.CreatedAt,
         UpdatedAt: user.UpdatedAt
       })
@@ -100,6 +103,7 @@ describe('User', () => {
       expect(actual).toEqual({
         UserId: 'the-id',
         OrganisationId: '',
+        EmailAddress: '',
         CreatedAt: user.CreatedAt,
         UpdatedAt: user.UpdatedAt
       })
