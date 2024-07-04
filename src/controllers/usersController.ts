@@ -41,7 +41,7 @@ export class UserController {
   }
 
   async update (req: Request, res: Response): Promise<void> {
-    const userId = req.params.userId
+    const userId = req.params.id
     const emailAddress = req.body.emailAddress as string
 
     await this.userRepository.updateUser(userId, emailAddress)
