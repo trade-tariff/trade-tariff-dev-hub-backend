@@ -149,9 +149,6 @@ describe('UserController', () => {
       })
       userRepository.updateUser.bind(userRepository)
       userRepository.createUser.bind(userRepository)
-      organisationRepository.getOrganisation.bind(organisationRepository)
-      organisationRepository.createOrganisation.bind(organisationRepository)
-      organisationRepository.updateOrganisation.bind(organisationRepository)
       controller = new UserController(userRepository, organisationRepository)
       req = {
         params: { id: 'userId' },
@@ -173,51 +170,6 @@ describe('UserController', () => {
       expect(userRepository.updateUser).toHaveBeenCalledWith('userId', 'emailAddress')
       expect(res.statusCode).toBe(200)
       expect(res.data).toEqual({ userId: 'userId' })
-    })
-  })
-
-  describe('updateOrganisation', () => {
-    it('returns updated organisation', async () => {
-      user = new User()
-      user.OrganisationId = 'organisationId'
-      organisation = new Organisation()
-      organisation.OrganisationId = 'organisationId'
-      getOrganisationResult = Promise.resolve(null)
-      createOrganisationResult = Promise.resolve(organisation)
-      updateOrganisationResult = Promise.resolve(organisation)
-      userRepository = jasmine.createSpyObj('UserRepository', {
-        createUser: Promise.resolve(user)
-      })
-      organisationRepository = jasmine.createSpyObj('OrganisationRepository', {
-        getOrganisation: getOrganisationResult,
-        createOrganisation: createOrganisationResult,
-        updateOrganisation: updateOrganisationResult
-      })
-      userRepository.createUser.bind(userRepository)
-      organisationRepository.getOrganisation.bind(organisationRepository)
-      organisationRepository.createOrganisation.bind(organisationRepository)
-      organisationRepository.updateOrganisation.bind(organisationRepository)
-      controller = new UserController(userRepository, organisationRepository)
-      req = {
-        params: { organisationId: 'organisationId' },
-        body: { applicationReference: 'reference', status: 'status', organisationName: 'organisationName', eoriNumber: 'eoriNumber', ukAcsReference: 'ukAcsReference' }
-      } as any
-      const res = {
-        status: function (code: number) {
-          this.statusCode = code
-          return this
-        },
-        json: function (data: any) {
-          this.data = data
-          return this
-        }
-      } as any
-
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      await controller.updateOrganisation(req, res)
-      expect(organisationRepository.updateOrganisation).toHaveBeenCalledWith('organisationId', 'reference', 'status', 'organisationName', 'eoriNumber', 'ukAcsReference')
-      expect(res.statusCode).toBe(200)
-      expect(res.data).toEqual({ organisationId: 'organisationId' })
     })
   })
 })
