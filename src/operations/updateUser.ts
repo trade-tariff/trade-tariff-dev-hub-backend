@@ -21,7 +21,6 @@ class UpdateUser {
         ':updatedAt': { S: new Date().toISOString() }
       }
     }
-
     const command = new UpdateItemCommand(input)
 
     await this.client.send(command)

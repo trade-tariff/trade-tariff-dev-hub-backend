@@ -154,7 +154,7 @@ describe('UserController', () => {
       organisationRepository.updateOrganisation.bind(organisationRepository)
       controller = new UserController(userRepository, organisationRepository)
       req = {
-        params: { userId: 'userId' },
+        params: { id: 'userId' },
         body: { emailAddress: 'emailAddress' }
       } as any
       const res = {

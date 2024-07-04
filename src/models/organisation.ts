@@ -53,7 +53,7 @@ export class Organisation {
 
   static fromNestedItem (plainObject: any): Organisation {
     const appReference = getNestFieldValue(plainObject, 'ApplicationReference')
-    const organisationName = getNestFieldValue(plainObject, 'organisationName')
+    const organisationName = getNestFieldValue(plainObject, 'OrganisationName')
     const eoriNumber = getNestFieldValue(plainObject, 'EoriNumber')
     const UkAcsReference = getNestFieldValue(plainObject, 'UkAcsReference')
 
