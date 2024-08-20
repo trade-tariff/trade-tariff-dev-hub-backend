@@ -182,7 +182,7 @@ class CreateCustomerApiKey {
   }
 
   private async generateRandomSecret (): Promise<string> {
-    const randomSecret: string = crypto.randomBytes(CreateCustomerApiKey.SECRET_LENGTH).toString('base64')
+    const randomSecret: string = crypto.randomBytes(CreateCustomerApiKey.SECRET_LENGTH).toString('base64url')
     const encrypted = await new CustomerApiKeyEncryption().encrypt(randomSecret)
 
     return encrypted
