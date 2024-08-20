@@ -79,9 +79,9 @@ if (sentryDsn !== '') {
   app.use(Sentry.Handlers.errorHandler())
 }
 
-// catch 404 and forward to error handler
+// catch 404
 app.use(function (_req: Request, _res: Response, next: NextFunction) {
-  next(createError(404))
+  _res.status(404).json({ error: 'Not Found' })
 })
 
 // Error handler
