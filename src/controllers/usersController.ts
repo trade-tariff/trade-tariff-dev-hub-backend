@@ -49,14 +49,13 @@ export class UserController {
     }
   }
 
-  async updateOrganisation (req: Request, res: Response, next: NextFunction): Promise<void> {
+  async update (req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const organisationId = req.params.organisationId
-      const reference = req.body.applicationReference as string
-      const status = req.body.status as string
+      const userId = req.params.id
+      const emailAddress = req.body.emailAddress as string
 
-      await this.organisationRepository.updateOrganisation(organisationId, reference, status)
-      res.status(201).json({ organisationId })
+      await this.userRepository.updateUser(userId, emailAddress)
+      res.status(200).json({ userId })
     } catch (e) {
       next(e)
     }

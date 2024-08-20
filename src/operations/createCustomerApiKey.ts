@@ -22,7 +22,7 @@ class CreateCustomerApiKey {
   static CLIENT_ID_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
   static CLIENT_ID_LENGTH = 17
   static CLIENT_ID_PREFIX = 'HUB'
-  static SECRET_LENGTH = 32
+  static SECRET_LENGTH = 36
   static API_KEY_TYPE = 'API_KEY'
   static PLAN_LIST_LIMIT = parseInt(process.env.USAGE_PLAN_LIST_PAGINATION_LIMIT ?? '100')
   static PER_FPO_RATE_LIMIT = parseInt(process.env.USAGE_PLAN_PER_FPO_RATE_LIMIT ?? '100')

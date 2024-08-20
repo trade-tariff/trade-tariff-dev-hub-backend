@@ -95,7 +95,7 @@ create_customer_api_key() {
 create_user() {
     id=$1
     organisationId=$2
-    status=$3
+    emailAddress=$3
 
     # create the dynnamodb item
     aws dynamodb put-item \
@@ -104,7 +104,7 @@ create_user() {
         --table-name "$USERS_TABLE_NAME" --item "{
             \"UserId\": {\"S\": \"$id\"},
             \"OrganisationId\": {\"S\": \"$organisationId\"},
-            \"Status\": {\"S\": \"$status\"},
+            \"EmailAddress\": {\"S\": \"$emailAddress\"},
             \"CreatedAt\": {\"S\": \"$createdAt\"},
             \"UpdatedAt\": {\"S\": \"$createdAt\"}
         }"
@@ -119,9 +119,9 @@ create_customer_api_key "HUBPC7NFHXS6H3LKZCEW" "$usagePlanId" "VitXWo4eiEphvzqR:
 create_customer_api_key "HUBP4NMDNBUKZ168SQTL" "$usagePlanId" "CBsaehhd3Q/qDusw:yGfSGJgPtL8xMMpN9SFc+s+ZZXugnA1DOeu8A7HofaOR7qZMYN5pTZtjFs3HBM29ER4KA2tj9OnoKjUC" false
 
 create_table_without_range_key "$USERS_TABLE_NAME" "UserId"
-create_user "1234" "local-development" "Unregistered"
-create_user "2345" "local-development" "Unregistered"
-create_user "3456" "local-development" "Unregistered"
-create_user "4567" "local-development" "Unregistered"
-create_user "4442615091686901" "A55244BE-486B-489F-B3DE-2B87EE471B82" "Authorised"
-create_user "5580468525832191" "08961382-2C50-42B7-B8BE-7D143FCAA101" "Authorised"
+create_user "1234" "local-development" "abcd@test.com"
+create_user "2345" "local-development" ""
+create_user "3456" "local-development" "test@test.com"
+create_user "4567" "local-development" ""
+create_user "4442615091686901" "A55244BE-486B-489F-B3DE-2B87EE471B82" "abc@test.com"
+create_user "5580468525832191" "08961382-2C50-42B7-B8BE-7D143FCAA101" "xyz@test.com"

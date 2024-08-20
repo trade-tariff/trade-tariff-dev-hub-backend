@@ -69,9 +69,9 @@ describe('OrganisationRepository', () => {
     it('calls updateOperation', async () => {
       const organisation: Organisation = new Organisation()
 
-      await mockUpdateOperation.call(organisation.OrganisationId, organisation.ApplicationReference, organisation.Status)
-      await repository.updateOrganisation(organisation.OrganisationId, organisation.ApplicationReference, organisation.Status)
-      expect(mockUpdateOperation.call).toHaveBeenCalledWith(organisation.OrganisationId, organisation.ApplicationReference, organisation.Status)
+      await mockUpdateOperation.call(organisation.OrganisationId, organisation.ApplicationReference, organisation.Status, organisation.OrganisationName, organisation.EoriNumber, organisation.UkAcsReference)
+      await repository.updateOrganisation(organisation.OrganisationId, organisation.ApplicationReference, organisation.Status, organisation.OrganisationName, organisation.EoriNumber, organisation.UkAcsReference)
+      expect(mockUpdateOperation.call).toHaveBeenCalledWith(organisation.OrganisationId, organisation.ApplicationReference, organisation.Status, organisation.OrganisationName, organisation.EoriNumber, organisation.UkAcsReference)
     })
   })
 })

@@ -8,6 +8,7 @@ import { UserRepository } from '../repositories/userRepository'
 import { OrganisationRepository } from '../repositories/organisationRepository'
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { APIGatewayClient } from '@aws-sdk/client-api-gateway'
+import { OrganisationsController } from '../../src/controllers/organisationsController'
 
 const endpoint = process.env.AWS_ENDPOINT
 
@@ -29,6 +30,7 @@ const organisationRepository = new OrganisationRepository(dynamodbClient)
 
 const apiKeyController = new ApiKeyController(repository)
 const userController = new UserController(userRepository, organisationRepository)
+const organisationsController = new OrganisationsController(organisationRepository)
 const healthchecksController = new HealthchecksController()
 
 const router: Router = express.Router()
@@ -47,8 +49,10 @@ router.delete('/keys/:organisationId/:id', (req, res, next) => { apiKeyControlle
 
 router.post('/users/:id', (req, res, next) => { userController.create(req, res, next) })
 router.get('/users/:id', (req, res, next) => { userController.show(req, res, next) })
+router.patch('/users/:id', (req, res, next) => { userController.update(req, res, next) })
 
-router.patch('/organisations/:organisationId', (req, res, next) => { userController.updateOrganisation(req, res, next) })
+router.patch('/organisations/:organisationId', (req, res, next) => { organisationsController.updateOrganisation(req, res, next) })
+router.get('/organisations/:organisationId', (req, res, next) => { organisationsController.getOrganisation(req, res, next) })
 
 /* eslint-enable @typescript-eslint/no-floating-promises */
 
