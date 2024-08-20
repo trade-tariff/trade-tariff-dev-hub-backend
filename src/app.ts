@@ -1,5 +1,5 @@
 import express, { type Express, type Request, type Response, type NextFunction } from 'express'
-import createError, { type HttpError } from 'http-errors'
+import { type HttpError } from 'http-errors'
 import * as Sentry from '@sentry/node'
 import path from 'path'
 import morgan from 'morgan'

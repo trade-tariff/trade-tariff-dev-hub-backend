@@ -1,6 +1,5 @@
-import { NextFunction, type Request, type Response } from 'express'
+import { type NextFunction, type Request, type Response } from 'express'
 import { type OrganisationRepository } from '../repositories/organisationRepository'
-import { type Organisation } from '../../src/models/organisation'
 
 export class OrganisationsController {
   constructor (
