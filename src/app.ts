@@ -104,7 +104,7 @@ app.use(function (err: HttpError, _req: Request, res: Response, _next: NextFunct
     err.message = err.message ?? 'Internal Server Error'
     // In production, send a generic message
 
-    if(statusCode >= 500) {
+    if (statusCode >= 500) {
       Sentry.captureException(err)
     }
 
