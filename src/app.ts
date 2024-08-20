@@ -1,5 +1,5 @@
 import express, { type Express, type Request, type Response, type NextFunction } from 'express'
-import { type HttpError } from 'http-errors'
+import createError, { type HttpError } from 'http-errors'
 import * as Sentry from '@sentry/node'
 import path from 'path'
 import morgan from 'morgan'
@@ -81,7 +81,7 @@ if (sentryDsn !== '') {
 
 // catch 404
 app.use(function (_req: Request, _res: Response, next: NextFunction) {
-  _res.status(404).json({ error: 'Not Found' })
+  next(createError(404))
 })
 
 // Error handler
