@@ -84,7 +84,7 @@ describe('CreateCustomerApiKey', () => {
 
       expect(created.OrganisationId).toEqual('anotherOrganisationId')
       expect(created.CustomerApiKeyId).toMatch(/^HUB[A-Z0-9]{17}$/)
-      expect(created.Secret).toMatch(/^[\w\d]+:[\w\d+/=]+$/)
+      expect(created.Secret).toMatch(/^[\w\d+/=]+:[\w\d+/=]+$/)
       expect(created.Enabled).toEqual(true)
       expect(decrypted.Secret).toMatch(/^[A-Za-z0-9_-]+$/)
       expect(created.Description).toMatch(/^description/)
