@@ -34,7 +34,7 @@ describe('OrganisationsController', () => {
       req = { params: { organisationId: 'organisationId' } } as any
       res = { json: jasmine.createSpy() } as unknown as any
 
-      await controller.getOrganisation(req, res)
+      await controller.getOrganisation(req, res, (e): void => { fail(e) })
 
       expect(organisationRepository.getOrganisation).toHaveBeenCalledWith('organisationId')
       expect(res.json).toHaveBeenCalledWith({ ...organisation.toJson() })
@@ -53,7 +53,7 @@ describe('OrganisationsController', () => {
           .and.returnValue({ json: jasmine.createSpy() })
       } as unknown as any
 
-      await controller.getOrganisation(req, res)
+      await controller.getOrganisation(req, res, (e): void => { fail(e) })
 
       expect(res.status).toHaveBeenCalledWith(404)
     })
@@ -88,7 +88,7 @@ describe('OrganisationsController', () => {
       } as any
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      await controller.create(req, res)
+      await controller.create(req, res, (e): void => { fail(e) })
 
       expect(res.statusCode).toBe(201)
       expect(res.data).toEqual({ ...organisation.toJson(), Status: organisation.Status })
@@ -118,7 +118,7 @@ describe('OrganisationsController', () => {
       } as any
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      await controller.updateOrganisation(req, res)
+      await controller.updateOrganisation(req, res, (e): void => { fail(e) })
       expect(organisationRepository.updateOrganisation).toHaveBeenCalledWith('organisationId', 'reference', 'status', 'organisationName', 'eoriNumber', 'ukAcsReference')
       expect(res.statusCode).toBe(200)
       expect(res.data).toEqual({ organisationId: 'organisationId' })

@@ -51,7 +51,7 @@ describe('UserController', () => {
       req = { params: { id: 'id' } } as any
       res = { json: jasmine.createSpy() } as unknown as any
 
-      await controller.show(req, res)
+      await controller.show(req, res, (e): void => { fail(e) })
 
       expect(userRepository.getUser).toHaveBeenCalledWith('id')
       expect(organisationRepository.getOrganisation).toHaveBeenCalledWith('organisationId')
@@ -76,7 +76,7 @@ describe('UserController', () => {
           .and.returnValue({ json: jasmine.createSpy() })
       } as unknown as any
 
-      await controller.show(req, res)
+      await controller.show(req, res, (e): void => { fail(e) })
 
       expect(res.status).toHaveBeenCalledWith(404)
     })
@@ -118,7 +118,7 @@ describe('UserController', () => {
       } as any
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      await controller.create(req, res)
+      await controller.create(req, res, (e): void => { fail(e) })
 
       expect(userRepository.createUser).toHaveBeenCalledWith('id', 'organisationId')
       expect(res.statusCode).toBe(201)
@@ -166,7 +166,7 @@ describe('UserController', () => {
       } as any
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      await controller.update(req, res)
+      await controller.update(req, res, (e): void => { fail(e) })
       expect(userRepository.updateUser).toHaveBeenCalledWith('userId', 'emailAddress')
       expect(res.statusCode).toBe(200)
       expect(res.data).toEqual({ userId: 'userId' })
